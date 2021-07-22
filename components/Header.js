@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import ImageButton from './ImageButton';
+
+import menu from '../assets/menu.png'
 import fonts from '../constants/fonts';
 
 const Header = (props) => {
@@ -9,7 +11,7 @@ const Header = (props) => {
     <View style={styles.header}>
       <Text style={styles.headerTitle}>{props.title}</Text>
       <View style={styles.button}>
-        <ImageButton title='' uri='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQowYXvfQbMeVEwf-AfBXfhSakwGiFhXYS6nw&usqp=CAU' />
+        <ImageButton title='' source={menu} />
       </View>
     </View>
   );

@@ -1,14 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import ImageButton from './ImageButton';
+
+import roster from '../assets/roster.jpg'
+import fitness from '../assets/fitness.jpg'
 
 const Navigator = (props) => {
   return (
     <View style={styles.navBar}>
       <View style={styles.buttonContainer}>
-        <ImageButton title='Roster' uri='https://media.istockphoto.com/vectors/document-icon-vector-design-vector-id1270675230?b=1&k=6&m=1270675230&s=170667a&w=0&h=vEmuh4iscQGkreby-QR_-j4egUPrmMxGatKCP3-yRE8=' />
-        <ImageButton title='Fitness Tests' uri='https://media.istockphoto.com/vectors/heartbeat-flat-icon-pixel-perfect-for-mobile-and-web-vector-id1149310034?b=1&k=6&m=1149310034&s=170667a&w=0&h=UcTpkq-8CX-srTEVciRFKWGde8YJFaOdtcJe9OTq7uc=' />
+        <ImageButton title='Roster' source={roster} />
+        <ImageButton title='Fitness Tests' source={fitness} />
       </View>
     </View>
   );

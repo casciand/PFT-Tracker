@@ -7,7 +7,7 @@ const ImageButton = (props) => {
   return (
     <TouchableOpacity style={styles.touchable} onPress={() => console.log('Pressed')} >
         <Image
-          source={{uri: props.uri}}
+          source={props.source}
           style={styles.image}
         />
         <View style={styles.view}>
@@ -19,7 +19,7 @@ const ImageButton = (props) => {
 
 const styles = StyleSheet.create({
   view: {
-    position: 'relative',
+    position: 'relative'
   },
 
   image: {

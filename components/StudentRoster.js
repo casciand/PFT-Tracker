@@ -12,18 +12,13 @@ const StudentRoster = (props) => {
       <Student name='First Last' gender='Boy' age='15' />
       <Student name='First Last' gender='Boy' age='7' />
       <Student name='First Last' gender='Girl' age='9' />
-      <Student name='First Last' gender='Girl' age='12' />
-      <Student name='First Last' gender='Boy' age='15' />
-      <Student name='First Last' gender='Girl' age='9' />
-      <Student name='First Last' gender='Girl' age='12' />
-      <Student name='First Last' gender='Boy' age='15' />
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   contentContainer: {
-    padding: 10
+    padding: 15
   }
 });
 

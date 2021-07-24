@@ -1,13 +1,15 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Button } from "react-native";
 
-import fonts from '../constants/fonts';
+import fonts from "../constants/fonts";
 
 const Student = (props) => {
   return (
     <TouchableOpacity>
       <View style={styles.student}>
-        <Text style={styles.name}>{props.name}  |  ( {props.gender}, {props.age} )</Text>
+        <Text style={styles.name}>
+          {props.name} ( {props.gender}, {props.age} )
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -18,14 +20,14 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 2,
     height: 40,
-    backgroundColor: '#ccc',
-    borderColor: 'black',
+    backgroundColor: "#ccc",
+    borderColor: "black",
     borderWidth: 1,
   },
 
   name: {
-    fontFamily: fonts.secondary
-  }
+    fontFamily: fonts.secondary,
+  },
 });
 
 export default Student;

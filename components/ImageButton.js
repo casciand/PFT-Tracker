@@ -5,7 +5,7 @@ import fonts from '../constants/fonts';
 
 const ImageButton = (props) => {
   return (
-    <TouchableOpacity style={styles.touchable} onPress={() => console.log('Pressed')} >
+    <TouchableOpacity style={styles.touchable} onPress={props.onPress} >
         <Image
           source={props.source}
           style={styles.image}

@@ -8,35 +8,57 @@ import Navigator from "../components/Navigator";
 import StudentRoster from "../components/StudentRoster";
 
 import AddStudentScreen from "../screens/AddStudentScreen";
+import StudentInfoScreen from "../screens/StudentInfoScreen";
 
 import plusSign from "../assets/plussign.png";
 
+const defaultStudent = { key: "", name: "", age: "", gender: "" };
+
 const RosterScreen = (props) => {
   const [studentList, setStudentList] = useState([]);
+  const [currentStudent, setCurrentStudent] = useState(defaultStudent);
+
   const [addStudentMode, setAddStudentMode] = useState(false);
+  const [studentInfoMode, setStudentInfoMode] = useState(true);
 
   const addStudentHandler = (studentName, studentAge, studentGender) => {
     setStudentList((currentStudents) => [
       ...currentStudents,
       {
-        id: uuid.v1(),
+        key: uuid.v1(),
         name: studentName,
         age: studentAge,
         gender: studentGender,
       },
     ]);
-
+    console.log(studentList);
     setAddStudentMode(false);
   };
 
-  const removeStudentHandler = (studentId) => {
-    setStudentList((currentStudents) => {
-      return currentStudents.filter((student) => student.id != studentId);
-    });
+  // const removeStudentHandler = (studentId) => {
+  //   setStudentList((currentStudents) => {
+  //     return currentStudents.filter((student) => student.id != studentId);
+  //   });
+  // };
+
+  const studentInfoModeHandler = (studentID) => {
+    console.log(studentList);
+    for (let i = 0; i < studentList.length; ++i) {
+      if (studentID == studentList[i].key) {
+        setCurrentStudent(studentList[i]);
+        setStudentInfoMode(true);
+        return;
+      }
+    }
   };
 
   const cancelAddStudentMode = () => {
     setAddStudentMode(false);
+  };
+
+  const cancelStudentInfoMode = () => {
+    setStudentInfoMode(false);
+    setCurrentStudent(defaultStudent);
   };
 
   return (
@@ -46,6 +68,11 @@ const RosterScreen = (props) => {
         addStudent={addStudentHandler}
         onCancel={cancelAddStudentMode}
       />
+      <StudentInfoScreen
+        visible={studentInfoMode}
+        onCancel={cancelStudentInfoMode}
+        student={currentStudent}
+      />
       <View style={styles.header}>
         <Header
           title="Class Roster"
@@ -54,10 +81,13 @@ const RosterScreen = (props) => {
         />
       </View>
       <View style={styles.roster}>
-        <StudentRoster students={studentList} />
+        <StudentRoster
+          students={studentList}
+          onPress={studentInfoModeHandler}
+        />
       </View>
       <View style={styles.footer}>
-        <Navigator />
+        <Navigator onPressRoster={() => {}} onPressFitness={() => {}} />
       </View>
     </View>
   );

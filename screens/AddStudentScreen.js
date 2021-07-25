@@ -8,7 +8,7 @@ import backArrow from "../assets/backarrow.png";
 
 const AddStudentScreen = (props) => {
   const [enteredName, setEnteredName] = useState("");
-  const [enteredAge, setEnteredAge] = useState(0);
+  const [enteredAge, setEnteredAge] = useState("");
   const [enteredGender, setEnteredGender] = useState("");
 
   const nameInputHandler = (enteredText) => {
@@ -23,7 +23,7 @@ const AddStudentScreen = (props) => {
     props.addStudent(enteredName, enteredAge, enteredGender);
 
     setEnteredName("");
-    setEnteredAge(0);
+    setEnteredAge("");
     setEnteredGender("");
   };
 

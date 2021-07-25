@@ -1,26 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 
-import RosterScreen from './screens/RosterScreen';
+import RosterScreen from "./screens/RosterScreen";
+import FitnessTestsScreen from "./screens/FitnessTestsScreen";
 
 export default function App() {
+  const [rosterMode, setRosterMode] = useState(true);
 
-  let content = <RosterScreen />  // add logic to choose current screen
+  let content = <RosterScreen />;
+
+  // if (!rosterMode) {
+  //   content = <FitnessTestsScreen />;
+  // }
 
   return (
-    <PaperProvider>
-      <View style={styles.container}>
-        {content}
-        <StatusBar style="auto" />
-      </View>
-    </PaperProvider>
+    <View style={styles.container}>
+      {content}
+      <StatusBar style="auto" />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
 });

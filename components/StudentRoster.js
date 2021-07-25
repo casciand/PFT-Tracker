@@ -9,9 +9,11 @@ const StudentRoster = (props) => {
   for (let i = 0; i < props.students.length; ++i) {
     students.push(
       <Student
+        key={props.students[i].key}
         name={props.students[i].name}
         age={props.students[i].age}
         gender={props.students[i].gender}
+        onPress={props.onPress.bind(this, props.students[i].key)}
       />
     );
   }

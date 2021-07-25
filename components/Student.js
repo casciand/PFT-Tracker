@@ -5,7 +5,7 @@ import fonts from "../constants/fonts";
 
 const Student = (props) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={props.onPress}>
       <View style={styles.student}>
         <Text style={styles.name}>
           {props.name} ( {props.gender}, {props.age} )

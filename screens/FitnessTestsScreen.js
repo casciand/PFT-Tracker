@@ -6,6 +6,7 @@ import Navigator from "../components/Navigator";
 import ImageButton from "../components/ImageButton";
 
 import StaticFitnessScreen from "./StaticFitnessScreen";
+import TimerFitnessScreen from "./TimerFitnessScreen";
 
 import curlUp from "../assets/curlup.jpg";
 import pullUp from "../assets/pullup.jpg";
@@ -20,6 +21,8 @@ const FitnessTestScreen = (props) => {
 
   const [curlUpsMode, setCurlUpsMode] = useState(false);
   const [pullUpsMode, setPullUpsMode] = useState(false);
+  const [mileMode, setMileMode] = useState(false);
+  const [shuttleMode, setShuttleMode] = useState(false);
   const [sitAndReachMode, setSitAndReachMode] = useState(false);
 
   const openCurlUpsHandler = () => {
@@ -36,6 +39,20 @@ const FitnessTestScreen = (props) => {
     setStaticFitnessScreenMode(true);
   };
 
+  const openMileHandler = () => {
+    setCurrentActivity("Mile Run");
+
+    setMileMode(true);
+    setTimerFitnessScreenMode(true);
+  };
+
+  const openShuttleHandler = () => {
+    setCurrentActivity("Shuttle Run");
+
+    setShuttleMode(true);
+    setTimerFitnessScreenMode(true);
+  };
+
   const openSitAndReachHandler = () => {
     setCurrentActivity("Sit & Reach");
 
@@ -44,8 +61,18 @@ const FitnessTestScreen = (props) => {
   };
 
   const closeStaticFitnessScreenHandler = () => {
+    setPullUpsMode(false);
     setCurlUpsMode(false);
+    setSitAndReachMode(false);
+
     setStaticFitnessScreenMode(false);
+  };
+
+  const closeTimerFitnessScreenHandler = () => {
+    setMileMode(false);
+    setShuttleMode(false);
+
+    setTimerFitnessScreenMode(false);
   };
 
   return (
@@ -55,10 +82,24 @@ const FitnessTestScreen = (props) => {
         title={currentActivity}
         onCancel={closeStaticFitnessScreenHandler}
         studentList={props.studentList}
+        student={props.currentStudent}
+        setCurrentStudent={props.setCurrentStudent}
         studentInfoModeHandler={props.studentInfoModeHandler}
+        curlUpsMode={curlUpsMode}
+        pullUpsMode={pullUpsMode}
+        sitAndReachMode={sitAndReachMode}
+      />
+      <TimerFitnessScreen
+        visible={timerFitnessScreenMode}
+        title={currentActivity}
+        onCancel={closeTimerFitnessScreenHandler}
+        studentList={props.studentList}
+        studentInfoModeHandler={props.studentInfoModeHandler}
+        mileMode={mileMode}
+        shuttleMode={shuttleMode}
       />
       <View style={styles.header}>
-        <Header style={styles.headerText} title="Fitness Tests" />
+        <Header title="Fitness Tests" />
       </View>
       <View style={styles.fitnessTests}>
         <ImageButton
@@ -79,13 +120,13 @@ const FitnessTestScreen = (props) => {
           style={styles.fitnessButton}
           title="Mile Run"
           source={mileRun}
-          onPress={() => {}}
+          onPress={openMileHandler}
         />
         <ImageButton
           style={styles.fitnessButton}
           title="Shuttle Run"
           source={shuttleRun}
-          onPress={() => {}}
+          onPress={openShuttleHandler}
         />
       </View>
       <View style={styles.fitnessTests}>
@@ -142,7 +183,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: -140,
     width: "100%",
-    height: "15%",
+    height: "15.7%",
     flex: 1,
     zIndex: 1,
   },

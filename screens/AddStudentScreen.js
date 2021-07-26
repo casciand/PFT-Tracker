@@ -7,12 +7,17 @@ import Header from "../components/Header";
 import backArrow from "../assets/backarrow.png";
 
 const AddStudentScreen = (props) => {
-  const [enteredName, setEnteredName] = useState("");
+  const [enteredFirstName, setEnteredFirstName] = useState("");
+  const [enteredLastName, setEnteredLastName] = useState("");
   const [enteredAge, setEnteredAge] = useState("");
   const [enteredGender, setEnteredGender] = useState("");
 
-  const nameInputHandler = (enteredText) => {
-    setEnteredName(enteredText);
+  const firstNameInputHandler = (enteredText) => {
+    setEnteredFirstName(enteredText);
+  };
+
+  const lastNameInputHandler = (enteredText) => {
+    setEnteredLastName(enteredText);
   };
 
   const ageInputHandler = (enteredText) => {
@@ -21,14 +26,21 @@ const AddStudentScreen = (props) => {
 
   const addStudentHandler = () => {
     let newStudent = {
-      name: enteredName,
+      firstName: enteredFirstName,
+      lastName: enteredLastName,
       age: enteredAge,
       gender: enteredGender,
+      curlUps: "N/A",
+      pullUps: "N/A",
+      mile: "N/A",
+      shuttle: "N/A",
+      sitAndReach: "N/A",
     };
 
     props.addStudent(newStudent);
 
-    setEnteredName("");
+    setEnteredFirstName("");
+    setEnteredLastName("");
     setEnteredAge("");
     setEnteredGender("");
   };
@@ -44,10 +56,16 @@ const AddStudentScreen = (props) => {
       </View>
       <View style={styles.inputView}>
         <TextInput
-          placeholder="Student Name"
+          placeholder="First Name"
           style={styles.nameTextBox}
-          onChangeText={nameInputHandler}
-          value={enteredName}
+          onChangeText={firstNameInputHandler}
+          value={enteredFirstName}
+        />
+        <TextInput
+          placeholder="Last Name"
+          style={styles.nameTextBox}
+          onChangeText={lastNameInputHandler}
+          value={enteredLastName}
         />
         <TextInput
           placeholder="Age"

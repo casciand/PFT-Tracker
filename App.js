@@ -67,9 +67,15 @@ export default function App() {
   const addStudentHandler = (student) => {
     let newStudent = {
       key: uuid.v1(),
-      name: student.name,
+      firstName: student.firstName,
+      lastName: student.lastName,
       age: student.age,
       gender: student.gender,
+      curlUps: student.curlUps,
+      pullUps: student.pullUps,
+      mile: student.mile,
+      shuttle: student.shuttle,
+      sitAndReach: student.sitAndReach,
     };
 
     setStudentList((currentStudents) => [...currentStudents, newStudent]);
@@ -135,6 +141,8 @@ export default function App() {
     content = (
       <FitnessTestsScreen
         studentList={studentList}
+        currentStudent={currentStudent}
+        setCurrentStudent={setCurrentStudent}
         studentInfoModeHandler={studentInfoModeHandler}
         onPressRoster={() => setRosterMode(true)}
         onPressFitness={() => setRosterMode(false)}

@@ -10,9 +10,20 @@ const StudentRoster = (props) => {
     students.push(
       <Student
         key={props.students[i].key}
-        name={props.students[i].name}
+        firstName={props.students[i].firstName}
+        lastName={props.students[i].lastName}
         age={props.students[i].age}
         gender={props.students[i].gender}
+        curlUps={props.students[i].curlUps}
+        pullUps={props.students[i].pullUps}
+        mile={props.students[i].mile}
+        shuttle={props.students[i].shuttle}
+        sitAndReach={props.students[i].sitAndReach}
+        curlUpsMode={props.curlUpsMode}
+        pullUpsMode={props.pullUpsMode}
+        sitAndReachMode={props.sitAndReachMode}
+        mileMode={props.mileMode}
+        shuttleMode={props.shuttleMode}
         onPress={props.onPress.bind(this, props.students[i].key)}
       />
     );

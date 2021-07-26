@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
 
   roster: {
-    height: "76%",
+    height: "70%",
     padding: 5,
   },
 

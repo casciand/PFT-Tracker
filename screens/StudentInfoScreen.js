@@ -16,10 +16,19 @@ const StudentInfoScreen = (props) => {
             onPress={props.onCancel}
           />
         </View>
-        <View style={styles.name}>
-          <Text>Name: {props.student.name}</Text>
+        <View style={styles.basicInfo}>
+          <Text>
+            Name: {props.student.firstName} {props.student.lastName}
+          </Text>
           <Text>Age: {props.student.age}</Text>
           <Text>Gender: {props.student.gender}</Text>
+        </View>
+        <View style={styles.fitnessInfo}>
+          <Text>Curl-Ups: {props.student.curlUps}</Text>
+          <Text>Pull-Ups: {props.student.pullUps}</Text>
+          <Text>Mile Run: {props.student.mile}</Text>
+          <Text>Shuttle Run: {props.student.shuttle}</Text>
+          <Text>Sit & Reach: {props.student.sitAndReach}</Text>
         </View>
         <View style={styles.buttonContainer}>
           <Button
@@ -35,14 +44,20 @@ const StudentInfoScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
-  name: {
+  basicInfo: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 100,
+  },
+
+  fitnessInfo: {
     justifyContent: "center",
     alignItems: "center",
     marginTop: 100,
   },
 
   buttonContainer: {
-    marginTop: 350,
+    marginTop: 100,
   },
 
   button: {

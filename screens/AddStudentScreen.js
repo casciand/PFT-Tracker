@@ -19,8 +19,14 @@ const AddStudentScreen = (props) => {
     setEnteredAge(enteredText.replace(/[^0-9]/g, ""));
   };
 
-  const addStudentHandler = (studentName, studentAge, studentGender) => {
-    props.addStudent(enteredName, enteredAge, enteredGender);
+  const addStudentHandler = () => {
+    let newStudent = {
+      name: enteredName,
+      age: enteredAge,
+      gender: enteredGender,
+    };
+
+    props.addStudent(newStudent);
 
     setEnteredName("");
     setEnteredAge("");
@@ -64,10 +70,8 @@ const AddStudentScreen = (props) => {
             </View>
           </RadioButton.Group>
         </View>
-        <View style={styles.buttonsView}>
-          <View style={styles.button}>
-            <Button title="Add Student" onPress={addStudentHandler} />
-          </View>
+        <View style={styles.button}>
+          <Button title="Add Student" onPress={addStudentHandler} />
         </View>
       </View>
     </Modal>

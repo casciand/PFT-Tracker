@@ -13,7 +13,7 @@ const Navigator = (props) => {
         <ImageButton
           title="Roster"
           source={roster}
-          onPress={() => props.onPressRoster}
+          onPress={props.onPressRoster}
         />
         <ImageButton
           title="Fitness Tests"

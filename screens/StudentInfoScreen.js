@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Modal } from "react-native";
+import { View, Text, StyleSheet, Modal, Button } from "react-native";
 
 import Header from "../components/Header";
 
@@ -16,9 +16,19 @@ const StudentInfoScreen = (props) => {
             onPress={props.onCancel}
           />
         </View>
-        <Text style={styles.name}>
-          {props.student.name} ( {props.student.gender}, {props.student.age} )
-        </Text>
+        <View style={styles.name}>
+          <Text>Name: {props.student.name}</Text>
+          <Text>Age: {props.student.age}</Text>
+          <Text>Gender: {props.student.gender}</Text>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            style={styles.button}
+            title="Delete Student"
+            color="red"
+            onPress={props.onDelete}
+          />
+        </View>
       </View>
     </Modal>
   );
@@ -28,6 +38,15 @@ const styles = StyleSheet.create({
   name: {
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 100,
+  },
+
+  buttonContainer: {
+    marginTop: 350,
+  },
+
+  button: {
+    width: "20%",
   },
 });
 

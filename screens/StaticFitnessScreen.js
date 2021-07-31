@@ -20,6 +20,7 @@ const StaticFitnessScreen = (props) => {
       if (studentID == props.studentList[i].key) {
         props.setCurrentStudent.bind(this, props.studentList[i]);
         setStaticResultScreenMode(true);
+        props.setCurrentStudent(props.studentList[i]);
         return;
       }
     }
@@ -38,7 +39,12 @@ const StaticFitnessScreen = (props) => {
         visible={staticResultScreenMode}
         student={props.student}
         title={`${props.student.lastName}, ${props.student.firstName}`}
+        curlUpsMode={props.curlUpsMode}
+        pullUpsMode={props.pullUpsMode}
+        sitAndReachMode={props.sitAndReachMode}
+        saveStudent={props.saveStudent}
         setScore={setStaticResultHandler}
+        setStaticResultScreen={setStaticResultScreenMode}
         onCancel={() => setStaticResultScreenMode(false)}
       />
       <View style={styles.roster}>

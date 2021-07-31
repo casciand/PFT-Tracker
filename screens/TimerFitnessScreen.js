@@ -7,6 +7,8 @@ import StudentRoster from "../components/StudentRoster";
 import backArrow from "../assets/backarrow.png";
 
 const TimerFitnessScreen = (props) => {
+  const setTimerScoreHandler = () => {};
+
   return (
     <Modal visible={props.visible} animationType="none">
       <View>
@@ -17,12 +19,12 @@ const TimerFitnessScreen = (props) => {
         />
       </View>
       <View style={styles.stopwatch}>
-        <Text>Insert Stopwatch Component</Text>
+        <Text>Insert Stopwatch Component Here</Text>
       </View>
       <View style={styles.roster}>
         <StudentRoster
           students={props.studentList}
-          onPress={props.studentInfoModeHandler} // change to activity specific screen
+          onPress={setTimerScoreHandler} // change to activity specific screen
           mileMode={props.mileMode}
           shuttleMode={props.shuttleMode}
         />

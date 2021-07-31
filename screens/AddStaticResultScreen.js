@@ -6,16 +6,59 @@ import Header from "../components/Header";
 import backArrow from "../assets/backarrow.png";
 
 const AddStaticResultScreen = (props) => {
-  const [enteredCurlUps, setEnteredCurlUps] = useState("");
+  const [enteredValue, setEnteredValue] = useState("");
 
-  const curlUpsInputHandler = (enteredText) => {
-    setEnteredCurlUps(enteredText);
+  const inputHandler = (enteredText) => {
+    setEnteredValue(enteredText);
   };
 
-  const addCurlUpsHandler = () => {
-    props.student.curlUps = enteredCurlUps;
-    setEnteredCurlUps("");
+  const addInputHandler = () => {
+    if (props.curlUpsMode) {
+      props.student.curlUps = enteredValue;
+    } else if (props.pullUpsMode) {
+      props.student.pullUps = enteredValue;
+    } else {
+      props.student.sitAndReach = enteredValue;
+    }
+
+    props.setStaticResultScreen(false);
+    props.saveStudent(props.student);
+    setEnteredValue("");
   };
+
+  let input;
+
+  if (props.curlUpsMode) {
+    input = (
+      <TextInput
+        placeholder="# of Curl-Ups"
+        style={styles.input}
+        onChangeText={inputHandler}
+        value={enteredValue}
+        keyboardType="number-pad"
+      />
+    );
+  } else if (props.pullUpsMode) {
+    input = (
+      <TextInput
+        placeholder="# of Pull-Ups"
+        style={styles.input}
+        onChangeText={inputHandler}
+        value={enteredValue}
+        keyboardType="number-pad"
+      />
+    );
+  } else {
+    input = (
+      <TextInput
+        placeholder="Reach Length"
+        style={styles.input}
+        onChangeText={inputHandler}
+        value={enteredValue}
+        keyboardType="number-pad"
+      />
+    );
+  }
 
   return (
     <Modal visible={props.visible} animationType="slide">
@@ -26,17 +69,9 @@ const AddStaticResultScreen = (props) => {
           onPress={props.onCancel}
         />
       </View>
-      <View style={styles.inputView}>
-        <TextInput
-          placeholder="# of Curl-Ups"
-          style={styles.input}
-          onChangeText={curlUpsInputHandler}
-          value={enteredCurlUps}
-          keyboardType="number-pad"
-        />
-      </View>
+      <View style={styles.inputView}>{input}</View>
       <View style={styles.button}>
-        <Button title="Confirm Score" onPress={addCurlUpsHandler} />
+        <Button title="Confirm Score" onPress={addInputHandler} />
       </View>
     </Modal>
   );

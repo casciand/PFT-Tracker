@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 
 import Header from "../components/Header";
-import Navigator from "../components/Navigator";
 import ImageButton from "../components/ImageButton";
 
 import StaticFitnessScreen from "./StaticFitnessScreen";
@@ -84,6 +83,7 @@ const FitnessTestScreen = (props) => {
         studentList={props.studentList}
         student={props.currentStudent}
         setCurrentStudent={props.setCurrentStudent}
+        saveStudent={props.saveStudent}
         studentInfoModeHandler={props.studentInfoModeHandler}
         curlUpsMode={curlUpsMode}
         pullUpsMode={pullUpsMode}
@@ -103,13 +103,15 @@ const FitnessTestScreen = (props) => {
       </View>
       <View style={styles.fitnessTests}>
         <ImageButton
-          style={styles.fitnessButton}
+          imageStyle={styles.fitnessButtonImage}
+          textStyle={styles.fitnessButtonText}
           title="Curl-Ups"
           source={curlUp}
           onPress={openCurlUpsHandler}
         />
         <ImageButton
-          style={styles.fitnessButton}
+          imageStyle={styles.fitnessButtonImage}
+          textStyle={styles.fitnessButtonText}
           title="Pull-Ups"
           source={pullUp}
           onPress={openPullUpsHandler}
@@ -117,13 +119,15 @@ const FitnessTestScreen = (props) => {
       </View>
       <View style={styles.fitnessTests}>
         <ImageButton
-          style={styles.fitnessButton}
+          imageStyle={styles.fitnessButtonImage}
+          textStyle={styles.fitnessButtonText}
           title="Mile Run"
           source={mileRun}
           onPress={openMileHandler}
         />
         <ImageButton
-          style={styles.fitnessButton}
+          imageStyle={styles.fitnessButtonImage}
+          textStyle={styles.fitnessButtonText}
           title="Shuttle Run"
           source={shuttleRun}
           onPress={openShuttleHandler}
@@ -131,16 +135,11 @@ const FitnessTestScreen = (props) => {
       </View>
       <View style={styles.fitnessTests}>
         <ImageButton
-          style={styles.fitnessButton}
+          imageStyle={styles.fitnessButtonImage}
+          textStyle={styles.fitnessButtonText}
           title="Sit & Reach"
           source={sitAndReach}
           onPress={openSitAndReachHandler}
-        />
-      </View>
-      <View style={styles.footer}>
-        <Navigator
-          onPressRoster={props.onPressRoster}
-          onPressFitness={props.onPressFitness}
         />
       </View>
     </View>
@@ -167,25 +166,19 @@ const styles = StyleSheet.create({
   fitnessTests: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 30,
+    marginTop: 25,
     height: 100,
   },
 
-  fitnessButton: {
+  fitnessButtonImage: {
     height: 85,
     width: 85,
-    fontSize: 16,
-    fontStyle: "italic",
     margin: 10,
   },
 
-  footer: {
-    position: "absolute",
-    bottom: -140,
-    width: "100%",
-    height: "15.7%",
-    flex: 1,
-    zIndex: 1,
+  fitnessButtonText: {
+    fontSize: 16,
+    fontStyle: "italic",
   },
 });
 

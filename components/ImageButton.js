@@ -8,10 +8,12 @@ const ImageButton = (props) => {
     <TouchableOpacity style={styles.touchable} onPress={props.onPress}>
       <Image
         source={props.source}
-        style={{ ...styles.image, ...props.style }}
+        style={{ ...styles.image, ...props.imageStyle }}
       />
       <View style={styles.view}>
-        <Text style={{ ...styles.text, ...props.style }}>{props.title}</Text>
+        <Text style={{ ...styles.text, ...props.textStyle }}>
+          {props.title}
+        </Text>
       </View>
     </TouchableOpacity>
   );

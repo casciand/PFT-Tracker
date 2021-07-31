@@ -5,6 +5,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import uuid from "react-native-uuid";
 
+import Navigator from "./components/Navigator";
+
 import RosterScreen from "./screens/RosterScreen";
 import FitnessTestsScreen from "./screens/FitnessTestsScreen";
 
@@ -144,6 +146,7 @@ export default function App() {
         currentStudent={currentStudent}
         setCurrentStudent={setCurrentStudent}
         studentInfoModeHandler={studentInfoModeHandler}
+        saveStudent={saveStudent}
         onPressRoster={() => setRosterMode(true)}
         onPressFitness={() => setRosterMode(false)}
       />
@@ -154,6 +157,12 @@ export default function App() {
     <View style={styles.container}>
       {content}
       <StatusBar style="auto" />
+      <View style={styles.navigator}>
+        <Navigator
+          onPressRoster={() => setRosterMode(true)}
+          onPressFitness={() => setRosterMode(false)}
+        />
+      </View>
     </View>
   );
 }
@@ -161,5 +170,12 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+
+  navigator: {
+    height: "10%",
+    width: "100%",
+    bottom: 0,
+    position: "absolute",
   },
 });

@@ -1,8 +1,8 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Alert } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { StatusBar } from "expo-status-bar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import uuid from "react-native-uuid";
 
 import ValidationFunctions from "./assets/ValidationFunctions";
@@ -75,7 +75,7 @@ export default function App() {
     loadStudents();
   }, []);
 
-  // regular functions
+  // event handlers
   const addStudentHandler = (student) => {
     let newStudent = {
       key: uuid.v1(),
@@ -181,6 +181,7 @@ export default function App() {
         <Navigator
           onPressRoster={() => setRosterMode(true)}
           onPressFitness={() => setRosterMode(false)}
+          rosterMode={rosterMode}
         />
       </View>
     </View>

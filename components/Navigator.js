@@ -5,23 +5,35 @@ import ImageButton from "./ImageButton";
 
 import roster from "../assets/roster.jpg";
 import fitness from "../assets/fitness.jpg";
-import colors from "../constants/colors";
-import fonts from "../constants/fonts";
+import Colors from "../constants/colors";
+import Fonts from "../constants/fonts";
 
 const Navigator = (props) => {
+  let rosterOpacity, fitnessOpacity;
+
+  if (props.rosterMode) {
+    rosterOpacity = 0.4;
+    fitnessOpacity = 1;
+  } else {
+    rosterOpacity = 1;
+    fitnessOpacity = 0.4;
+  }
+
   return (
     <View style={styles.navBar}>
       <View style={styles.buttonContainer}>
         <ImageButton
           title="Roster"
           source={roster}
-          textStyle={styles.navTitle}
+          textStyle={{ ...styles.navTitle, opacity: rosterOpacity }}
+          imageStyle={{ opacity: rosterOpacity }}
           onPress={props.onPressRoster}
         />
         <ImageButton
           title="Fitness Tests"
           source={fitness}
-          textStyle={styles.navTitle}
+          textStyle={{ ...styles.navTitle, opacity: fitnessOpacity }}
+          imageStyle={{ opacity: fitnessOpacity }}
           onPress={props.onPressFitness}
         />
       </View>
@@ -36,8 +48,6 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOpacity: 0.5,
     elevation: 5,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
     alignItems: "center",
     backgroundColor: "white",
     width: "100%",
@@ -54,8 +64,8 @@ const styles = StyleSheet.create({
 
   navTitle: {
     fontSize: 10,
-    fontFamily: fonts.primary,
-    color: colors.primary,
+    fontFamily: Fonts.primary,
+    color: Colors.colors.primary,
   },
 });
 

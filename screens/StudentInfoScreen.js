@@ -2,10 +2,11 @@ import React from "react";
 import { View, Text, StyleSheet, Modal, Button } from "react-native";
 
 import Header from "../components/Header";
+import CustomButton from "../components/CustomButton";
 
 import backArrow from "../assets/backarrow.png";
-import fonts from "../constants/fonts";
-import colors from "../constants/colors";
+import Fonts from "../constants/fonts";
+import Colors from "../constants/colors";
 
 const StudentInfoScreen = (props) => {
   const formatTime = (time) => {
@@ -43,40 +44,27 @@ const StudentInfoScreen = (props) => {
           />
         </View>
         <View style={styles.informaion}>
-          <View style={styles.basicInfo}>
-            <Text style={styles.infoTitle}>Basics</Text>
-            <View style={styles.infoBlock}>
-              <View style={styles.test}>
-                <Text style={styles.testText}>Gender:</Text>
-                <Text style={styles.testText}>{props.student.gender}</Text>
-              </View>
-              <View style={styles.test}>
-                <Text style={styles.testText}>Age:</Text>
-                <Text style={styles.testText}>{props.student.age}</Text>
-              </View>
-            </View>
-          </View>
           <View style={styles.fitnessInfo}>
             <Text style={styles.infoTitle}>Fitness Scores</Text>
             <View style={styles.infoBlock}>
               <View style={styles.test}>
-                <Text style={styles.testText}>Curl-Ups:</Text>
+                <Text style={styles.testText}>Curl-Ups</Text>
                 <Text style={styles.testText}>{curlUps}</Text>
               </View>
               <View style={styles.test}>
-                <Text style={styles.testText}>Pull-Ups:</Text>
+                <Text style={styles.testText}>Pull-Ups</Text>
                 <Text style={styles.testText}>{pullUps}</Text>
               </View>
               <View style={styles.test}>
-                <Text style={styles.testText}>Mile Run:</Text>
+                <Text style={styles.testText}>Mile Run</Text>
                 <Text style={styles.testText}>{mile}</Text>
               </View>
               <View style={styles.test}>
-                <Text style={styles.testText}>Shuttle Run:</Text>
+                <Text style={styles.testText}>Shuttle Run</Text>
                 <Text style={styles.testText}>{shuttle}</Text>
               </View>
               <View style={styles.test}>
-                <Text style={styles.testText}>Sit & Reach:</Text>
+                <Text style={styles.testText}>Sit & Reach</Text>
                 <Text style={styles.testText}>{sitAndReach}</Text>
               </View>
             </View>
@@ -85,24 +73,24 @@ const StudentInfoScreen = (props) => {
             <Text style={styles.infoTitle}>Awards</Text>
             <View style={styles.infoBlock}>
               <View style={styles.test}>
-                <Text style={styles.testText}>Presidential Fitness Award:</Text>
+                <Text style={styles.testText}>Presidential Fitness Award</Text>
                 <Text style={styles.testText}>{passedPresidential}</Text>
               </View>
               <View style={styles.test}>
-                <Text style={styles.testText}>National Fitness Award:</Text>
+                <Text style={styles.testText}>National Fitness Award</Text>
                 <Text style={styles.testText}>{passedNational}</Text>
               </View>
             </View>
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <Button
-            style={styles.button}
+          <CustomButton
+            textStyle={styles.button}
             title="Edit Student"
             onPress={() => {}}
           />
-          <Button
-            style={styles.button}
+          <CustomButton
+            textStyle={styles.button}
             title="Delete Student"
             color="red"
             onPress={props.onDelete}
@@ -115,7 +103,7 @@ const StudentInfoScreen = (props) => {
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: "#F3E7FF",
+    backgroundColor: Colors.shades.secondary,
   },
 
   header: {
@@ -127,7 +115,7 @@ const styles = StyleSheet.create({
   },
 
   infoTitle: {
-    fontFamily: fonts.secondary,
+    fontFamily: Fonts.primary,
     fontSize: 20,
     color: "white",
     textAlign: "left",
@@ -136,35 +124,21 @@ const styles = StyleSheet.create({
   },
 
   infoBlock: {
-    backgroundColor: colors.primary,
+    backgroundColor: Colors.colors.primary,
     borderRadius: 15,
-  },
-
-  basicInfo: {
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    backgroundColor: "#F3E7FF",
-    padding: 5,
-    paddingHorizontal: 10,
-    zIndex: 0,
-  },
-
-  fitnessInfo: {
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
     shadowOpacity: 0.5,
     elevation: 5,
+  },
+
+  fitnessInfo: {
     height: "100%",
     padding: 5,
-    marginTop: 130,
     paddingHorizontal: 10,
     width: "100%",
-    backgroundColor: colors.secondary,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    zIndex: 1,
+    backgroundColor: Colors.shades.secondary,
   },
 
   awardInfo: {
@@ -174,12 +148,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     elevation: 5,
     position: "absolute",
-    marginTop: 370,
+    marginTop: 270,
     padding: 5,
     paddingHorizontal: 10,
     width: "100%",
     height: "100%",
-    backgroundColor: "#D3afFf",
+    backgroundColor: Colors.shades.tertiary,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     zIndex: 2,
@@ -194,7 +168,7 @@ const styles = StyleSheet.create({
 
   testText: {
     fontSize: 12,
-    fontFamily: fonts.primary,
+    fontFamily: Fonts.secondary,
     color: "white",
   },
 
@@ -205,11 +179,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     elevation: 5,
     position: "absolute",
-    bottom: 220,
+    bottom: 85,
     width: "100%",
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    backgroundColor: "white",
+    backgroundColor: Colors.colors.background,
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 15,
@@ -220,6 +192,7 @@ const styles = StyleSheet.create({
 
   button: {
     width: "80%",
+    fontSize: 16,
   },
 });
 

@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Button } from "react-native";
 
-import fonts from "../constants/fonts";
-import colors from "../constants/colors";
+import Fonts from "../constants/fonts";
+import Colors from "../constants/colors";
 
 const Student = (props) => {
   const formatTime = (time) => {
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 2,
     height: 40,
-    backgroundColor: colors.primary,
+    backgroundColor: Colors.colors.primary,
     borderWidth: 1,
     borderRadius: 15,
     justifyContent: "space-between",
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
 
   name: {
-    fontFamily: fonts.secondary,
+    fontFamily: Fonts.secondary,
     color: "white",
   },
 });

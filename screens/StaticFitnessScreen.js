@@ -7,7 +7,7 @@ import StudentRoster from "../components/StudentRoster";
 import AddStaticResultScreen from "./AddStaticResultScreen";
 
 import backArrow from "../assets/backarrow.png";
-import colors from "../constants/colors";
+import Colors from "../constants/colors";
 
 const StaticFitnessScreen = (props) => {
   const [staticResultScreenMode, setStaticResultScreenMode] = useState(false);
@@ -63,7 +63,7 @@ const StaticFitnessScreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: colors.tertiary,
+    backgroundColor: Colors.colors.background,
   },
 
   name: {

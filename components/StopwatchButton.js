@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
-import fonts from "../constants/fonts";
+import Fonts from "../constants/fonts";
 
 const StopwatchButton = (props) => {
   return (
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 12,
     textAlign: "center",
-    fontFamily: fonts.secondary,
+    fontFamily: Fonts.secondary,
   },
 });
 

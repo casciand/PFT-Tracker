@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-import fonts from "../constants/fonts";
-import colors from "../constants/colors";
+import Fonts from "../constants/fonts";
+import Colors from "../constants/colors";
 
 import ImageButton from "./ImageButton";
 
@@ -43,9 +43,9 @@ const styles = StyleSheet.create({
   },
 
   headerTitle: {
-    color: colors.primary,
+    color: Colors.colors.primary,
     fontSize: 30,
-    fontFamily: fonts.primary,
+    fontFamily: Fonts.primary,
     width: "80%",
   },
 

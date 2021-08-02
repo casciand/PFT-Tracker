@@ -12,8 +12,8 @@ import pullUp from "../assets/pullup.jpg";
 import mileRun from "../assets/mile.jpg";
 import shuttleRun from "../assets/shuttlerun.jpg";
 import sitAndReach from "../assets/sitandreach.jpg";
-import colors from "../constants/colors";
-import fonts from "../constants/fonts";
+import Colors from "../constants/colors";
+import Fonts from "../constants/fonts";
 
 const FitnessTestScreen = (props) => {
   const [staticFitnessScreenMode, setStaticFitnessScreenMode] = useState(false);
@@ -160,7 +160,7 @@ const FitnessTestScreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: colors.tertiary,
+    backgroundColor: Colors.colors.background,
   },
 
   fitnessTestsView: {
@@ -197,8 +197,8 @@ const styles = StyleSheet.create({
   },
 
   fitnessButtonText: {
-    fontFamily: fonts.secondary,
-    color: colors.primary,
+    fontFamily: Fonts.secondary,
+    color: Colors.colors.primary,
     fontSize: 16,
   },
 });

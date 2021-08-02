@@ -6,7 +6,7 @@ import StudentRoster from "../components/StudentRoster";
 import Stopwatch from "../components/Stopwatch";
 
 import backArrow from "../assets/backarrow.png";
-import colors from "../constants/colors";
+import Colors from "../constants/colors";
 
 const TimerFitnessScreen = (props) => {
   const [time, setTime] = useState(0);
@@ -17,6 +17,10 @@ const TimerFitnessScreen = (props) => {
   };
 
   const setTimerScoreHandler = (studentID) => {
+    if (time == 0) {
+      return;
+    }
+
     let currentTime = time;
     let currentStudent;
 
@@ -64,7 +68,7 @@ const TimerFitnessScreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: colors.tertiary,
+    backgroundColor: Colors.colors.background,
   },
 
   name: {
@@ -90,7 +94,7 @@ const styles = StyleSheet.create({
   },
 
   roster: {
-    height: "84.5%",
+    height: "56.5%",
     padding: 5,
   },
 });

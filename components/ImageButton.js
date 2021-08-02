@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
-import fonts from "../constants/fonts";
+import Fonts from "../constants/fonts";
 
 const ImageButton = (props) => {
   return (
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     fontSize: 8,
     textAlign: "center",
     bottom: 5,
-    fontFamily: fonts.secondary,
+    fontFamily: Fonts.secondary,
   },
 });
 

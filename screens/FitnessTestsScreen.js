@@ -12,6 +12,8 @@ import pullUp from "../assets/pullup.jpg";
 import mileRun from "../assets/mile.jpg";
 import shuttleRun from "../assets/shuttlerun.jpg";
 import sitAndReach from "../assets/sitandreach.jpg";
+import colors from "../constants/colors";
+import fonts from "../constants/fonts";
 
 const FitnessTestScreen = (props) => {
   const [staticFitnessScreenMode, setStaticFitnessScreenMode] = useState(false);
@@ -72,6 +74,10 @@ const FitnessTestScreen = (props) => {
     setShuttleMode(false);
 
     setTimerFitnessScreenMode(false);
+
+    for (let i = 0; i < props.studentList.length; ++i) {
+      props.saveStudent(props.studentList[i]);
+    }
   };
 
   return (
@@ -97,50 +103,55 @@ const FitnessTestScreen = (props) => {
         studentInfoModeHandler={props.studentInfoModeHandler}
         mileMode={mileMode}
         shuttleMode={shuttleMode}
+        saveStudent={props.saveStudent}
+        student={props.currentStudent}
+        setCurrentStudent={props.setCurrentStudent}
       />
       <View style={styles.header}>
-        <Header title="Fitness Tests" />
+        <Header style={styles.headerText} title="Fitness Tests" />
       </View>
-      <View style={styles.fitnessTests}>
-        <ImageButton
-          imageStyle={styles.fitnessButtonImage}
-          textStyle={styles.fitnessButtonText}
-          title="Curl-Ups"
-          source={curlUp}
-          onPress={openCurlUpsHandler}
-        />
-        <ImageButton
-          imageStyle={styles.fitnessButtonImage}
-          textStyle={styles.fitnessButtonText}
-          title="Pull-Ups"
-          source={pullUp}
-          onPress={openPullUpsHandler}
-        />
-      </View>
-      <View style={styles.fitnessTests}>
-        <ImageButton
-          imageStyle={styles.fitnessButtonImage}
-          textStyle={styles.fitnessButtonText}
-          title="Mile Run"
-          source={mileRun}
-          onPress={openMileHandler}
-        />
-        <ImageButton
-          imageStyle={styles.fitnessButtonImage}
-          textStyle={styles.fitnessButtonText}
-          title="Shuttle Run"
-          source={shuttleRun}
-          onPress={openShuttleHandler}
-        />
-      </View>
-      <View style={styles.fitnessTests}>
-        <ImageButton
-          imageStyle={styles.fitnessButtonImage}
-          textStyle={styles.fitnessButtonText}
-          title="Sit & Reach"
-          source={sitAndReach}
-          onPress={openSitAndReachHandler}
-        />
+      <View style={styles.fitnessTestsView}>
+        <View style={styles.fitnessTests}>
+          <ImageButton
+            imageStyle={styles.fitnessButtonImage}
+            textStyle={styles.fitnessButtonText}
+            title="Curl-Ups"
+            source={curlUp}
+            onPress={openCurlUpsHandler}
+          />
+          <ImageButton
+            imageStyle={styles.fitnessButtonImage}
+            textStyle={styles.fitnessButtonText}
+            title="Pull-Ups"
+            source={pullUp}
+            onPress={openPullUpsHandler}
+          />
+        </View>
+        <View style={styles.fitnessTests}>
+          <ImageButton
+            imageStyle={styles.fitnessButtonImage}
+            textStyle={styles.fitnessButtonText}
+            title="Mile Run"
+            source={mileRun}
+            onPress={openMileHandler}
+          />
+          <ImageButton
+            imageStyle={styles.fitnessButtonImage}
+            textStyle={styles.fitnessButtonText}
+            title="Shuttle Run"
+            source={shuttleRun}
+            onPress={openShuttleHandler}
+          />
+        </View>
+        <View style={styles.fitnessTests}>
+          <ImageButton
+            imageStyle={styles.fitnessButtonImage}
+            textStyle={styles.fitnessButtonText}
+            title="Sit & Reach"
+            source={sitAndReach}
+            onPress={openSitAndReachHandler}
+          />
+        </View>
       </View>
     </View>
   );
@@ -148,6 +159,11 @@ const FitnessTestScreen = (props) => {
 
 const styles = StyleSheet.create({
   screen: {
+    flex: 1,
+    backgroundColor: colors.tertiary,
+  },
+
+  fitnessTestsView: {
     alignItems: "center",
     justifyContent: "center",
   },
@@ -160,7 +176,9 @@ const styles = StyleSheet.create({
   },
 
   headerText: {
-    left: 80,
+    width: "100%",
+    alignContent: "center",
+    justifyContent: "center",
   },
 
   fitnessTests: {
@@ -174,11 +192,14 @@ const styles = StyleSheet.create({
     height: 85,
     width: 85,
     margin: 10,
+    borderWidth: 0.25,
+    borderRadius: 20,
   },
 
   fitnessButtonText: {
+    fontFamily: fonts.secondary,
+    color: colors.primary,
     fontSize: 16,
-    fontStyle: "italic",
   },
 });
 

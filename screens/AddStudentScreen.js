@@ -5,6 +5,7 @@ import { RadioButton } from "react-native-paper";
 import Header from "../components/Header";
 
 import backArrow from "../assets/backarrow.png";
+import colors from "../constants/colors";
 
 const AddStudentScreen = (props) => {
   const [enteredFirstName, setEnteredFirstName] = useState("");
@@ -30,11 +31,13 @@ const AddStudentScreen = (props) => {
       lastName: enteredLastName,
       age: enteredAge,
       gender: enteredGender,
-      curlUps: "N/A",
-      pullUps: "N/A",
-      mile: "N/A",
-      shuttle: "N/A",
-      sitAndReach: "N/A",
+      curlUps: null,
+      pullUps: null,
+      mile: null,
+      shuttle: null,
+      sitAndReach: null,
+      passedPresidential: false,
+      passedNational: false,
     };
 
     props.addStudent(newStudent);
@@ -47,49 +50,49 @@ const AddStudentScreen = (props) => {
 
   return (
     <Modal visible={props.visible} animationType="slide">
-      <View>
+      <View style={styles.screen}>
         <Header
           title="New Student"
           imageSource={backArrow}
           onPress={props.onCancel}
         />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          placeholder="First Name"
-          style={styles.nameTextBox}
-          onChangeText={firstNameInputHandler}
-          value={enteredFirstName}
-        />
-        <TextInput
-          placeholder="Last Name"
-          style={styles.nameTextBox}
-          onChangeText={lastNameInputHandler}
-          value={enteredLastName}
-        />
-        <TextInput
-          placeholder="Age"
-          style={styles.ageTextBox}
-          onChangeText={ageInputHandler}
-          value={enteredAge}
-          keyboardType="number-pad"
-          maxLength={2}
-        />
-        <View style={styles.radioButtons}>
-          <RadioButton.Group
-            onValueChange={(newValue) => setEnteredGender(newValue)}
-            value={enteredGender}
-          >
-            <View style={styles.radioButton}>
-              <RadioButton.Item label="Boy" value="Boy" />
-            </View>
-            <View style={styles.radioButton}>
-              <RadioButton.Item label="Girl" value="Girl" />
-            </View>
-          </RadioButton.Group>
-        </View>
-        <View style={styles.button}>
-          <Button title="Add Student" onPress={addStudentHandler} />
+        <View style={styles.inputView}>
+          <TextInput
+            placeholder="First Name"
+            style={styles.nameTextBox}
+            onChangeText={firstNameInputHandler}
+            value={enteredFirstName}
+          />
+          <TextInput
+            placeholder="Last Name"
+            style={styles.nameTextBox}
+            onChangeText={lastNameInputHandler}
+            value={enteredLastName}
+          />
+          <TextInput
+            placeholder="Age"
+            style={styles.ageTextBox}
+            onChangeText={ageInputHandler}
+            value={enteredAge}
+            keyboardType="number-pad"
+            maxLength={2}
+          />
+          <View style={styles.radioButtons}>
+            <RadioButton.Group
+              onValueChange={(newValue) => setEnteredGender(newValue)}
+              value={enteredGender}
+            >
+              <View style={styles.radioButton}>
+                <RadioButton.Item label="Boy" value="Boy" />
+              </View>
+              <View style={styles.radioButton}>
+                <RadioButton.Item label="Girl" value="Girl" />
+              </View>
+            </RadioButton.Group>
+          </View>
+          <View style={styles.button}>
+            <Button title="Add Student" onPress={addStudentHandler} />
+          </View>
         </View>
       </View>
     </Modal>
@@ -97,6 +100,11 @@ const AddStudentScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: colors.tertiary,
+  },
+
   inputView: {
     flex: 1,
     justifyContent: "center",
@@ -107,8 +115,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
-    width: "80%",
+    width: "60%",
     textAlign: "center",
+    backgroundColor: "white",
   },
 
   ageTextBox: {
@@ -121,15 +130,15 @@ const styles = StyleSheet.create({
 
   radioButtons: {
     flexDirection: "row",
-    width: "100%",
     alignItems: "center",
     justifyContent: "center",
     padding: 5,
+    marginTop: 10,
   },
 
   radioButton: {
     borderWidth: 1,
-    margin: 4,
+    marginBottom: 10,
   },
 
   button: {

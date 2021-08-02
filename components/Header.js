@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 import fonts from "../constants/fonts";
+import colors from "../constants/colors";
 
 import ImageButton from "./ImageButton";
 
@@ -27,8 +28,10 @@ const styles = StyleSheet.create({
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
-    shadowOpacity: 0.26,
+    shadowOpacity: 0.5,
     elevation: 5,
+    borderBottomRightRadius: 15,
+    borderBottomLeftRadius: 15,
     width: "100%",
     height: 90,
     paddingTop: 36,
@@ -40,9 +43,10 @@ const styles = StyleSheet.create({
   },
 
   headerTitle: {
-    color: "black",
+    color: colors.primary,
     fontSize: 30,
     fontFamily: fonts.primary,
+    width: "80%",
   },
 
   button: {

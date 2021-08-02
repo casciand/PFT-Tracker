@@ -5,25 +5,35 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import uuid from "react-native-uuid";
 
+import ValidationFunctions from "./assets/ValidationFunctions";
+
 import Navigator from "./components/Navigator";
 
 import RosterScreen from "./screens/RosterScreen";
 import FitnessTestsScreen from "./screens/FitnessTestsScreen";
 
 const defaultStudent = {
-  key: "null",
-  name: "null",
-  age: "null",
-  gender: "null",
+  key: null,
+  firstName: null,
+  lastName: null,
+  age: null,
+  gender: null,
+  curlUps: null,
+  pullUps: null,
+  mile: null,
+  shuttle: null,
+  sitAndReach: null,
+  passedPresidential: null,
+  passedNational: null,
 };
 
 export default function App() {
   const [studentList, setStudentList] = useState([]);
-  const [rosterMode, setRosterMode] = useState(true);
+  const [currentStudent, setCurrentStudent] = useState(defaultStudent);
 
+  const [rosterMode, setRosterMode] = useState(true);
   const [addStudentMode, setAddStudentMode] = useState(false);
   const [studentInfoMode, setStudentInfoMode] = useState(false);
-  const [currentStudent, setCurrentStudent] = useState(defaultStudent);
 
   // AsyncStorage functions
   const saveStudent = async (student) => {
@@ -78,6 +88,8 @@ export default function App() {
       mile: student.mile,
       shuttle: student.shuttle,
       sitAndReach: student.sitAndReach,
+      passedPresidential: student.passedPresidential,
+      passedNational: student.passedNational,
     };
 
     setStudentList((currentStudents) => [...currentStudents, newStudent]);
@@ -112,11 +124,19 @@ export default function App() {
 
   const studentInfoModeHandler = (studentID) => {
     for (let i = 0; i < studentList.length; ++i) {
-      if (studentID == studentList[i].key) {
-        setCurrentStudent(studentList[i]);
+      let student = studentList[i];
+
+      if (studentID == student.key) {
+        setCurrentStudent(student);
         setStudentInfoMode(true);
-        return;
+        break;
       }
+    }
+
+    if (ValidationFunctions.passedPresidential(currentStudent)) {
+      currentStudent.passedPresidential = true;
+      console.log(currentStudent.passedPresidential);
+      saveStudent(currentStudent);
     }
   };
 

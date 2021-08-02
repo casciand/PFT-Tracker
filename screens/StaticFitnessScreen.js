@@ -7,6 +7,7 @@ import StudentRoster from "../components/StudentRoster";
 import AddStaticResultScreen from "./AddStaticResultScreen";
 
 import backArrow from "../assets/backarrow.png";
+import colors from "../constants/colors";
 
 const StaticFitnessScreen = (props) => {
   const [staticResultScreenMode, setStaticResultScreenMode] = useState(false);
@@ -18,9 +19,8 @@ const StaticFitnessScreen = (props) => {
   const staticResultScreenHandler = (studentID) => {
     for (let i = 0; i < props.studentList.length; ++i) {
       if (studentID == props.studentList[i].key) {
-        props.setCurrentStudent.bind(this, props.studentList[i]);
-        setStaticResultScreenMode(true);
         props.setCurrentStudent(props.studentList[i]);
+        setStaticResultScreenMode(true);
         return;
       }
     }
@@ -28,39 +28,44 @@ const StaticFitnessScreen = (props) => {
 
   return (
     <Modal visible={props.visible} animationType="none">
-      <View>
+      <View style={styles.screen}>
         <Header
           title={props.title}
           imageSource={backArrow}
           onPress={props.onCancel}
         />
-      </View>
-      <AddStaticResultScreen
-        visible={staticResultScreenMode}
-        student={props.student}
-        title={`${props.student.lastName}, ${props.student.firstName}`}
-        curlUpsMode={props.curlUpsMode}
-        pullUpsMode={props.pullUpsMode}
-        sitAndReachMode={props.sitAndReachMode}
-        saveStudent={props.saveStudent}
-        setScore={setStaticResultHandler}
-        setStaticResultScreen={setStaticResultScreenMode}
-        onCancel={() => setStaticResultScreenMode(false)}
-      />
-      <View style={styles.roster}>
-        <StudentRoster
-          students={props.studentList}
-          onPress={staticResultScreenHandler} // change to activity specific screen
+        <AddStaticResultScreen
+          visible={staticResultScreenMode}
+          student={props.student}
+          title={`${props.student.lastName}, ${props.student.firstName}`}
           curlUpsMode={props.curlUpsMode}
           pullUpsMode={props.pullUpsMode}
           sitAndReachMode={props.sitAndReachMode}
+          saveStudent={props.saveStudent}
+          setScore={setStaticResultHandler}
+          setStaticResultScreen={setStaticResultScreenMode}
+          onCancel={() => setStaticResultScreenMode(false)}
         />
+        <View style={styles.roster}>
+          <StudentRoster
+            students={props.studentList}
+            onPress={staticResultScreenHandler} // change to activity specific screen
+            curlUpsMode={props.curlUpsMode}
+            pullUpsMode={props.pullUpsMode}
+            sitAndReachMode={props.sitAndReachMode}
+          />
+        </View>
       </View>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: colors.tertiary,
+  },
+
   name: {
     justifyContent: "center",
     alignItems: "center",

@@ -8,6 +8,7 @@ import AddStudentScreen from "../screens/AddStudentScreen";
 import StudentInfoScreen from "../screens/StudentInfoScreen";
 
 import plusSign from "../assets/plussign.png";
+import colors from "../constants/colors";
 
 const RosterScreen = (props) => {
   return (
@@ -46,6 +47,7 @@ const RosterScreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: colors.tertiary,
   },
 
   header: {

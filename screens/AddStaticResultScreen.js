@@ -4,6 +4,7 @@ import { View, StyleSheet, Modal, TextInput, Button } from "react-native";
 import Header from "../components/Header";
 
 import backArrow from "../assets/backarrow.png";
+import colors from "../constants/colors";
 
 const AddStaticResultScreen = (props) => {
   const [enteredValue, setEnteredValue] = useState("");
@@ -62,44 +63,70 @@ const AddStaticResultScreen = (props) => {
 
   return (
     <Modal visible={props.visible} animationType="slide">
-      <View>
+      <View style={styles.screen}>
         <Header
           title={props.title}
+          style={styles.studentName}
           imageSource={backArrow}
           onPress={props.onCancel}
         />
-      </View>
-      <View style={styles.inputView}>{input}</View>
-      <View style={styles.button}>
-        <Button title="Confirm Score" onPress={addInputHandler} />
+
+        <View style={styles.staticView}>
+          <View style={styles.inputView}>
+            {input}
+            <View style={styles.button}>
+              <Button
+                title="Confirm Score"
+                color={colors.primary}
+                onPress={addInputHandler}
+              />
+            </View>
+          </View>
+        </View>
       </View>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  name: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 100,
+  screen: {
+    flex: 1,
+    backgroundColor: colors.tertiary,
   },
 
-  button: {
-    marginBottom: 300,
+  studentName: {
+    fontSize: 20,
   },
 
   inputView: {
-    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 30,
+    borderWidth: 1,
+    borderRadius: 20,
+    backgroundColor: colors.secondary,
+    marginTop: 200,
+    width: "100%",
+    height: "60%",
+  },
+
+  staticView: {
     justifyContent: "center",
     alignItems: "center",
   },
 
   input: {
     borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
-    width: "35%",
+    padding: 15,
+    width: "55%",
     textAlign: "center",
+    backgroundColor: colors.tertiary,
+    borderRadius: 15,
+  },
+
+  button: {
+    marginTop: 20,
+    margin: 10,
   },
 });
 

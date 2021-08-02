@@ -5,6 +5,8 @@ import ImageButton from "./ImageButton";
 
 import roster from "../assets/roster.jpg";
 import fitness from "../assets/fitness.jpg";
+import colors from "../constants/colors";
+import fonts from "../constants/fonts";
 
 const Navigator = (props) => {
   return (
@@ -13,11 +15,13 @@ const Navigator = (props) => {
         <ImageButton
           title="Roster"
           source={roster}
+          textStyle={styles.navTitle}
           onPress={props.onPressRoster}
         />
         <ImageButton
           title="Fitness Tests"
           source={fitness}
+          textStyle={styles.navTitle}
           onPress={props.onPressFitness}
         />
       </View>
@@ -30,8 +34,10 @@ const styles = StyleSheet.create({
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
-    shadowOpacity: 0.26,
+    shadowOpacity: 0.5,
     elevation: 5,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
     alignItems: "center",
     backgroundColor: "white",
     width: "100%",
@@ -44,6 +50,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flex: 1,
+  },
+
+  navTitle: {
+    fontSize: 10,
+    fontFamily: fonts.primary,
+    color: colors.primary,
   },
 });
 

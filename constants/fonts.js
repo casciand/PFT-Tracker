@@ -1,4 +1,4 @@
 export default {
-    primary: 'Helvetica Neue',
-    secondary: 'Avenir'
-  };
+  primary: "Helvetica-Bold",
+  secondary: "Helvetica Neue",
+};

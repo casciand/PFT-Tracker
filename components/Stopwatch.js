@@ -9,27 +9,25 @@ const Stopwatch = (props) => {
 
   const startStopwatchHandler = () => {
     setIsRunning(true);
+
+    const now = new Date().getTime();
+
     timerRef.current = setInterval(() => {
-      props.setTime((currentTime) => currentTime + 1);
-    }, 1000);
+      props.setCsecs(Math.floor((new Date().getTime() - now) / 10));
+    }, 10);
   };
 
   const stopStopwatchHandler = () => {
     setIsRunning(false);
+
     clearInterval(timerRef.current);
   };
 
   const resetStopwatchHandler = () => {
     setIsRunning(false);
+
     clearInterval(timerRef.current);
-    props.setTime(0);
-  };
-
-  const formatTime = () => {
-    let minutes = `0${Math.floor(props.time / 60)}`.slice(-2);
-    let seconds = `0${props.time % 60}`.slice(-2);
-
-    return `${minutes} : ${seconds}`;
+    props.setCsecs(0);
   };
 
   let statusButton = (
@@ -46,7 +44,7 @@ const Stopwatch = (props) => {
     <View>
       <View style={styles.stopwatchView}>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.stopwatchText}>{formatTime()}</Text>
+          <Text style={styles.stopwatchText}>{props.format()}</Text>
         </View>
       </View>
       <View style={styles.buttonView}>
@@ -63,7 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     margin: 10,
     borderWidth: 2,
-    width: 175,
+    width: 200,
   },
 
   stopwatchText: {

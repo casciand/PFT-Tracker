@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, View, TextInput, Text, StyleSheet } from "react-native";
+import { Modal, View, TextInput, Alert, StyleSheet } from "react-native";
 import { RadioButton } from "react-native-paper";
 
 import Header from "../components/Header";
@@ -27,6 +27,21 @@ const AddStudentScreen = (props) => {
   };
 
   const addStudentHandler = () => {
+    if (
+      enteredFirstName == "" ||
+      enteredLastName == "" ||
+      enteredAge == "" ||
+      enteredGender == ""
+    ) {
+      Alert.alert(
+        "Missing Fields",
+        "You must complete all fields to create a student.",
+        [{ text: "OK", style: "cancel", onPress: () => {} }]
+      );
+
+      return;
+    }
+
     let newStudent = {
       firstName: enteredFirstName,
       lastName: enteredLastName,

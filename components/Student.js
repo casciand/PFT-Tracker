@@ -6,47 +6,44 @@ import Colors from "../constants/colors";
 
 const Student = (props) => {
   const formatTime = (time) => {
-    let minutes = `0${Math.floor(time / 60)}`.slice(-2);
-    let seconds = `0${time % 60}`.slice(-2);
+    const csecs = time * 100;
 
-    return `${minutes}:${seconds}`;
+    const msecs = `0${csecs % 100}`.slice(-2);
+    const seconds = `0${Math.floor(csecs / 100) % 60}`.slice(-2);
+    const minutes = `0${Math.floor(csecs / 100 / 60)}`.slice(-2);
+
+    return `${minutes}:${seconds}.${msecs}`;
   };
 
   let moreInfo;
 
   if (props.curlUpsMode) {
     if (props.curlUps) {
-      moreInfo = <Text style={styles.name}>Score: {props.curlUps}</Text>;
+      moreInfo = <Text style={styles.name}>{props.curlUps}</Text>;
     } else {
       moreInfo = <Text style={styles.name}>Incomplete</Text>;
     }
   } else if (props.pullUpsMode) {
     if (props.pullUps) {
-      moreInfo = <Text style={styles.name}>Score: {props.pullUps}</Text>;
+      moreInfo = <Text style={styles.name}>{props.pullUps}</Text>;
     } else {
       moreInfo = <Text style={styles.name}>Incomplete</Text>;
     }
   } else if (props.sitAndReachMode) {
     if (props.sitAndReach) {
-      moreInfo = (
-        <Text style={styles.name}>Length: {props.sitAndReach} cm</Text>
-      );
+      moreInfo = <Text style={styles.name}>{props.sitAndReach} cm</Text>;
     } else {
       moreInfo = <Text style={styles.name}>Incomplete</Text>;
     }
   } else if (props.mileMode) {
     if (props.mile) {
-      moreInfo = (
-        <Text style={styles.name}>Time: {formatTime(props.mile)}</Text>
-      );
+      moreInfo = <Text style={styles.name}>{formatTime(props.mile)}</Text>;
     } else {
       moreInfo = <Text style={styles.name}>Incomplete</Text>;
     }
   } else if (props.shuttleMode) {
     if (props.shuttle) {
-      moreInfo = (
-        <Text style={styles.name}>Time: {formatTime(props.shuttle)}</Text>
-      );
+      moreInfo = <Text style={styles.name}>{props.shuttle} s</Text>;
     } else {
       moreInfo = <Text style={styles.name}>Incomplete</Text>;
     }

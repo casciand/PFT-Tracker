@@ -13,7 +13,7 @@ import RosterScreen from "./screens/RosterScreen";
 import FitnessTestsScreen from "./screens/FitnessTestsScreen";
 
 const defaultStudent = {
-  key: null,
+  key: "key",
   firstName: null,
   lastName: null,
   age: null,
@@ -133,11 +133,19 @@ export default function App() {
       }
     }
 
+    if (ValidationFunctions.passedNational(currentStudent)) {
+      currentStudent.passedNational = true;
+    } else {
+      currentStudent.passedNational = false;
+    }
+
     if (ValidationFunctions.passedPresidential(currentStudent)) {
       currentStudent.passedPresidential = true;
-      console.log(currentStudent.passedPresidential);
-      saveStudent(currentStudent);
+    } else {
+      currentStudent.passedPresidential = false;
     }
+
+    saveStudent(currentStudent);
   };
 
   let content = (

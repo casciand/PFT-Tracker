@@ -9,18 +9,23 @@ import Fonts from "../constants/fonts";
 import Colors from "../constants/colors";
 
 const StudentInfoScreen = (props) => {
-  const formatTime = (time) => {
-    let minutes = `0${Math.floor(time / 60)}`.slice(-2);
-    let seconds = `0${time % 60}`.slice(-2);
+  const formatMileTime = (time) => {
+    const csecs = time * 100;
 
-    return `${minutes}:${seconds}`;
+    const msecs = `0${csecs % 100}`.slice(-2);
+    const seconds = `0${Math.floor(csecs / 100) % 60}`.slice(-2);
+    const minutes = `0${Math.floor(csecs / 100 / 60)}`.slice(-2);
+
+    return `${minutes}:${seconds}.${msecs}`;
   };
 
   let curlUps = props.student.curlUps ? props.student.curlUps : "Incomplete";
   let pullUps = props.student.pullUps ? props.student.pullUps : "Incomplete";
-  let mile = props.student.mile ? formatTime(props.student.mile) : "Incomplete";
+  let mile = props.student.mile
+    ? formatMileTime(props.student.mile)
+    : "Incomplete";
   let shuttle = props.student.shuttle
-    ? formatTime(props.student.shuttle)
+    ? props.student.shuttle + " s"
     : "Incomplete";
   let sitAndReach = props.student.sitAndReach
     ? props.student.sitAndReach + " cm"
@@ -121,6 +126,11 @@ const styles = StyleSheet.create({
     textAlign: "left",
     marginVertical: 5,
     padding: 5,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    shadowOpacity: 0.5,
+    elevation: 5,
   },
 
   infoBlock: {
@@ -148,7 +158,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     elevation: 5,
     position: "absolute",
-    marginTop: 270,
+    marginTop: 330,
     padding: 5,
     paddingHorizontal: 10,
     width: "100%",
@@ -187,6 +197,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 20,
     flexDirection: "row",
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
     zIndex: 3,
   },
 

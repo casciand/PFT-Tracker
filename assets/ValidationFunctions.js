@@ -249,7 +249,7 @@ export default {
     return false;
   },
 
-  passeNational: (student) => {
+  passedNational: (student) => {
     if (student.gender == "Boy") {
       if (student.age <= 6) {
         if (

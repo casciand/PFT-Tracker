@@ -9,19 +9,34 @@ import backArrow from "../assets/backarrow.png";
 import Colors from "../constants/colors";
 
 const TimerFitnessScreen = (props) => {
-  const [time, setTime] = useState(0);
+  const [csecs, setCsecs] = useState(0);
   const [, setDummyValue] = useState(0);
+
+  const formatMileTime = () => {
+    const centisecs = `0${csecs % 100}`.slice(-2);
+    const seconds = `0${Math.floor(csecs / 100) % 60}`.slice(-2);
+    const minutes = `0${Math.floor(csecs / 100 / 60)}`.slice(-2);
+
+    return `${minutes}:${seconds}.${centisecs}`;
+  };
+
+  const formatShuttleTime = () => {
+    const centisecs = `0${csecs % 100}`.slice(-2);
+    const seconds = `0${Math.floor(csecs / 100) % 60}`.slice(-2);
+
+    return `${seconds}.${centisecs}`;
+  };
 
   const forceUpdate = () => {
     setDummyValue((val) => val + 1);
   };
 
   const setTimerScoreHandler = (studentID) => {
-    if (time == 0) {
+    if (csecs == 0) {
       return;
     }
 
-    let currentTime = time;
+    const currentSeconds = csecs / 100;
     let currentStudent;
 
     for (let i = 0; i < props.studentList.length; ++i) {
@@ -33,13 +48,19 @@ const TimerFitnessScreen = (props) => {
     }
 
     if (props.mileMode) {
-      currentStudent.mile = currentTime;
+      currentStudent.mile = currentSeconds;
     } else {
-      currentStudent.shuttle = currentTime;
+      currentStudent.shuttle = currentSeconds;
     }
 
     forceUpdate();
   };
+
+  let timeFormat = formatMileTime;
+
+  if (props.shuttleMode) {
+    timeFormat = formatShuttleTime;
+  }
 
   return (
     <Modal visible={props.visible} animationType="none">
@@ -50,7 +71,7 @@ const TimerFitnessScreen = (props) => {
           onPress={props.onCancel}
         />
         <View style={styles.stopwatchView}>
-          <Stopwatch time={time} setTime={setTime} />
+          <Stopwatch format={timeFormat} setCsecs={setCsecs} />
         </View>
         <View style={styles.roster}>
           <StudentRoster
@@ -71,32 +92,26 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.colors.background,
   },
 
-  name: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 100,
-  },
-
-  button: {
-    marginTop: 350,
-  },
-
   stopwatchView: {
     alignItems: "center",
     margin: 10,
-  },
-
-  stopwatch: {
-    backgroundColor: "#fff",
-    padding: 5,
-    borderRadius: 5,
-    width: 220,
+    borderRadius: 50,
+    padding: 10,
+    marginHorizontal: 50,
+    backgroundColor: Colors.colors.background,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
+    shadowOpacity: 0.2,
+    elevation: 5,
   },
 
   roster: {
     height: "56.5%",
     padding: 5,
   },
+
+  shuttleStopwatch: {},
 });
 
 export default TimerFitnessScreen;

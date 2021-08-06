@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Button } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import Fonts from "../constants/fonts";
 import Colors from "../constants/colors";
@@ -19,36 +19,42 @@ const Student = (props) => {
 
   if (props.curlUpsMode) {
     if (props.curlUps) {
-      moreInfo = <Text style={styles.name}>{props.curlUps}</Text>;
+      moreInfo = `Attempts: ${props.curlUps.length}`;
     } else {
-      moreInfo = <Text style={styles.name}>Incomplete</Text>;
+      moreInfo = "Incomplete";
     }
   } else if (props.pullUpsMode) {
     if (props.pullUps) {
-      moreInfo = <Text style={styles.name}>{props.pullUps}</Text>;
+      moreInfo = `Attempts: ${props.pullUps.length}`;
     } else {
-      moreInfo = <Text style={styles.name}>Incomplete</Text>;
+      moreInfo = "Incomplete";
+    }
+  } else if (props.pushUpsMode) {
+    if (props.pushUps) {
+      moreInfo = `Attempts: ${props.pushUps.length}`;
+    } else {
+      moreInfo = "Incomplete";
     }
   } else if (props.sitAndReachMode) {
     if (props.sitAndReach) {
-      moreInfo = <Text style={styles.name}>{props.sitAndReach} cm</Text>;
+      moreInfo = `Attempts: ${props.sitAndReach.length}`;
     } else {
-      moreInfo = <Text style={styles.name}>Incomplete</Text>;
+      moreInfo = "Incomplete";
     }
   } else if (props.mileMode) {
     if (props.mile) {
-      moreInfo = <Text style={styles.name}>{formatTime(props.mile)}</Text>;
+      moreInfo = `Attempts: ${props.mile.length}`;
     } else {
-      moreInfo = <Text style={styles.name}>Incomplete</Text>;
+      moreInfo = "Incomplete";
     }
   } else if (props.shuttleMode) {
     if (props.shuttle) {
-      moreInfo = <Text style={styles.name}>{props.shuttle} s</Text>;
+      moreInfo = `Attempts: ${props.shuttle.length}`;
     } else {
-      moreInfo = <Text style={styles.name}>Incomplete</Text>;
+      moreInfo = "Incomplete";
     }
   } else {
-    moreInfo = <Text style={styles.name}></Text>;
+    moreInfo = "";
   }
 
   return (
@@ -57,7 +63,7 @@ const Student = (props) => {
         <Text style={styles.name}>
           {props.lastName}, {props.firstName}
         </Text>
-        {moreInfo}
+        <Text style={styles.name}>{moreInfo}</Text>
       </View>
     </TouchableOpacity>
   );

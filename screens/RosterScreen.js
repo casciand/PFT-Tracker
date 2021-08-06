@@ -1,13 +1,14 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-import Header from "../components/Header";
-import StudentRoster from "../components/StudentRoster";
-
 import AddStudentScreen from "../screens/AddStudentScreen";
 import StudentInfoScreen from "../screens/StudentInfoScreen";
 
+import Header from "../components/Header";
+import StudentRoster from "../components/StudentRoster";
+
 import plusSign from "../assets/plussign.png";
+
 import Colors from "../constants/colors";
 import Fonts from "../constants/fonts";
 

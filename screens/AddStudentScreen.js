@@ -47,11 +47,12 @@ const AddStudentScreen = (props) => {
       lastName: enteredLastName,
       age: enteredAge,
       gender: enteredGender,
-      curlUps: null,
-      pullUps: null,
-      mile: null,
-      shuttle: null,
-      sitAndReach: null,
+      curlUps: [],
+      pullUps: [],
+      pushUps: [],
+      mile: [],
+      shuttle: [],
+      sitAndReach: [],
       passedPresidential: false,
       passedNational: false,
     };
@@ -111,9 +112,9 @@ const AddStudentScreen = (props) => {
           <View style={{ zIndex: 2 }}>
             <CustomButton title="Add Student" onPress={addStudentHandler} />
           </View>
-          <View style={styles.largerCircle}></View>
+          {/* <View style={styles.largerCircle}></View>
           <View style={styles.smallCircle}></View>
-          <View style={styles.largeCircle}></View>
+          <View style={styles.largeCircle}></View> */}
         </View>
       </View>
     </Modal>
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
   buttonView: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.shades.secondary,
+    //backgroundColor: Colors.shades.secondary,
     position: "absolute",
     height: "40%",
     width: "100%",
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     elevation: 5,
     bottom: 0,
-    borderWidth: 1,
+    //borderWidth: 1,
     zIndex: 1,
   },
 

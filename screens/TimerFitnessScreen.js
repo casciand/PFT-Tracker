@@ -10,7 +10,7 @@ import Colors from "../constants/colors";
 
 const TimerFitnessScreen = (props) => {
   const [csecs, setCsecs] = useState(0);
-  const [, setDummyValue] = useState(0);
+  const [, setDummyValue] = useState(false);
 
   const formatMileTime = () => {
     const centisecs = `0${csecs % 100}`.slice(-2);
@@ -21,14 +21,33 @@ const TimerFitnessScreen = (props) => {
   };
 
   const formatShuttleTime = () => {
+    let format;
+
     const centisecs = `0${csecs % 100}`.slice(-2);
     const seconds = `0${Math.floor(csecs / 100) % 60}`.slice(-2);
 
-    return `${seconds}.${centisecs}`;
+    if (csecs / 100 >= 60) {
+      const minutes = `0${Math.floor(csecs / 100 / 60)}`.slice(-2);
+      format = `${minutes}:${seconds}.${centisecs}`;
+    } else {
+      format = `${seconds}.${centisecs}`;
+    }
+
+    return format;
   };
 
   const forceUpdate = () => {
-    setDummyValue((val) => val + 1);
+    setDummyValue((val) => !val);
+  };
+
+  const formatDate = () => {
+    const now = new Date();
+
+    const day = now.getDate();
+    const month = now.getMonth() + 1;
+    const year = now.getFullYear() % 100;
+
+    return `${month}/${day}/${year}`;
   };
 
   const setTimerScoreHandler = (studentID) => {
@@ -36,7 +55,6 @@ const TimerFitnessScreen = (props) => {
       return;
     }
 
-    const currentSeconds = csecs / 100;
     let currentStudent;
 
     for (let i = 0; i < props.studentList.length; ++i) {
@@ -47,10 +65,13 @@ const TimerFitnessScreen = (props) => {
       }
     }
 
+    const currentSeconds = csecs / 100;
+    const entry = [formatDate(), currentSeconds];
+
     if (props.mileMode) {
-      currentStudent.mile = currentSeconds;
+      currentStudent.mile.push(entry);
     } else {
-      currentStudent.shuttle = currentSeconds;
+      currentStudent.shuttle.push(entry);
     }
 
     forceUpdate();
@@ -71,7 +92,7 @@ const TimerFitnessScreen = (props) => {
           onPress={props.onCancel}
         />
         <View style={styles.stopwatchView}>
-          <Stopwatch format={timeFormat} setCsecs={setCsecs} />
+          <Stopwatch format={timeFormat} csecs={csecs} setCsecs={setCsecs} />
         </View>
         <View style={styles.roster}>
           <StudentRoster

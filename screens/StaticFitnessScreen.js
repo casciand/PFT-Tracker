@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Modal } from "react-native";
 
+import AddStaticResultScreen from "./AddStaticResultScreen";
+
 import Header from "../components/Header";
 import StudentRoster from "../components/StudentRoster";
 
-import AddStaticResultScreen from "./AddStaticResultScreen";
-
 import backArrow from "../assets/backarrow.png";
+
 import Colors from "../constants/colors";
 
 const StaticFitnessScreen = (props) => {
@@ -40,6 +41,7 @@ const StaticFitnessScreen = (props) => {
           title={`${props.student.lastName}, ${props.student.firstName}`}
           curlUpsMode={props.curlUpsMode}
           pullUpsMode={props.pullUpsMode}
+          pushUpsMode={props.pushUpsMode}
           sitAndReachMode={props.sitAndReachMode}
           saveStudent={props.saveStudent}
           setScore={setStaticResultHandler}
@@ -49,9 +51,10 @@ const StaticFitnessScreen = (props) => {
         <View style={styles.roster}>
           <StudentRoster
             students={props.studentList}
-            onPress={staticResultScreenHandler} // change to activity specific screen
+            onPress={staticResultScreenHandler}
             curlUpsMode={props.curlUpsMode}
             pullUpsMode={props.pullUpsMode}
+            pushUpsMode={props.pushUpsMode}
             sitAndReachMode={props.sitAndReachMode}
           />
         </View>

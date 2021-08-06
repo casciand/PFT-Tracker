@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Modal, TextInput, Button } from "react-native";
+import { View, StyleSheet, Modal, TextInput, Alert } from "react-native";
 
 import Header from "../components/Header";
 import CustomButton from "../components/CustomButton";
 
 import backArrow from "../assets/backarrow.png";
+
 import Colors from "../constants/colors";
 
 const AddStaticResultScreen = (props) => {
@@ -14,13 +15,35 @@ const AddStaticResultScreen = (props) => {
     setEnteredValue(enteredText);
   };
 
+  const formatDate = () => {
+    const now = new Date();
+
+    const day = now.getDate();
+    const month = now.getMonth() + 1;
+    const year = now.getFullYear() % 100;
+
+    return `${month}/${day}/${year}`;
+  };
+
   const addInputHandler = () => {
+    if (enteredValue == "") {
+      Alert.alert("Missing Field", "Please enter a number to submit.", [
+        { text: "OK", style: "cancel", onPress: () => {} },
+      ]);
+
+      return;
+    }
+
+    const entry = [formatDate(), enteredValue];
+
     if (props.curlUpsMode) {
-      props.student.curlUps = enteredValue;
+      props.student.curlUps.push(entry);
     } else if (props.pullUpsMode) {
-      props.student.pullUps = enteredValue;
+      props.student.pullUps.push(entry);
+    } else if (props.pushUpsMode) {
+      props.student.pushUps.push(entry);
     } else {
-      props.student.sitAndReach = enteredValue;
+      props.student.sitAndReach.push(entry);
     }
 
     props.setStaticResultScreen(false);
@@ -34,6 +57,8 @@ const AddStaticResultScreen = (props) => {
     placeholder = "# of Curl-Ups";
   } else if (props.pullUpsMode) {
     placeholder = "# of Pull-Ups";
+  } else if (props.pushUpsMode) {
+    placeholder = "# of Push-Ups";
   } else {
     placeholder = "Reach Length";
   }

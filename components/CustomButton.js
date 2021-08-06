@@ -6,7 +6,7 @@ import Fonts from "../constants/fonts";
 
 const CustomButton = (props) => {
   return (
-    <TouchableOpacity style={styles.touchable} onPress={props.onPress}>
+    <TouchableOpacity onPress={props.onPress}>
       <View style={{ ...styles.border, ...props.borderStyle }}>
         <Text style={{ ...styles.text, ...props.textStyle }}>
           {props.title}

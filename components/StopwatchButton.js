@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import Fonts from "../constants/fonts";
 
 const StopwatchButton = (props) => {
   return (
-    <TouchableOpacity style={styles.touchable} onPress={props.onPress}>
+    <TouchableOpacity onPress={props.onPress}>
       <View style={styles.border}>
         <View style={styles.view}>
           <Text style={{ ...styles.text, ...props.textStyle }}>

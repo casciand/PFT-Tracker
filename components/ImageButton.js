@@ -5,7 +5,7 @@ import Fonts from "../constants/fonts";
 
 const ImageButton = (props) => {
   return (
-    <TouchableOpacity style={styles.touchable} onPress={props.onPress}>
+    <TouchableOpacity onPress={props.onPress}>
       <Image
         source={props.source}
         style={{ ...styles.image, ...props.imageStyle }}
@@ -20,10 +20,6 @@ const ImageButton = (props) => {
 };
 
 const styles = StyleSheet.create({
-  view: {
-    position: "relative",
-  },
-
   image: {
     width: 50,
     height: 50,

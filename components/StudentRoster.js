@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { View, ScrollView, Text, StyleSheet, Button } from "react-native";
+import React from "react";
+import { ScrollView, StyleSheet } from "react-native";
 
 import Student from "./Student";
 
 const StudentRoster = (props) => {
-  function insertionSort(arr) {
+  const insertionSort = (arr) => {
     for (let i = 1; i < arr.length; ++i) {
       let j = i;
 
@@ -15,7 +15,7 @@ const StudentRoster = (props) => {
         --j;
       }
     }
-  }
+  };
 
   let students = [];
 
@@ -29,6 +29,7 @@ const StudentRoster = (props) => {
         gender={props.students[i].gender}
         curlUps={props.students[i].curlUps}
         pullUps={props.students[i].pullUps}
+        pushUps={props.students[i].pushUps}
         mile={props.students[i].mile}
         shuttle={props.students[i].shuttle}
         sitAndReach={props.students[i].sitAndReach}
@@ -36,6 +37,7 @@ const StudentRoster = (props) => {
         passedNational={props.students[i].passedNational}
         curlUpsMode={props.curlUpsMode}
         pullUpsMode={props.pullUpsMode}
+        pushUpsMode={props.pushUpsMode}
         sitAndReachMode={props.sitAndReachMode}
         mileMode={props.mileMode}
         shuttleMode={props.shuttleMode}

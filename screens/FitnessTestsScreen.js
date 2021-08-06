@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
-
-import Header from "../components/Header";
-import ImageButton from "../components/ImageButton";
+import { View, StyleSheet } from "react-native";
 
 import StaticFitnessScreen from "./StaticFitnessScreen";
 import TimerFitnessScreen from "./TimerFitnessScreen";
 
+import Header from "../components/Header";
+import ImageButton from "../components/ImageButton";
+
 import curlUp from "../assets/curlup.jpg";
 import pullUp from "../assets/pullup.jpg";
+import pushUp from "../assets/pushup.png";
 import mileRun from "../assets/mile.jpg";
 import shuttleRun from "../assets/shuttlerun.jpg";
 import sitAndReach from "../assets/sitandreach.jpg";
+
 import Colors from "../constants/colors";
 import Fonts from "../constants/fonts";
 
@@ -22,6 +24,7 @@ const FitnessTestScreen = (props) => {
 
   const [curlUpsMode, setCurlUpsMode] = useState(false);
   const [pullUpsMode, setPullUpsMode] = useState(false);
+  const [pushUpsMode, setPushUpsMode] = useState(false);
   const [mileMode, setMileMode] = useState(false);
   const [shuttleMode, setShuttleMode] = useState(false);
   const [sitAndReachMode, setSitAndReachMode] = useState(false);
@@ -37,6 +40,13 @@ const FitnessTestScreen = (props) => {
     setCurrentActivity("Pull-Ups");
 
     setPullUpsMode(true);
+    setStaticFitnessScreenMode(true);
+  };
+
+  const openPushUpsHandler = () => {
+    setCurrentActivity("Push-Ups");
+
+    setPushUpsMode(true);
     setStaticFitnessScreenMode(true);
   };
 
@@ -64,6 +74,7 @@ const FitnessTestScreen = (props) => {
   const closeStaticFitnessScreenHandler = () => {
     setPullUpsMode(false);
     setCurlUpsMode(false);
+    setPushUpsMode(false);
     setSitAndReachMode(false);
 
     setStaticFitnessScreenMode(false);
@@ -93,6 +104,7 @@ const FitnessTestScreen = (props) => {
         studentInfoModeHandler={props.studentInfoModeHandler}
         curlUpsMode={curlUpsMode}
         pullUpsMode={pullUpsMode}
+        pushUpsMode={pushUpsMode}
         sitAndReachMode={sitAndReachMode}
       />
       <TimerFitnessScreen
@@ -125,6 +137,13 @@ const FitnessTestScreen = (props) => {
             title="Pull-Ups"
             source={pullUp}
             onPress={openPullUpsHandler}
+          />
+          <ImageButton
+            imageStyle={styles.fitnessButtonImage}
+            textStyle={styles.fitnessButtonText}
+            title="Push-Ups"
+            source={pushUp}
+            onPress={openPushUpsHandler}
           />
         </View>
         <View style={styles.fitnessTests}>

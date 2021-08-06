@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react";
-import { View, StyleSheet, Button, Text } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 
 import StopwatchButton from "../components/StopwatchButton";
 
 const Stopwatch = (props) => {
   const timerRef = useRef();
   const [isRunning, setIsRunning] = useState(false);
+  const [currTime, setCurrTime] = useState(0);
 
   const startStopwatchHandler = () => {
     setIsRunning(true);
@@ -13,12 +14,13 @@ const Stopwatch = (props) => {
     const now = new Date().getTime();
 
     timerRef.current = setInterval(() => {
-      props.setCsecs(Math.floor((new Date().getTime() - now) / 10));
+      props.setCsecs(currTime + Math.floor((new Date().getTime() - now) / 10));
     }, 10);
   };
 
   const stopStopwatchHandler = () => {
     setIsRunning(false);
+    setCurrTime(props.csecs);
 
     clearInterval(timerRef.current);
   };
@@ -27,6 +29,7 @@ const Stopwatch = (props) => {
     setIsRunning(false);
 
     clearInterval(timerRef.current);
+    setCurrTime(0);
     props.setCsecs(0);
   };
 

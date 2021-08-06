@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
+import ImageButton from "./ImageButton";
+
 import Fonts from "../constants/fonts";
 import Colors from "../constants/colors";
-
-import ImageButton from "./ImageButton";
 
 const Header = (props) => {
   return (

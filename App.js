@@ -5,26 +5,27 @@ import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import uuid from "react-native-uuid";
 
+import RosterScreen from "./screens/RosterScreen";
+import FitnessTestsScreen from "./screens/FitnessTestsScreen";
+
 import ValidationFunctions from "./assets/ValidationFunctions";
 
 import Navigator from "./components/Navigator";
 
-import RosterScreen from "./screens/RosterScreen";
-import FitnessTestsScreen from "./screens/FitnessTestsScreen";
-
 const defaultStudent = {
   key: "key",
-  firstName: null,
-  lastName: null,
-  age: null,
-  gender: null,
-  curlUps: null,
-  pullUps: null,
-  mile: null,
-  shuttle: null,
-  sitAndReach: null,
-  passedPresidential: null,
-  passedNational: null,
+  firstName: "Placeholder",
+  lastName: "Student",
+  age: "2",
+  gender: "Boy",
+  curlUps: [],
+  pullUps: [],
+  pushUps: [],
+  mile: [],
+  shuttle: [],
+  sitAndReach: [],
+  passedPresidential: false,
+  passedNational: false,
 };
 
 export default function App() {
@@ -85,6 +86,7 @@ export default function App() {
       gender: student.gender,
       curlUps: student.curlUps,
       pullUps: student.pullUps,
+      pushUps: student.pushUps,
       mile: student.mile,
       shuttle: student.shuttle,
       sitAndReach: student.sitAndReach,

@@ -48,19 +48,29 @@ const StudentRoster = (props) => {
 
   insertionSort(students);
 
+  let rosterStyle = styles.staticStyle;
+
+  if (props.mileMode || props.shuttleMode) {
+    rosterStyle = styles.timerStyle;
+  }
+
   return (
-    <ScrollView
-      contentContainerStyle={styles.contentContainer}
-      indicatorStyle="black"
-    >
+    <ScrollView contentContainerStyle={rosterStyle} indicatorStyle="black">
       {students}
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  contentContainer: {
+  staticStyle: {
     padding: 15,
+  },
+
+  timerStyle: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

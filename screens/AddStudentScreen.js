@@ -112,9 +112,9 @@ const AddStudentScreen = (props) => {
           <View style={{ zIndex: 2 }}>
             <CustomButton title="Add Student" onPress={addStudentHandler} />
           </View>
-          {/* <View style={styles.largerCircle}></View>
+          <View style={styles.largerCircle}></View>
           <View style={styles.smallCircle}></View>
-          <View style={styles.largeCircle}></View> */}
+          <View style={styles.largeCircle}></View>
         </View>
       </View>
     </Modal>
@@ -131,15 +131,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 100,
-    backgroundColor: Colors.shades.primary,
+    backgroundColor: Colors.colors.primary,
     paddingVertical: 30,
     marginHorizontal: 30,
     borderRadius: 15,
     borderWidth: 1,
     shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 0 },
     shadowRadius: 6,
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.9,
     elevation: 5,
     zIndex: 2,
   },
@@ -183,57 +183,7 @@ const styles = StyleSheet.create({
   buttonView: {
     alignItems: "center",
     justifyContent: "center",
-    //backgroundColor: Colors.shades.secondary,
-    position: "absolute",
-    height: "40%",
-    width: "100%",
     paddingTop: 40,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    shadowOpacity: 0.4,
-    elevation: 5,
-    bottom: 0,
-    //borderWidth: 1,
-    zIndex: 1,
-  },
-
-  smallCircle: {
-    backgroundColor: Colors.colors.background,
-    borderRadius: 100,
-    width: 160,
-    height: 160,
-    zIndex: 3,
-    left: -40,
-    bottom: -40,
-    position: "absolute",
-    borderWidth: 1,
-  },
-
-  largeCircle: {
-    backgroundColor: Colors.colors.background,
-    borderRadius: 100,
-    width: 200,
-    height: 200,
-    zIndex: 3,
-    left: 40,
-    bottom: -160,
-    position: "absolute",
-    borderWidth: 1,
-  },
-
-  largerCircle: {
-    backgroundColor: Colors.colors.background,
-    borderRadius: 100,
-    width: 200,
-    height: 200,
-    zIndex: 1,
-    right: -40,
-    bottom: 60,
-    position: "absolute",
-    borderWidth: 1,
   },
 });
 

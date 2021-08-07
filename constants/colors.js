@@ -9,7 +9,7 @@ export default {
 
   shades: {
     primary: "#1F4E59",
-    secondary: "#2C6D7DDD",
-    tertiary: "#309F8ADD",
+    secondary: "#2C6D7D",
+    tertiary: "#309F8f",
   },
 };

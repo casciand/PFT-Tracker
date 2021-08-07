@@ -55,8 +55,11 @@ const StudentInfoScreen = ({ student, ...props }) => {
     }
 
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.test}>{contents}</View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.test}
+      >
+        {contents}
       </ScrollView>
     );
   };
@@ -178,14 +181,14 @@ const StudentInfoScreen = ({ student, ...props }) => {
           </View>
           <View style={styles.awardInfo}>
             <Text style={styles.infoTitle}>Awards</Text>
-            <View style={styles.infoBlock}>
-              <View style={styles.entry}>
+            <View style={{ ...styles.infoBlock, height: 75 }}>
+              <View style={styles.awardTextView}>
                 <Text style={styles.testText}>Presidential Fitness Award</Text>
                 <Text style={styles.testText}>
                   {student.passedPresidential ? "Passed" : "Has Not Passed"}
                 </Text>
               </View>
-              <View style={styles.entry}>
+              <View style={styles.awardTextView}>
                 <Text style={styles.testText}>National Fitness Award</Text>
                 <Text style={styles.testText}>
                   {student.passedNational ? "Passed" : "Has Not Passed"}
@@ -207,7 +210,6 @@ const StudentInfoScreen = ({ student, ...props }) => {
             />
           </View>
         </ScrollView>
-        <View style={styles.largeCircle}></View>
       </View>
     </Modal>
   );
@@ -216,7 +218,11 @@ const StudentInfoScreen = ({ student, ...props }) => {
 const styles = StyleSheet.create({
   screen: {
     height: "100%",
-    backgroundColor: Colors.colors.background,
+    backgroundColor: Colors.colors.backgroundColor,
+  },
+
+  studentName: {
+    fontSize: 20,
   },
 
   entry: {
@@ -232,10 +238,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 
-  studentName: {
-    fontSize: 20,
-  },
-
   infoTitle: {
     fontFamily: Fonts.primary,
     fontSize: 20,
@@ -248,6 +250,11 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOpacity: 0.5,
     elevation: 5,
+  },
+
+  activityTitleView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 
   activityTitle: {
@@ -265,21 +272,17 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 
-  activityTitleView: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
   infoBlock: {
     backgroundColor: Colors.colors.primary,
     borderRadius: 15,
+    borderWidth: 1,
     marginVertical: 10,
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    shadowOpacity: 0.5,
-    elevation: 5,
     height: 90,
+  },
+
+  test: {
+    width: "100%",
+    padding: 10,
   },
 
   fitnessInfo: {
@@ -287,13 +290,19 @@ const styles = StyleSheet.create({
     width: "90%",
     backgroundColor: Colors.shades.secondary,
     borderRadius: 15,
+    borderWidth: 1,
     padding: 15,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 10,
+    shadowOpacity: 0.5,
+    elevation: 5,
   },
 
   awardInfo: {
     shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 10,
     shadowOpacity: 0.5,
     elevation: 5,
     padding: 5,
@@ -301,13 +310,15 @@ const styles = StyleSheet.create({
     margin: 20,
     width: "90%",
     height: "18%",
-    backgroundColor: Colors.shades.tertiary,
+    backgroundColor: Colors.shades.secondary,
     borderRadius: 15,
+    borderWidth: 1,
   },
 
-  test: {
-    width: "100%",
+  awardTextView: {
     padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 
   testText: {
@@ -326,20 +337,8 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: "80%",
+    width: "100%",
     fontSize: 16,
-  },
-
-  largeCircle: {
-    backgroundColor: Colors.colors.background,
-    borderRadius: 100,
-    width: 200,
-    height: 200,
-    zIndex: -1,
-    right: -40,
-    bottom: 60,
-    position: "absolute",
-    borderWidth: 1,
   },
 });
 

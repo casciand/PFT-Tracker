@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Modal, Button } from "react-native";
 
 import Header from "../components/Header";
@@ -11,6 +11,7 @@ import Colors from "../constants/colors";
 const TimerFitnessScreen = (props) => {
   const [csecs, setCsecs] = useState(0);
   const [, setDummyValue] = useState(false);
+  const [currentList, setCurrentList] = useState(props.studentList);
 
   const formatMileTime = () => {
     const centisecs = `0${csecs % 100}`.slice(-2);
@@ -51,10 +52,6 @@ const TimerFitnessScreen = (props) => {
   };
 
   const setTimerScoreHandler = (studentID) => {
-    if (csecs == 0) {
-      return;
-    }
-
     let currentStudent;
 
     for (let i = 0; i < props.studentList.length; ++i) {
@@ -77,11 +74,18 @@ const TimerFitnessScreen = (props) => {
     forceUpdate();
   };
 
-  let timeFormat = formatMileTime;
+  const onPressStudent = (studentID) => {
+    if (csecs == 0) {
+      return;
+    }
 
-  if (props.shuttleMode) {
-    timeFormat = formatShuttleTime;
-  }
+    setTimerScoreHandler(studentID);
+    setCurrentList((list) => {
+      return list.filter((student) => student.key != studentID);
+    });
+  };
+
+  let timeFormat = props.shuttleMode ? formatShuttleTime : formatMileTime;
 
   return (
     <Modal visible={props.visible} animationType="none">
@@ -96,8 +100,8 @@ const TimerFitnessScreen = (props) => {
         </View>
         <View style={styles.roster}>
           <StudentRoster
-            students={props.studentList}
-            onPress={setTimerScoreHandler} // change to activity specific screen
+            students={currentList}
+            onPress={onPressStudent} // change to activity specific screen
             mileMode={props.mileMode}
             shuttleMode={props.shuttleMode}
           />

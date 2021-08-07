@@ -41,36 +41,32 @@ const Student = (props) => {
     } else {
       moreInfo = "Incomplete";
     }
-  } else if (props.mileMode) {
-    if (props.mile) {
-      moreInfo = `Attempts: ${props.mile.length}`;
-    } else {
-      moreInfo = "Incomplete";
-    }
-  } else if (props.shuttleMode) {
-    if (props.shuttle) {
-      moreInfo = `Attempts: ${props.shuttle.length}`;
-    } else {
-      moreInfo = "Incomplete";
-    }
   } else {
     moreInfo = "";
   }
 
+  let additionalText = <Text style={styles.name}>{moreInfo}</Text>;
+
+  let studentStyle = styles.studentStatic;
+
+  if (props.mileMode || props.shuttleMode) {
+    studentStyle = styles.studentTimer;
+  }
+
   return (
     <TouchableOpacity onPress={props.onPress}>
-      <View style={styles.student}>
+      <View style={studentStyle}>
         <Text style={styles.name}>
           {props.lastName}, {props.firstName}
         </Text>
-        <Text style={styles.name}>{moreInfo}</Text>
+        {additionalText}
       </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  student: {
+  studentStatic: {
     padding: 10,
     margin: 2,
     height: 40,
@@ -78,6 +74,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 15,
     justifyContent: "space-between",
+    flexDirection: "row",
+    shadowColor: "black",
+    shadowOffset: { width: 2, height: 2 },
+    shadowRadius: 6,
+    shadowOpacity: 0.24,
+    elevation: 5,
+  },
+
+  studentTimer: {
+    padding: 10,
+    margin: 2,
+    height: 40,
+    backgroundColor: Colors.colors.primary,
+    borderWidth: 1,
+    borderRadius: 15,
+    justifyContent: "center",
     flexDirection: "row",
     shadowColor: "black",
     shadowOffset: { width: 2, height: 2 },

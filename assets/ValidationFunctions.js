@@ -1,13 +1,45 @@
+const getBestStatic = (scores) => {
+  if (scores.length == 0) {
+    return -1;
+  }
+
+  let best = scores[0][1];
+
+  for (let i = 0; i < scores.length; ++i) {
+    if (scores[i][1] > best) {
+      best = scores[i][1];
+    }
+  }
+
+  return best;
+};
+
+const getBestTimer = (scores) => {
+  if (scores.length == 0) {
+    return 793;
+  }
+
+  let best = scores[0][1];
+
+  for (let i = 0; i < scores.length; ++i) {
+    if (scores[i][1] < best) {
+      best = scores[i][1];
+    }
+  }
+
+  return best;
+};
+
 export default {
   passedPresidential: (student) => {
     if (student.gender == "Boy") {
       if (student.age <= 6) {
         if (
-          student.curlUps >= 33 &&
-          student.shuttle <= 12.1 &&
-          student.sitAndReach >= 31 &&
-          student.mile <= 615 &&
-          student.pullUps >= 2
+          getBestStatic(student.curlUps) >= 33 &&
+          getBestStatic(student.shuttle) <= 12.1 &&
+          getBestStatic(student.sitAndReach) >= 31 &&
+          getBestStatic(student.mile) <= 615 &&
+          getBestStatic(student.pullUps) >= 2
         ) {
           return true;
         }
@@ -93,11 +125,11 @@ export default {
         }
       } else if (student.age <= 15) {
         if (
-          student.curlUps >= 57 &&
-          student.shuttle <= 9 &&
-          student.sitAndReach >= 37 &&
-          student.mile <= 380 &&
-          student.pullUps >= 11
+          getBestStatic(student.curlUps) >= 57 &&
+          getBestStatic(student.shuttle) <= 9 &&
+          getBestStatic(student.sitAndReach) >= 37 &&
+          getBestStatic(student.mile) <= 380 &&
+          getBestStatic(student.pullUps) >= 11
         ) {
           return true;
         }

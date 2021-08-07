@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Modal, TextInput, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Modal,
+  TextInput,
+  Alert,
+  ScrollView,
+} from "react-native";
 
 import Header from "../components/Header";
 import CustomButton from "../components/CustomButton";
@@ -65,7 +72,7 @@ const AddStaticResultScreen = (props) => {
 
   return (
     <Modal visible={props.visible} animationType="slide">
-      <View style={styles.screen}>
+      <ScrollView contentContainerStyle={styles.screen} scrollEnabled={false}>
         <Header
           title={props.title}
           style={styles.studentName}
@@ -88,7 +95,7 @@ const AddStaticResultScreen = (props) => {
             </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </Modal>
   );
 };

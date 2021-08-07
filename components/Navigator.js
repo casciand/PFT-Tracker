@@ -3,21 +3,28 @@ import { View, StyleSheet } from "react-native";
 
 import ImageButton from "./ImageButton";
 
-import roster from "../assets/roster.jpg";
-import fitness from "../assets/fitness.jpg";
+import rosterBAW from "../assets/rosterBAW.png";
+import rosterG from "../assets/rosterG.png";
+import fitnessBAW from "../assets/fitnessBAW.png";
+import fitnessG from "../assets/fitnessG.png";
 
 import Colors from "../constants/colors";
 import Fonts from "../constants/fonts";
 
 const Navigator = (props) => {
-  let rosterOpacity, fitnessOpacity;
+  let rosterImage, fitnessImage;
+  let rosterTitle, fitnessTitle;
 
   if (props.rosterMode) {
-    rosterOpacity = 0.4;
-    fitnessOpacity = 1;
+    rosterImage = rosterG;
+    rosterTitle = styles.greenTitle;
+    fitnessImage = fitnessBAW;
+    fitnessTitle = styles.blackTitle;
   } else {
-    rosterOpacity = 1;
-    fitnessOpacity = 0.4;
+    rosterImage = rosterBAW;
+    rosterTitle = styles.blackTitle;
+    fitnessImage = fitnessG;
+    fitnessTitle = styles.greenTitle;
   }
 
   return (
@@ -25,16 +32,14 @@ const Navigator = (props) => {
       <View style={styles.buttonContainer}>
         <ImageButton
           title="Roster"
-          source={roster}
-          textStyle={{ ...styles.navTitle, opacity: rosterOpacity }}
-          imageStyle={{ opacity: rosterOpacity }}
+          source={rosterImage}
+          textStyle={rosterTitle}
           onPress={props.onPressRoster}
         />
         <ImageButton
-          title="Fitness Tests"
-          source={fitness}
-          textStyle={{ ...styles.navTitle, opacity: fitnessOpacity }}
-          imageStyle={{ opacity: fitnessOpacity }}
+          title="Activities"
+          source={fitnessImage}
+          textStyle={fitnessTitle}
           onPress={props.onPressFitness}
         />
       </View>
@@ -63,7 +68,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  navTitle: {
+  blackTitle: {
+    fontSize: 10,
+    fontFamily: Fonts.primary,
+    color: "black",
+  },
+
+  greenTitle: {
     fontSize: 10,
     fontFamily: Fonts.primary,
     color: Colors.colors.primary,

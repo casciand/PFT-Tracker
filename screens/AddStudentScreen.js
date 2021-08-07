@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Modal, View, TextInput, Alert, StyleSheet } from "react-native";
+import {
+  Modal,
+  View,
+  TextInput,
+  Alert,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { RadioButton } from "react-native-paper";
 
 import Header from "../components/Header";
@@ -35,7 +42,7 @@ const AddStudentScreen = (props) => {
     ) {
       Alert.alert(
         "Missing Fields",
-        "You must complete all fields to create a student.",
+        "Please fill in all fields to create a student.",
         [{ text: "OK", style: "cancel", onPress: () => {} }]
       );
 
@@ -67,7 +74,7 @@ const AddStudentScreen = (props) => {
 
   return (
     <Modal visible={props.visible} animationType="slide">
-      <View style={styles.screen}>
+      <ScrollView contentContainerStyle={styles.screen} scrollEnabled={false}>
         <Header
           title="New Student"
           imageSource={backArrow}
@@ -112,11 +119,8 @@ const AddStudentScreen = (props) => {
           <View style={{ zIndex: 2 }}>
             <CustomButton title="Add Student" onPress={addStudentHandler} />
           </View>
-          <View style={styles.largerCircle}></View>
-          <View style={styles.smallCircle}></View>
-          <View style={styles.largeCircle}></View>
         </View>
-      </View>
+      </ScrollView>
     </Modal>
   );
 };
@@ -131,7 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 100,
-    backgroundColor: Colors.colors.primary,
+    backgroundColor: Colors.shades.secondary,
     paddingVertical: 30,
     marginHorizontal: 30,
     borderRadius: 15,
@@ -139,7 +143,7 @@ const styles = StyleSheet.create({
     shadowColor: "black",
     shadowOffset: { width: 0, height: 0 },
     shadowRadius: 6,
-    shadowOpacity: 0.9,
+    shadowOpacity: 0.5,
     elevation: 5,
     zIndex: 2,
   },

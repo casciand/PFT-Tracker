@@ -7,12 +7,12 @@ import TimerFitnessScreen from "./TimerFitnessScreen";
 import Header from "../components/Header";
 import ImageButton from "../components/ImageButton";
 
-import curlUp from "../assets/curlup.jpg";
-import pullUp from "../assets/pullup.jpg";
+import curlUp from "../assets/curlup.png";
+import pullUp from "../assets/pullup.png";
 import pushUp from "../assets/pushup.png";
-import mileRun from "../assets/mile.jpg";
-import shuttleRun from "../assets/shuttlerun.jpg";
-import sitAndReach from "../assets/sitandreach.jpg";
+import mileRun from "../assets/mile.png";
+import shuttleRun from "../assets/shuttlerun.png";
+import sitAndReach from "../assets/sitandreach.png";
 
 import Colors from "../constants/colors";
 import Fonts from "../constants/fonts";
@@ -120,7 +120,7 @@ const FitnessTestScreen = (props) => {
         setCurrentStudent={props.setCurrentStudent}
       />
       <View style={styles.header}>
-        <Header style={styles.headerText} title="Fitness Tests" />
+        <Header style={styles.headerText} title="Activities" />
       </View>
       <View style={styles.fitnessTestsView}>
         <View style={styles.fitnessTests}>

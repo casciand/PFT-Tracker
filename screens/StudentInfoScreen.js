@@ -48,20 +48,24 @@ const StudentInfoScreen = ({ student, ...props }) => {
   };
 
   const createInfoBlock = (scores, min = false, sec = false, cm = false) => {
-    let contents = <Text style={styles.testText}>No Entries.</Text>;
+    let contents = (
+      <View style={styles.test}>
+        <Text style={styles.noEntry}>No Entries</Text>
+      </View>
+    );
 
     if (scores.length != 0) {
-      contents = formatScores(scores, min, sec, cm);
+      contents = (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.test}
+        >
+          {formatScores(scores, min, sec, cm)}
+        </ScrollView>
+      );
     }
 
-    return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.test}
-      >
-        {contents}
-      </ScrollView>
-    );
+    return contents;
   };
 
   const getBestStatic = (scores, cm = false) => {
@@ -278,6 +282,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginVertical: 10,
     height: 90,
+    justifyContent: "center",
   },
 
   test: {
@@ -323,6 +328,13 @@ const styles = StyleSheet.create({
 
   testText: {
     fontSize: 12,
+    fontFamily: Fonts.secondary,
+    color: "white",
+  },
+
+  noEntry: {
+    fontSize: 12,
+    textAlign: "center",
     fontFamily: Fonts.secondary,
     color: "white",
   },

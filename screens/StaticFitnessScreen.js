@@ -5,6 +5,7 @@ import AddStaticResultScreen from "./AddStaticResultScreen";
 
 import Header from "../components/Header";
 import StudentRoster from "../components/StudentRoster";
+import Timer from "../components/Timer";
 
 import backArrow from "../assets/backarrow.png";
 
@@ -12,6 +13,7 @@ import Colors from "../constants/colors";
 
 const StaticFitnessScreen = (props) => {
   const [staticResultScreenMode, setStaticResultScreenMode] = useState(false);
+  const [csecs, setCsecs] = useState(6000);
 
   const setStaticResultHandler = () => {
     setStaticResultScreenMode(false);
@@ -26,6 +28,18 @@ const StaticFitnessScreen = (props) => {
       }
     }
   };
+
+  let timer;
+
+  if (props.curlUpsMode) {
+    timer = (
+      <View style={styles.timerView}>
+        <Timer ref={props.timerRef} csecs={csecs} setCsecs={setCsecs} />
+      </View>
+    );
+  } else {
+    timer = null;
+  }
 
   return (
     <Modal visible={props.visible} animationType="none">
@@ -43,11 +57,13 @@ const StaticFitnessScreen = (props) => {
           pullUpsMode={props.pullUpsMode}
           pushUpsMode={props.pushUpsMode}
           sitAndReachMode={props.sitAndReachMode}
+          flexedArmHangMode={props.flexedArmHangMode}
           saveStudent={props.saveStudent}
           setScore={setStaticResultHandler}
           setStaticResultScreen={setStaticResultScreenMode}
           onCancel={() => setStaticResultScreenMode(false)}
         />
+        {timer}
         <View style={styles.roster}>
           <StudentRoster
             students={props.studentList}
@@ -56,6 +72,7 @@ const StaticFitnessScreen = (props) => {
             pullUpsMode={props.pullUpsMode}
             pushUpsMode={props.pushUpsMode}
             sitAndReachMode={props.sitAndReachMode}
+            flexedArmHangMode={props.flexedArmHangMode}
           />
         </View>
       </View>
@@ -82,6 +99,21 @@ const styles = StyleSheet.create({
   roster: {
     height: "84.5%",
     padding: 5,
+  },
+
+  timerView: {
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 10,
+    borderRadius: 50,
+    padding: 10,
+    marginHorizontal: 50,
+    backgroundColor: Colors.colors.background,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
+    shadowOpacity: 0.2,
+    elevation: 5,
   },
 });
 

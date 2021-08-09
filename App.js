@@ -24,6 +24,8 @@ const defaultStudent = {
   mile: [],
   shuttle: [],
   sitAndReach: [],
+  flexedArmHang: [],
+  lapCount: 0,
   passedPresidential: false,
   passedNational: false,
 };
@@ -40,7 +42,6 @@ export default function App() {
   const saveStudent = async (student) => {
     try {
       await AsyncStorage.setItem(student.key, JSON.stringify(student));
-      console.log("saved");
     } catch (err) {
       alert(err);
     }
@@ -49,7 +50,6 @@ export default function App() {
   const deleteStudent = async () => {
     try {
       await AsyncStorage.removeItem(currentStudent.key);
-      console.log("deleted");
     } catch (err) {
       alert(err);
     }
@@ -76,6 +76,7 @@ export default function App() {
 
   useEffect(() => {
     loadStudents();
+    AsyncStorage.clear();
   }, []);
 
   // event handlers
@@ -92,6 +93,8 @@ export default function App() {
       mile: student.mile,
       shuttle: student.shuttle,
       sitAndReach: student.sitAndReach,
+      flexedArmHang: student.flexedArmHang,
+      lapCount: student.lapCount,
       passedPresidential: student.passedPresidential,
       passedNational: student.passedNational,
     };
@@ -140,10 +143,8 @@ export default function App() {
 
     if (ValidationFunctions.passedNational(currentStudent)) {
       currentStudent.passedNational = true;
-      console.log("passed");
     } else {
       currentStudent.passedNational = false;
-      console.log("failed");
     }
 
     if (ValidationFunctions.passedPresidential(currentStudent)) {
@@ -153,7 +154,6 @@ export default function App() {
     }
 
     saveStudent(currentStudent);
-    console.log(currentStudent);
   };
 
   let content = (

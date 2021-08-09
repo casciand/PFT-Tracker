@@ -1,20 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import Fonts from "../constants/fonts";
 import Colors from "../constants/colors";
 
 const Student = (props) => {
-  const formatTime = (time) => {
-    const csecs = time * 100;
-
-    const msecs = `0${csecs % 100}`.slice(-2);
-    const seconds = `0${Math.floor(csecs / 100) % 60}`.slice(-2);
-    const minutes = `0${Math.floor(csecs / 100 / 60)}`.slice(-2);
-
-    return `${minutes}:${seconds}.${msecs}`;
-  };
-
   let moreInfo;
 
   if (props.curlUpsMode) {
@@ -34,6 +24,12 @@ const Student = (props) => {
       moreInfo = `Attempts: ${props.pushUps.length}`;
     } else {
       moreInfo = "Incomplete";
+    }
+  } else if (props.mileMode) {
+    moreInfo = props.lapCount == 0 ? "" : " ";
+
+    for (let i = 0; i < props.lapCount; ++i) {
+      moreInfo += "✓";
     }
   } else if (props.sitAndReachMode) {
     if (props.sitAndReach) {

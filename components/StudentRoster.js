@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
 import Student from "./Student";
@@ -33,14 +33,17 @@ const StudentRoster = (props) => {
         mile={props.students[i].mile}
         shuttle={props.students[i].shuttle}
         sitAndReach={props.students[i].sitAndReach}
+        flexedArmHang={props.students[i].flexedArmHang}
         passedPresidential={props.students[i].passedPresidential}
         passedNational={props.students[i].passedNational}
         curlUpsMode={props.curlUpsMode}
         pullUpsMode={props.pullUpsMode}
         pushUpsMode={props.pushUpsMode}
         sitAndReachMode={props.sitAndReachMode}
+        flexedArmHangMode={props.flexedArmHangMode}
         mileMode={props.mileMode}
         shuttleMode={props.shuttleMode}
+        lapCount={props.students[i].lapCount}
         onPress={props.onPress.bind(this, props.students[i].key)}
       />
     );
@@ -50,14 +53,12 @@ const StudentRoster = (props) => {
 
   let rosterStyle = styles.staticStyle;
 
-  if (props.mileMode || props.shuttleMode) {
+  if (props.mileMode || props.shuttleMode || props.flexedArmHangMode) {
     rosterStyle = styles.timerStyle;
   }
 
   return (
-    <ScrollView contentContainerStyle={rosterStyle} indicatorStyle="black">
-      {students}
-    </ScrollView>
+    <ScrollView contentContainerStyle={rosterStyle}>{students}</ScrollView>
   );
 };
 

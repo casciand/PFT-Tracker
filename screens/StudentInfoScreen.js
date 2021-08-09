@@ -68,7 +68,7 @@ const StudentInfoScreen = ({ student, ...props }) => {
     return contents;
   };
 
-  const getBestStatic = (scores, cm = false) => {
+  const getBestStatic = (scores, cm = false, sec = false) => {
     if (scores.length == 0) {
       return "N/A";
     }
@@ -83,9 +83,11 @@ const StudentInfoScreen = ({ student, ...props }) => {
 
     if (cm) {
       return best + " cm";
+    } else if (sec) {
+      return best + " s";
+    } else {
+      return best;
     }
-
-    return best;
   };
 
   const getBestTimer = (scores, minutes = false) => {
@@ -133,6 +135,16 @@ const StudentInfoScreen = ({ student, ...props }) => {
               </View>
 
               <View style={styles.activityTitleView}>
+                <Text style={styles.activityTitle}>Sit & Reach</Text>
+                <Text style={styles.activityTitle}>
+                  Best: {getBestStatic(student.sitAndReach, true, false)}
+                </Text>
+              </View>
+              <View style={styles.infoBlock}>
+                {createInfoBlock(student.sitAndReach, false, false, true)}
+              </View>
+
+              <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Pull-Ups</Text>
                 <Text style={styles.activityTitle}>
                   Best: {getBestStatic(student.pullUps)}
@@ -153,6 +165,16 @@ const StudentInfoScreen = ({ student, ...props }) => {
               </View>
 
               <View style={styles.activityTitleView}>
+                <Text style={styles.activityTitle}>Flexed Arm Hang</Text>
+                <Text style={styles.activityTitle}>
+                  Best: {getBestTimer(student.flexedArmHang)}
+                </Text>
+              </View>
+              <View style={styles.infoBlock}>
+                {createInfoBlock(student.flexedArmHang, false, true, false)}
+              </View>
+
+              <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Mile Run</Text>
                 <Text style={styles.activityTitle}>
                   Best: {getBestTimer(student.mile, true)}
@@ -170,16 +192,6 @@ const StudentInfoScreen = ({ student, ...props }) => {
               </View>
               <View style={styles.infoBlock}>
                 {createInfoBlock(student.shuttle, false, true, false)}
-              </View>
-
-              <View style={styles.activityTitleView}>
-                <Text style={styles.activityTitle}>Sit & Reach</Text>
-                <Text style={styles.activityTitle}>
-                  Best: {getBestStatic(student.sitAndReach, true)}
-                </Text>
-              </View>
-              <View style={styles.infoBlock}>
-                {createInfoBlock(student.sitAndReach, false, false, true)}
               </View>
             </ScrollView>
           </View>

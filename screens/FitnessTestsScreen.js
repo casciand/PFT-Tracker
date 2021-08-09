@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, StyleSheet } from "react-native";
 
 import StaticFitnessScreen from "./StaticFitnessScreen";
@@ -25,9 +25,14 @@ const FitnessTestScreen = (props) => {
   const [curlUpsMode, setCurlUpsMode] = useState(false);
   const [pullUpsMode, setPullUpsMode] = useState(false);
   const [pushUpsMode, setPushUpsMode] = useState(false);
+  const [flexedArmHangMode, setFlexedArmHangMode] = useState(false);
+  const [sitAndReachMode, setSitAndReachMode] = useState(false);
   const [mileMode, setMileMode] = useState(false);
   const [shuttleMode, setShuttleMode] = useState(false);
-  const [sitAndReachMode, setSitAndReachMode] = useState(false);
+
+  const stopwatchRef = useRef();
+  const timerRef = useRef();
+  const timerScreenRef = useRef();
 
   const openCurlUpsHandler = () => {
     setCurrentActivity("Curl-Ups");
@@ -48,6 +53,13 @@ const FitnessTestScreen = (props) => {
 
     setPushUpsMode(true);
     setStaticFitnessScreenMode(true);
+  };
+
+  const openFlexedArmHangHandler = () => {
+    setCurrentActivity("Flexed Arm Hang");
+
+    setFlexedArmHangMode(true);
+    setTimerFitnessScreenMode(true);
   };
 
   const openMileHandler = () => {
@@ -72,6 +84,10 @@ const FitnessTestScreen = (props) => {
   };
 
   const closeStaticFitnessScreenHandler = () => {
+    if (curlUpsMode) {
+      timerRef.current.resetTimerHandler();
+    }
+
     setPullUpsMode(false);
     setCurlUpsMode(false);
     setPushUpsMode(false);
@@ -85,8 +101,11 @@ const FitnessTestScreen = (props) => {
     setShuttleMode(false);
 
     setTimerFitnessScreenMode(false);
+    stopwatchRef.current.resetStopwatchHandler();
+    timerScreenRef.current.resetCurrentList();
 
     for (let i = 0; i < props.studentList.length; ++i) {
+      props.studentList[i].lapCount = 0;
       props.saveStudent(props.studentList[i]);
     }
   };
@@ -106,6 +125,7 @@ const FitnessTestScreen = (props) => {
         pullUpsMode={pullUpsMode}
         pushUpsMode={pushUpsMode}
         sitAndReachMode={sitAndReachMode}
+        timerRef={timerRef}
       />
       <TimerFitnessScreen
         visible={timerFitnessScreenMode}
@@ -115,9 +135,12 @@ const FitnessTestScreen = (props) => {
         studentInfoModeHandler={props.studentInfoModeHandler}
         mileMode={mileMode}
         shuttleMode={shuttleMode}
+        flexedArmHangMode={flexedArmHangMode}
         saveStudent={props.saveStudent}
         student={props.currentStudent}
         setCurrentStudent={props.setCurrentStudent}
+        stopwatchRef={stopwatchRef}
+        ref={timerScreenRef}
       />
       <View style={styles.header}>
         <Header style={styles.headerText} title="Activities" />
@@ -134,6 +157,22 @@ const FitnessTestScreen = (props) => {
           <ImageButton
             imageStyle={styles.fitnessButtonImage}
             textStyle={styles.fitnessButtonText}
+            title="Sit & Reach"
+            source={sitAndReach}
+            onPress={openSitAndReachHandler}
+          />
+        </View>
+        <View style={styles.fitnessTests}>
+          <ImageButton
+            imageStyle={styles.fitnessButtonImage}
+            textStyle={styles.fitnessButtonText}
+            title="Push-Ups"
+            source={pushUp}
+            onPress={openPushUpsHandler}
+          />
+          <ImageButton
+            imageStyle={styles.fitnessButtonImage}
+            textStyle={styles.fitnessButtonText}
             title="Pull-Ups"
             source={pullUp}
             onPress={openPullUpsHandler}
@@ -141,9 +180,9 @@ const FitnessTestScreen = (props) => {
           <ImageButton
             imageStyle={styles.fitnessButtonImage}
             textStyle={styles.fitnessButtonText}
-            title="Push-Ups"
+            title="Arm Hang"
             source={pushUp}
-            onPress={openPushUpsHandler}
+            onPress={openFlexedArmHangHandler}
           />
         </View>
         <View style={styles.fitnessTests}>
@@ -160,15 +199,6 @@ const FitnessTestScreen = (props) => {
             title="Shuttle Run"
             source={shuttleRun}
             onPress={openShuttleHandler}
-          />
-        </View>
-        <View style={styles.fitnessTests}>
-          <ImageButton
-            imageStyle={styles.fitnessButtonImage}
-            textStyle={styles.fitnessButtonText}
-            title="Sit & Reach"
-            source={sitAndReach}
-            onPress={openSitAndReachHandler}
           />
         </View>
       </View>

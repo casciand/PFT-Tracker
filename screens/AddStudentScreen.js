@@ -60,6 +60,8 @@ const AddStudentScreen = (props) => {
       mile: [],
       shuttle: [],
       sitAndReach: [],
+      flexedArmHang: [],
+      lapCount: 0,
       passedPresidential: false,
       passedNational: false,
     };

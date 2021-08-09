@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Modal, Button } from "react-native";
+import React, { useState, useImperativeHandle, forwardRef } from "react";
+import { View, StyleSheet, Modal } from "react-native";
 
 import Header from "../components/Header";
 import StudentRoster from "../components/StudentRoster";
@@ -8,10 +8,17 @@ import Stopwatch from "../components/Stopwatch";
 import backArrow from "../assets/backarrow.png";
 import Colors from "../constants/colors";
 
-const TimerFitnessScreen = (props) => {
+const TimerFitnessScreen = (props, ref) => {
   const [csecs, setCsecs] = useState(0);
-  const [, setDummyValue] = useState(false);
   const [currentList, setCurrentList] = useState(props.studentList);
+  const [, setDummyValue] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    // methods connected to `ref`
+    resetCurrentList: () => {
+      setCurrentList(props.studentList);
+    },
+  }));
 
   const formatMileTime = () => {
     const centisecs = `0${csecs % 100}`.slice(-2);
@@ -52,6 +59,8 @@ const TimerFitnessScreen = (props) => {
   };
 
   const setTimerScoreHandler = (studentID) => {
+    const currentSeconds = csecs / 100;
+
     let currentStudent;
 
     for (let i = 0; i < props.studentList.length; ++i) {
@@ -62,13 +71,14 @@ const TimerFitnessScreen = (props) => {
       }
     }
 
-    const currentSeconds = csecs / 100;
     const entry = [formatDate(), currentSeconds];
 
     if (props.mileMode) {
       currentStudent.mile.push(entry);
-    } else {
+    } else if (props.shuttleMode) {
       currentStudent.shuttle.push(entry);
+    } else {
+      currentStudent.flexedArmHang.push(entry);
     }
 
     forceUpdate();
@@ -79,13 +89,34 @@ const TimerFitnessScreen = (props) => {
       return;
     }
 
+    let student;
+
+    for (let i = 0; i < props.studentList.length; ++i) {
+      student = props.studentList[i];
+
+      if (studentID == student.key) {
+        break;
+      }
+    }
+
+    if (props.mileMode) {
+      if (student.lapCount < 3) {
+        student.lapCount += 1;
+        forceUpdate();
+        return;
+      }
+    }
+
     setTimerScoreHandler(studentID);
     setCurrentList((list) => {
       return list.filter((student) => student.key != studentID);
     });
   };
 
-  let timeFormat = props.shuttleMode ? formatShuttleTime : formatMileTime;
+  let timeFormat =
+    props.shuttleMode || props.flexedArmHangMode
+      ? formatShuttleTime
+      : formatMileTime;
 
   return (
     <Modal visible={props.visible} animationType="none">
@@ -96,7 +127,13 @@ const TimerFitnessScreen = (props) => {
           onPress={props.onCancel}
         />
         <View style={styles.stopwatchView}>
-          <Stopwatch format={timeFormat} csecs={csecs} setCsecs={setCsecs} />
+          <Stopwatch
+            ref={props.stopwatchRef}
+            students={props.studentList}
+            format={timeFormat}
+            csecs={csecs}
+            setCsecs={setCsecs}
+          />
         </View>
         <View style={styles.roster}>
           <StudentRoster
@@ -104,6 +141,7 @@ const TimerFitnessScreen = (props) => {
             onPress={onPressStudent} // change to activity specific screen
             mileMode={props.mileMode}
             shuttleMode={props.shuttleMode}
+            flexedArmHangMode={props.flexedArmHangMode}
           />
         </View>
       </View>
@@ -119,6 +157,7 @@ const styles = StyleSheet.create({
 
   stopwatchView: {
     alignItems: "center",
+    justifyContent: "center",
     margin: 10,
     borderRadius: 50,
     padding: 10,
@@ -139,4 +178,4 @@ const styles = StyleSheet.create({
   shuttleStopwatch: {},
 });
 
-export default TimerFitnessScreen;
+export default forwardRef(TimerFitnessScreen);

@@ -3,13 +3,13 @@ import { View, StyleSheet } from "react-native";
 
 import ImageButton from "./ImageButton";
 
+import Colors from "../constants/colors";
+import Fonts from "../constants/fonts";
+
 import rosterBAW from "../assets/rosterBAW.png";
 import rosterG from "../assets/rosterG.png";
 import fitnessBAW from "../assets/fitnessBAW.png";
 import fitnessG from "../assets/fitnessG.png";
-
-import Colors from "../constants/colors";
-import Fonts from "../constants/fonts";
 
 const Navigator = (props) => {
   let rosterImage, fitnessImage;

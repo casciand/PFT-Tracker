@@ -1,33 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Modal } from "react-native";
+
+import EditStudentScreen from "./EditStudentScreen";
 
 import Header from "../components/Header";
 import CustomButton from "../components/CustomButton";
 
-import backArrow from "../assets/backarrow.png";
+import ValidationFunctions from "../functions/ValidationFunctions";
+import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 
 import Fonts from "../constants/fonts";
 import Colors from "../constants/colors";
 
+import backArrow from "../assets/backarrow.png";
+
 const StudentInfoScreen = ({ student, ...props }) => {
-  const formatMileTime = (time) => {
-    const csecs = time * 100;
-
-    const msecs = `0${csecs % 100}`.slice(-2);
-    const seconds = `0${Math.floor(csecs / 100) % 60}`.slice(-2);
-    const minutes = `0${Math.floor(csecs / 100 / 60)}`.slice(-2);
-
-    return `${minutes}:${seconds}.${msecs}`;
-  };
+  const [editStudentMode, setEditStudentMode] = useState(false);
 
   const formatScores = (scores, min, sec, cm) => {
     let formattedScores = [];
 
     for (let i = 0; i < scores.length; ++i) {
-      let score = scores[i][1];
+      let score = scores[i].value;
 
       if (min) {
-        score = formatMileTime(score);
+        score = FormatTimeFunctions.formatTimeMinutes(score);
       } else if (sec) {
         score = score + " s";
       } else if (cm) {
@@ -36,8 +33,8 @@ const StudentInfoScreen = ({ student, ...props }) => {
 
       const entry = (
         <View style={styles.entry}>
-          <Text style={styles.testText}>{scores[i][0]}</Text>
-          <Text style={styles.testText}>{score}</Text>
+          <Text style={styles.activity}>{scores[i].date}</Text>
+          <Text style={styles.activity}>{score}</Text>
         </View>
       );
 
@@ -49,7 +46,7 @@ const StudentInfoScreen = ({ student, ...props }) => {
 
   const createInfoBlock = (scores, min = false, sec = false, cm = false) => {
     let contents = (
-      <View style={styles.test}>
+      <View style={{ padding: 10 }}>
         <Text style={styles.noEntry}>No Entries</Text>
       </View>
     );
@@ -58,7 +55,7 @@ const StudentInfoScreen = ({ student, ...props }) => {
       contents = (
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.test}
+          contentContainerStyle={{ padding: 10 }}
         >
           {formatScores(scores, min, sec, cm)}
         </ScrollView>
@@ -73,11 +70,11 @@ const StudentInfoScreen = ({ student, ...props }) => {
       return "N/A";
     }
 
-    let best = scores[0][1];
+    let best = parseFloat(scores[0].value);
 
     for (let i = 0; i < scores.length; ++i) {
-      if (scores[i][1] > best) {
-        best = scores[i][1];
+      if (parseFloat(scores[i].value) > best) {
+        best = parseFloat(scores[i].value);
       }
     }
 
@@ -95,34 +92,77 @@ const StudentInfoScreen = ({ student, ...props }) => {
       return "N/A";
     }
 
-    let best = scores[0][1];
+    let best = parseFloat(scores[0].value);
 
     for (let i = 0; i < scores.length; ++i) {
-      if (scores[i][1] < best) {
-        best = scores[i][1];
+      if (parseFloat(scores[i].value) < best) {
+        best = parseFloat(scores[i].value);
       }
     }
 
     if (minutes) {
-      return formatMileTime(best);
+      return FormatTimeFunctions.formatTimeMinutes(best);
     }
 
     return best + " s";
   };
 
+  const removeEmptyEntries = () => {
+    student.curlUps = student.curlUps.filter((entry) => !isNaN(entry.value));
+    student.sitAndReach = student.sitAndReach.filter(
+      (entry) => !isNaN(entry.value)
+    );
+    student.pullUps = student.pullUps.filter((entry) => !isNaN(entry.value));
+    student.pushUps = student.pushUps.filter((entry) => !isNaN(entry.value));
+    student.flexedArmHang = student.flexedArmHang.filter(
+      (entry) => !isNaN(entry.value)
+    );
+    student.mile = student.mile.filter((entry) => !isNaN(entry.value));
+    student.shuttle = student.shuttle.filter((entry) => !isNaN(entry.value));
+  };
+
+  const updateTestStanding = () => {
+    if (ValidationFunctions.passedNational(student)) {
+      student.passedNational = true;
+    } else {
+      student.passedNational = false;
+    }
+
+    if (ValidationFunctions.passedPresidential(student)) {
+      student.passedPresidential = true;
+    } else {
+      student.passedPresidential = false;
+    }
+  };
+
+  const closeEditStudentScreenHandler = () => {
+    removeEmptyEntries();
+    updateTestStanding();
+
+    props.saveStudent(student);
+    setEditStudentMode(false);
+  };
+
   return (
     <Modal visible={props.visible} animationType="slide">
+      <EditStudentScreen
+        visible={editStudentMode}
+        student={student}
+        onCancel={closeEditStudentScreenHandler}
+      />
       <View style={styles.screen}>
         <Header
-          style={styles.studentName}
+          style={{ fontSize: 20 }}
           title={`${student.lastName}, ${student.firstName}`}
           imageSource={backArrow}
           onPress={props.onCancel}
         />
-        <ScrollView contentContainerStyle={styles.information}>
+        <ScrollView
+          contentContainerStyle={styles.information}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.fitnessInfo}>
             <Text style={styles.infoTitle}>Fitness Scores</Text>
-
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Curl-Ups</Text>
@@ -199,14 +239,14 @@ const StudentInfoScreen = ({ student, ...props }) => {
             <Text style={styles.infoTitle}>Awards</Text>
             <View style={{ ...styles.infoBlock, height: 75 }}>
               <View style={styles.awardTextView}>
-                <Text style={styles.testText}>Presidential Fitness Award</Text>
-                <Text style={styles.testText}>
+                <Text style={styles.activity}>Presidential Fitness Award</Text>
+                <Text style={styles.activity}>
                   {student.passedPresidential ? "Passed" : "Has Not Passed"}
                 </Text>
               </View>
               <View style={styles.awardTextView}>
-                <Text style={styles.testText}>National Fitness Award</Text>
-                <Text style={styles.testText}>
+                <Text style={styles.activity}>National Fitness Award</Text>
+                <Text style={styles.activity}>
                   {student.passedNational ? "Passed" : "Has Not Passed"}
                 </Text>
               </View>
@@ -216,7 +256,7 @@ const StudentInfoScreen = ({ student, ...props }) => {
             <CustomButton
               textStyle={styles.button}
               title="Edit Student"
-              onPress={() => {}}
+              onPress={() => setEditStudentMode(true)}
             />
             <CustomButton
               textStyle={styles.button}
@@ -233,12 +273,8 @@ const StudentInfoScreen = ({ student, ...props }) => {
 
 const styles = StyleSheet.create({
   screen: {
-    height: "100%",
-    backgroundColor: Colors.colors.backgroundColor,
-  },
-
-  studentName: {
-    fontSize: 20,
+    flex: 1,
+    backgroundColor: "white",
   },
 
   entry: {
@@ -247,11 +283,38 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 
+  activity: {
+    fontSize: 12,
+    fontFamily: Fonts.secondary,
+    color: "white",
+  },
+
+  noEntry: {
+    fontSize: 12,
+    textAlign: "center",
+    fontFamily: Fonts.secondary,
+    color: "white",
+  },
+
   information: {
     justifyContent: "center",
     alignItems: "center",
     height: "150%",
     marginVertical: 10,
+  },
+
+  fitnessInfo: {
+    height: "60%",
+    width: "90%",
+    backgroundColor: Colors.shades.secondary,
+    borderRadius: 15,
+    borderWidth: 1,
+    padding: 15,
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 10,
+    shadowOpacity: 0.5,
+    elevation: 5,
   },
 
   infoTitle: {
@@ -297,25 +360,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  test: {
-    width: "100%",
-    padding: 10,
-  },
-
-  fitnessInfo: {
-    height: "60%",
-    width: "90%",
-    backgroundColor: Colors.shades.secondary,
-    borderRadius: 15,
-    borderWidth: 1,
-    padding: 15,
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 10,
-    shadowOpacity: 0.5,
-    elevation: 5,
-  },
-
   awardInfo: {
     shadowColor: "black",
     shadowOffset: { width: 0, height: 0 },
@@ -338,19 +382,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 
-  testText: {
-    fontSize: 12,
-    fontFamily: Fonts.secondary,
-    color: "white",
-  },
-
-  noEntry: {
-    fontSize: 12,
-    textAlign: "center",
-    fontFamily: Fonts.secondary,
-    color: "white",
-  },
-
   buttonContainer: {
     width: "100%",
     alignItems: "center",
@@ -361,7 +392,6 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: "100%",
     fontSize: 16,
   },
 });

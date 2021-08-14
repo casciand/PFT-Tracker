@@ -1,62 +1,34 @@
 import React, { useState, useImperativeHandle, forwardRef } from "react";
 import { View, StyleSheet, Modal } from "react-native";
+import uuid from "react-native-uuid";
 
 import Header from "../components/Header";
 import StudentRoster from "../components/StudentRoster";
 import Stopwatch from "../components/Stopwatch";
 
-import backArrow from "../assets/backarrow.png";
+import FormatTimeFunctions from "../functions/FormatTimeFunctions";
+
 import Colors from "../constants/colors";
 
+import backArrow from "../assets/backarrow.png";
+
 const TimerFitnessScreen = (props, ref) => {
-  const [csecs, setCsecs] = useState(0);
   const [currentList, setCurrentList] = useState(props.studentList);
+
+  const [csecs, setCsecs] = useState(0);
+
+  // dummy state to force certain re-renders
   const [, setDummyValue] = useState(false);
-
-  useImperativeHandle(ref, () => ({
-    // methods connected to `ref`
-    resetCurrentList: () => {
-      setCurrentList(props.studentList);
-    },
-  }));
-
-  const formatMileTime = () => {
-    const centisecs = `0${csecs % 100}`.slice(-2);
-    const seconds = `0${Math.floor(csecs / 100) % 60}`.slice(-2);
-    const minutes = `0${Math.floor(csecs / 100 / 60)}`.slice(-2);
-
-    return `${minutes}:${seconds}.${centisecs}`;
-  };
-
-  const formatShuttleTime = () => {
-    let format;
-
-    const centisecs = `0${csecs % 100}`.slice(-2);
-    const seconds = `0${Math.floor(csecs / 100) % 60}`.slice(-2);
-
-    if (csecs / 100 >= 60) {
-      const minutes = `0${Math.floor(csecs / 100 / 60)}`.slice(-2);
-      format = `${minutes}:${seconds}.${centisecs}`;
-    } else {
-      format = `${seconds}.${centisecs}`;
-    }
-
-    return format;
-  };
 
   const forceUpdate = () => {
     setDummyValue((val) => !val);
   };
 
-  const formatDate = () => {
-    const now = new Date();
-
-    const day = now.getDate();
-    const month = now.getMonth() + 1;
-    const year = now.getFullYear() % 100;
-
-    return `${month}/${day}/${year}`;
-  };
+  useImperativeHandle(ref, () => ({
+    resetCurrentList: () => {
+      setCurrentList(props.studentList);
+    },
+  }));
 
   const setTimerScoreHandler = (studentID) => {
     const currentSeconds = csecs / 100;
@@ -71,7 +43,11 @@ const TimerFitnessScreen = (props, ref) => {
       }
     }
 
-    const entry = [formatDate(), currentSeconds];
+    let entry = {
+      key: uuid.v1(),
+      date: FormatTimeFunctions.formatDate(),
+      value: currentSeconds,
+    };
 
     if (props.mileMode) {
       currentStudent.mile.push(entry);
@@ -115,11 +91,11 @@ const TimerFitnessScreen = (props, ref) => {
 
   let timeFormat =
     props.shuttleMode || props.flexedArmHangMode
-      ? formatShuttleTime
-      : formatMileTime;
+      ? FormatTimeFunctions.formatTimeSeconds
+      : FormatTimeFunctions.formatTimeMinutes;
 
   return (
-    <Modal visible={props.visible} animationType="none">
+    <Modal visible={props.visible} animationType="fade">
       <View style={styles.screen}>
         <Header
           title={props.title}
@@ -128,17 +104,17 @@ const TimerFitnessScreen = (props, ref) => {
         />
         <View style={styles.stopwatchView}>
           <Stopwatch
-            ref={props.stopwatchRef}
-            students={props.studentList}
-            format={timeFormat}
             csecs={csecs}
+            studentList={props.studentList}
             setCsecs={setCsecs}
+            format={timeFormat}
+            ref={props.stopwatchRef}
           />
         </View>
         <View style={styles.roster}>
           <StudentRoster
+            onPress={onPressStudent}
             students={currentList}
-            onPress={onPressStudent} // change to activity specific screen
             mileMode={props.mileMode}
             shuttleMode={props.shuttleMode}
             flexedArmHangMode={props.flexedArmHangMode}
@@ -152,7 +128,7 @@ const TimerFitnessScreen = (props, ref) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.colors.background,
+    backgroundColor: "white",
   },
 
   stopwatchView: {
@@ -174,8 +150,6 @@ const styles = StyleSheet.create({
     height: "56.5%",
     padding: 5,
   },
-
-  shuttleStopwatch: {},
 });
 
 export default forwardRef(TimerFitnessScreen);

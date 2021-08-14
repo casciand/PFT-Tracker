@@ -1,26 +1,17 @@
 import React, { useState, useRef } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 
 import StaticFitnessScreen from "./StaticFitnessScreen";
 import TimerFitnessScreen from "./TimerFitnessScreen";
 
 import Header from "../components/Header";
-import ImageButton from "../components/ImageButton";
+import CustomButton from "../components/CustomButton";
 
-import curlUp from "../assets/curlup.png";
-import pullUp from "../assets/pullup.png";
-import pushUp from "../assets/pushup.png";
-import mileRun from "../assets/mile.png";
-import shuttleRun from "../assets/shuttlerun.png";
-import sitAndReach from "../assets/sitandreach.png";
-
-import Colors from "../constants/colors";
-import Fonts from "../constants/fonts";
+import activitiesArt from "../assets/activities.png";
 
 const FitnessTestScreen = (props) => {
   const [staticFitnessScreenMode, setStaticFitnessScreenMode] = useState(false);
   const [timerFitnessScreenMode, setTimerFitnessScreenMode] = useState(false);
-  const [currentActivity, setCurrentActivity] = useState("");
 
   const [curlUpsMode, setCurlUpsMode] = useState(false);
   const [pullUpsMode, setPullUpsMode] = useState(false);
@@ -30,10 +21,13 @@ const FitnessTestScreen = (props) => {
   const [mileMode, setMileMode] = useState(false);
   const [shuttleMode, setShuttleMode] = useState(false);
 
+  const [currentActivity, setCurrentActivity] = useState("");
+
   const stopwatchRef = useRef();
   const timerRef = useRef();
   const timerScreenRef = useRef();
 
+  // open/close activity screen handlers
   const openCurlUpsHandler = () => {
     setCurrentActivity("Curl-Ups");
 
@@ -99,6 +93,7 @@ const FitnessTestScreen = (props) => {
   const closeTimerFitnessScreenHandler = () => {
     setMileMode(false);
     setShuttleMode(false);
+    setFlexedArmHangMode(false);
 
     setTimerFitnessScreenMode(false);
     stopwatchRef.current.resetStopwatchHandler();
@@ -110,17 +105,17 @@ const FitnessTestScreen = (props) => {
     }
   };
 
-  return (
-    <View style={styles.screen}>
+  let content = props.currentStudent ? (
+    <>
       <StaticFitnessScreen
         visible={staticFitnessScreenMode}
         title={currentActivity}
         onCancel={closeStaticFitnessScreenHandler}
+        studentInfoModeHandler={props.studentInfoModeHandler}
         studentList={props.studentList}
         student={props.currentStudent}
         setCurrentStudent={props.setCurrentStudent}
         saveStudent={props.saveStudent}
-        studentInfoModeHandler={props.studentInfoModeHandler}
         curlUpsMode={curlUpsMode}
         pullUpsMode={pullUpsMode}
         pushUpsMode={pushUpsMode}
@@ -131,76 +126,69 @@ const FitnessTestScreen = (props) => {
         visible={timerFitnessScreenMode}
         title={currentActivity}
         onCancel={closeTimerFitnessScreenHandler}
-        studentList={props.studentList}
         studentInfoModeHandler={props.studentInfoModeHandler}
+        studentList={props.studentList}
+        student={props.currentStudent}
+        setCurrentStudent={props.setCurrentStudent}
+        saveStudent={props.saveStudent}
         mileMode={mileMode}
         shuttleMode={shuttleMode}
         flexedArmHangMode={flexedArmHangMode}
-        saveStudent={props.saveStudent}
-        student={props.currentStudent}
-        setCurrentStudent={props.setCurrentStudent}
         stopwatchRef={stopwatchRef}
         ref={timerScreenRef}
       />
-      <View style={styles.header}>
-        <Header style={styles.headerText} title="Activities" />
-      </View>
+    </>
+  ) : null;
+
+  return (
+    <View style={styles.screen}>
+      {content}
+      <Header title="Activities" />
       <View style={styles.fitnessTestsView}>
-        <View style={styles.fitnessTests}>
-          <ImageButton
-            imageStyle={styles.fitnessButtonImage}
-            textStyle={styles.fitnessButtonText}
+        <View style={styles.fitnessTestsRow}>
+          <CustomButton
             title="Curl-Ups"
-            source={curlUp}
+            borderStyle={styles.button}
             onPress={openCurlUpsHandler}
           />
-          <ImageButton
-            imageStyle={styles.fitnessButtonImage}
-            textStyle={styles.fitnessButtonText}
+          <CustomButton
             title="Sit & Reach"
-            source={sitAndReach}
+            borderStyle={styles.button}
             onPress={openSitAndReachHandler}
           />
         </View>
-        <View style={styles.fitnessTests}>
-          <ImageButton
-            imageStyle={styles.fitnessButtonImage}
-            textStyle={styles.fitnessButtonText}
+        <View style={styles.fitnessTestsRow}>
+          <CustomButton
             title="Push-Ups"
-            source={pushUp}
+            borderStyle={styles.button}
             onPress={openPushUpsHandler}
           />
-          <ImageButton
-            imageStyle={styles.fitnessButtonImage}
-            textStyle={styles.fitnessButtonText}
+          <CustomButton
             title="Pull-Ups"
-            source={pullUp}
+            borderStyle={styles.button}
             onPress={openPullUpsHandler}
           />
-          <ImageButton
-            imageStyle={styles.fitnessButtonImage}
-            textStyle={styles.fitnessButtonText}
+          <CustomButton
             title="Arm Hang"
-            source={pushUp}
+            borderStyle={styles.button}
             onPress={openFlexedArmHangHandler}
           />
         </View>
-        <View style={styles.fitnessTests}>
-          <ImageButton
-            imageStyle={styles.fitnessButtonImage}
-            textStyle={styles.fitnessButtonText}
+        <View style={styles.fitnessTestsRow}>
+          <CustomButton
             title="Mile Run"
-            source={mileRun}
+            borderStyle={styles.button}
             onPress={openMileHandler}
           />
-          <ImageButton
-            imageStyle={styles.fitnessButtonImage}
-            textStyle={styles.fitnessButtonText}
+          <CustomButton
             title="Shuttle Run"
-            source={shuttleRun}
+            borderStyle={styles.button}
             onPress={openShuttleHandler}
           />
         </View>
+      </View>
+      <View style={{ alignItems: "center", zIndex: -1 }}>
+        <Image source={activitiesArt} style={styles.backgroundImage} />
       </View>
     </View>
   );
@@ -209,46 +197,36 @@ const FitnessTestScreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.colors.background,
+    backgroundColor: "white",
+  },
+
+  backgroundImage: {
+    position: "absolute",
+    bottom: -20,
+    height: 400,
+    width: 300,
+    opacity: 0.4,
   },
 
   fitnessTestsView: {
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    marginTop: 40,
   },
 
-  header: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 50,
-  },
-
-  headerText: {
-    width: "100%",
-    alignContent: "center",
-    justifyContent: "center",
-  },
-
-  fitnessTests: {
+  fitnessTestsRow: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 25,
     height: 100,
   },
 
-  fitnessButtonImage: {
-    height: 85,
-    width: 85,
-    margin: 10,
-    borderWidth: 0.25,
-    borderRadius: 20,
-  },
-
-  fitnessButtonText: {
-    fontFamily: Fonts.secondary,
-    color: Colors.colors.primary,
-    fontSize: 16,
+  button: {
+    borderRadius: 40,
+    width: 90,
+    height: 90,
+    marginHorizontal: 15,
+    padding: 10,
   },
 });
 

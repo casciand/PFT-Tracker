@@ -8,25 +8,21 @@ import { View, StyleSheet, Text } from "react-native";
 
 import StopwatchButton from "../components/StopwatchButton";
 
+import FormatTimeFunctions from "../functions/FormatTimeFunctions";
+
+import Colors from "../constants/colors";
+
 const Timer = (props, ref) => {
   const timerRef = useRef();
+
   const [isRunning, setIsRunning] = useState(false);
   const [currTime, setCurrTime] = useState(6000);
 
   useImperativeHandle(ref, () => ({
-    // methods connected to `ref`
     resetTimerHandler: () => {
       resetTimerHandler();
     },
   }));
-
-  const formatTime = (csecs) => {
-    const centisecs = `0${csecs % 100}`.slice(-2);
-    const seconds = `0${Math.floor(csecs / 100) % 60}`.slice(-2);
-    const minutes = `0${Math.floor(csecs / 100 / 60)}`.slice(-2);
-
-    return `${minutes}:${seconds}.${centisecs}`;
-  };
 
   const startTimerHandler = () => {
     setIsRunning(true);
@@ -47,8 +43,8 @@ const Timer = (props, ref) => {
 
   const resetTimerHandler = () => {
     setIsRunning(false);
-
     clearInterval(timerRef.current);
+
     setCurrTime(6000);
     props.setCsecs(6000);
   };
@@ -69,7 +65,9 @@ const Timer = (props, ref) => {
     <View>
       <View style={styles.stopwatchView}>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.stopwatchText}>{formatTime(props.csecs)}</Text>
+          <Text style={styles.stopwatchText}>
+            {FormatTimeFunctions.formatTimeMinutes(props.csecs)}
+          </Text>
         </View>
       </View>
       <View style={styles.buttonView}>
@@ -86,11 +84,13 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     margin: 10,
     borderWidth: 2,
+    borderColor: Colors.colors.primary,
     width: 220,
   },
 
   stopwatchText: {
     fontSize: 40,
+    color: Colors.colors.primary,
   },
 
   buttonView: {

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 
 import AddStudentScreen from "../screens/AddStudentScreen";
 import StudentInfoScreen from "../screens/StudentInfoScreen";
@@ -8,30 +8,24 @@ import Header from "../components/Header";
 import StudentRoster from "../components/StudentRoster";
 
 import plusSign from "../assets/plussign.png";
-
-import Colors from "../constants/colors";
-import Fonts from "../constants/fonts";
+import rosterArt from "../assets/rosterback.png";
 
 const RosterScreen = (props) => {
-  let content = (
-    <StudentRoster
-      students={props.studentList}
-      onPress={props.studentInfoModeHandler}
+  let content = props.currentStudent ? (
+    <StudentInfoScreen
+      visible={props.studentInfoMode}
+      studentList={props.studentList}
+      student={props.currentStudent}
+      setStudentList={props.setStudentList}
+      setCurrentStudent={props.setCurrentStudent}
+      saveStudent={props.saveStudent}
+      onCancel={props.setStudentInfoMode.bind(this, false)}
+      onDelete={props.confirmDeleteStudentHandler.bind(
+        this,
+        props.currentStudent
+      )}
     />
-  );
-
-  let style = styles.roster;
-
-  if (props.studentList.length == 0) {
-    content = (
-      <Text style={styles.defaultText}>
-        Add students by pressing the{" "}
-        <Text style={{ fontWeight: "bold" }}>+</Text> button
-      </Text>
-    );
-
-    style = styles.default;
-  }
+  ) : null;
 
   return (
     <View style={styles.screen}>
@@ -40,15 +34,7 @@ const RosterScreen = (props) => {
         addStudent={props.addStudentHandler}
         onCancel={props.setAddStudentMode.bind(this, false)}
       />
-      <StudentInfoScreen
-        visible={props.studentInfoMode}
-        student={props.currentStudent}
-        onCancel={props.setStudentInfoMode.bind(this, false)}
-        onDelete={props.confirmDeleteStudentHandler.bind(
-          this,
-          props.currentStudent
-        )}
-      />
+      {content}
       <View style={styles.header}>
         <Header
           title="Class Roster"
@@ -56,7 +42,15 @@ const RosterScreen = (props) => {
           onPress={props.setAddStudentMode.bind(this, true)}
         />
       </View>
-      <View style={style}>{content}</View>
+      <View style={styles.roster}>
+        <StudentRoster
+          students={props.studentList}
+          onPress={props.studentInfoModeHandler}
+        />
+      </View>
+      <View style={{ alignItems: "center", zIndex: -1 }}>
+        <Image source={rosterArt} style={styles.backgroundImage} />
+      </View>
     </View>
   );
 };
@@ -64,7 +58,15 @@ const RosterScreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.colors.background,
+    backgroundColor: "white",
+  },
+
+  backgroundImage: {
+    position: "absolute",
+    bottom: 40,
+    height: 400,
+    width: 400,
+    opacity: 0.4,
   },
 
   header: {
@@ -77,34 +79,6 @@ const styles = StyleSheet.create({
     height: "77.9%",
     padding: 5,
     top: -4.3,
-  },
-
-  default: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 200,
-    backgroundColor: Colors.colors.primary,
-    borderRadius: 15,
-    height: "15%",
-    width: "80%",
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    shadowOpacity: 0.2,
-    elevation: 5,
-    opacity: 0.3,
-    padding: 10,
-    marginHorizontal: 35,
-  },
-
-  defaultText: {
-    justifyContent: "center",
-    alignItems: "center",
-    fontFamily: Fonts.secondary,
-    textAlign: "center",
-    color: Colors.colors.background,
-    fontSize: 20,
-    padding: 10,
   },
 });
 

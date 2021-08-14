@@ -8,13 +8,15 @@ import { View, StyleSheet, Text } from "react-native";
 
 import StopwatchButton from "../components/StopwatchButton";
 
+import Colors from "../constants/colors";
+
 const Stopwatch = (props, ref) => {
   const timerRef = useRef();
+
   const [isRunning, setIsRunning] = useState(false);
   const [currTime, setCurrTime] = useState(0);
 
   useImperativeHandle(ref, () => ({
-    // methods connected to `ref`
     resetStopwatchHandler: () => {
       resetStopwatchHandler();
     },
@@ -39,13 +41,13 @@ const Stopwatch = (props, ref) => {
 
   const resetStopwatchHandler = () => {
     setIsRunning(false);
-
     clearInterval(timerRef.current);
+
     setCurrTime(0);
     props.setCsecs(0);
 
-    for (let i = 0; i < props.students.length; ++i) {
-      props.students[i].lapCount = 0;
+    for (let i = 0; i < props.studentList.length; ++i) {
+      props.studentList[i].lapCount = 0;
     }
   };
 
@@ -80,11 +82,13 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     margin: 10,
     borderWidth: 2,
+    borderColor: Colors.colors.primary,
     width: 220,
   },
 
   stopwatchText: {
     fontSize: 40,
+    color: Colors.colors.primary,
   },
 
   buttonView: {

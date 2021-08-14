@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Modal } from "react-native";
+import { View, StyleSheet, Modal, Image } from "react-native";
 
 import AddStaticResultScreen from "./AddStaticResultScreen";
 
@@ -7,17 +7,15 @@ import Header from "../components/Header";
 import StudentRoster from "../components/StudentRoster";
 import Timer from "../components/Timer";
 
-import backArrow from "../assets/backarrow.png";
-
 import Colors from "../constants/colors";
+
+import backArrow from "../assets/backarrow.png";
+import staticArt from "../assets/staticback.png";
 
 const StaticFitnessScreen = (props) => {
   const [staticResultScreenMode, setStaticResultScreenMode] = useState(false);
-  const [csecs, setCsecs] = useState(6000);
 
-  const setStaticResultHandler = () => {
-    setStaticResultScreenMode(false);
-  };
+  const [csecs, setCsecs] = useState(6000);
 
   const staticResultScreenHandler = (studentID) => {
     for (let i = 0; i < props.studentList.length; ++i) {
@@ -29,7 +27,7 @@ const StaticFitnessScreen = (props) => {
     }
   };
 
-  let timer;
+  let timer, rosterStyle, imageStyle;
 
   if (props.curlUpsMode) {
     timer = (
@@ -37,12 +35,16 @@ const StaticFitnessScreen = (props) => {
         <Timer ref={props.timerRef} csecs={csecs} setCsecs={setCsecs} />
       </View>
     );
+    rosterStyle = { ...styles.roster, height: "53%" };
+    imageStyle = { marginTop: 120 };
   } else {
     timer = null;
+    rosterStyle = styles.roster;
+    imageStyle = {};
   }
 
   return (
-    <Modal visible={props.visible} animationType="none">
+    <Modal visible={props.visible} animationType="fade">
       <View style={styles.screen}>
         <Header
           title={props.title}
@@ -51,6 +53,7 @@ const StaticFitnessScreen = (props) => {
         />
         <AddStaticResultScreen
           visible={staticResultScreenMode}
+          setStaticResultScreen={setStaticResultScreenMode}
           student={props.student}
           title={`${props.student.lastName}, ${props.student.firstName}`}
           curlUpsMode={props.curlUpsMode}
@@ -59,14 +62,13 @@ const StaticFitnessScreen = (props) => {
           sitAndReachMode={props.sitAndReachMode}
           flexedArmHangMode={props.flexedArmHangMode}
           saveStudent={props.saveStudent}
-          setScore={setStaticResultHandler}
-          setStaticResultScreen={setStaticResultScreenMode}
+          setScore={() => setStaticResultScreenMode(false)}
           onCancel={() => setStaticResultScreenMode(false)}
         />
         {timer}
-        <View style={styles.roster}>
+        <View style={rosterStyle}>
           <StudentRoster
-            students={props.studentList}
+            studentList={props.studentList}
             onPress={staticResultScreenHandler}
             curlUpsMode={props.curlUpsMode}
             pullUpsMode={props.pullUpsMode}
@@ -74,6 +76,9 @@ const StaticFitnessScreen = (props) => {
             sitAndReachMode={props.sitAndReachMode}
             flexedArmHangMode={props.flexedArmHangMode}
           />
+        </View>
+        <View style={{ ...imageStyle, alignItems: "center", zIndex: -1 }}>
+          <Image source={staticArt} style={styles.backgroundImage} />
         </View>
       </View>
     </Modal>
@@ -83,17 +88,15 @@ const StaticFitnessScreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.colors.background,
+    backgroundColor: "white",
   },
 
-  name: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 100,
-  },
-
-  button: {
-    marginTop: 350,
+  backgroundImage: {
+    position: "absolute",
+    bottom: 150,
+    height: 250,
+    width: 300,
+    opacity: 0.4,
   },
 
   roster: {

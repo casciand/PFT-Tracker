@@ -6,32 +6,23 @@ import {
   Alert,
   StyleSheet,
   ScrollView,
+  Image,
 } from "react-native";
 import { RadioButton } from "react-native-paper";
 
 import Header from "../components/Header";
 import CustomButton from "../components/CustomButton";
 
-import backArrow from "../assets/backarrow.png";
 import Colors from "../constants/colors";
+
+import backArrow from "../assets/backarrow.png";
+import newStudentArt from "../assets/newstudent.png";
 
 const AddStudentScreen = (props) => {
   const [enteredFirstName, setEnteredFirstName] = useState("");
   const [enteredLastName, setEnteredLastName] = useState("");
   const [enteredAge, setEnteredAge] = useState("");
   const [enteredGender, setEnteredGender] = useState("");
-
-  const firstNameInputHandler = (enteredText) => {
-    setEnteredFirstName(enteredText);
-  };
-
-  const lastNameInputHandler = (enteredText) => {
-    setEnteredLastName(enteredText);
-  };
-
-  const ageInputHandler = (enteredText) => {
-    setEnteredAge(enteredText.replace(/[^0-9]/g, ""));
-  };
 
   const addStudentHandler = () => {
     if (
@@ -45,33 +36,32 @@ const AddStudentScreen = (props) => {
         "Please fill in all fields to create a student.",
         [{ text: "OK", style: "cancel", onPress: () => {} }]
       );
+    } else {
+      // define a new student
+      let newStudent = {
+        firstName: enteredFirstName,
+        lastName: enteredLastName,
+        age: enteredAge,
+        gender: enteredGender,
+        curlUps: [],
+        pullUps: [],
+        pushUps: [],
+        mile: [],
+        shuttle: [],
+        sitAndReach: [],
+        flexedArmHang: [],
+        lapCount: 0,
+        passedPresidential: false,
+        passedNational: false,
+      };
 
-      return;
+      props.addStudent(newStudent);
+
+      setEnteredFirstName("");
+      setEnteredLastName("");
+      setEnteredAge("");
+      setEnteredGender("");
     }
-
-    let newStudent = {
-      firstName: enteredFirstName,
-      lastName: enteredLastName,
-      age: enteredAge,
-      gender: enteredGender,
-      curlUps: [],
-      pullUps: [],
-      pushUps: [],
-      mile: [],
-      shuttle: [],
-      sitAndReach: [],
-      flexedArmHang: [],
-      lapCount: 0,
-      passedPresidential: false,
-      passedNational: false,
-    };
-
-    props.addStudent(newStudent);
-
-    setEnteredFirstName("");
-    setEnteredLastName("");
-    setEnteredAge("");
-    setEnteredGender("");
   };
 
   return (
@@ -86,25 +76,31 @@ const AddStudentScreen = (props) => {
           <TextInput
             placeholder="First Name"
             style={styles.nameTextBox}
-            onChangeText={firstNameInputHandler}
+            onChangeText={(input) => {
+              setEnteredFirstName(input);
+            }}
             value={enteredFirstName}
           />
           <TextInput
             placeholder="Last Name"
             style={styles.nameTextBox}
-            onChangeText={lastNameInputHandler}
+            onChangeText={(input) => {
+              setEnteredLastName(input);
+            }}
             value={enteredLastName}
           />
           <TextInput
             placeholder="Age"
             style={styles.ageTextBox}
-            onChangeText={ageInputHandler}
+            onChangeText={(input) => {
+              setEnteredAge(input);
+            }}
             value={enteredAge}
             keyboardType="number-pad"
             maxLength={2}
           />
           <RadioButton.Group
-            onValueChange={(newValue) => setEnteredGender(newValue)}
+            onValueChange={(val) => setEnteredGender(val)}
             value={enteredGender}
           >
             <View style={styles.radioButtons}>
@@ -123,6 +119,9 @@ const AddStudentScreen = (props) => {
           </View>
         </View>
       </ScrollView>
+      <View style={{ alignItems: "center", zIndex: -1 }}>
+        <Image source={newStudentArt} style={styles.backgroundImage} />
+      </View>
     </Modal>
   );
 };
@@ -130,18 +129,25 @@ const AddStudentScreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.colors.background,
+    backgroundColor: "white",
+  },
+
+  backgroundImage: {
+    position: "absolute",
+    bottom: 10,
+    height: 300,
+    width: 300,
   },
 
   inputView: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 100,
-    backgroundColor: Colors.shades.secondary,
+    marginTop: 30,
+    backgroundColor: Colors.colors.primary,
     paddingVertical: 30,
     marginHorizontal: 30,
     borderRadius: 15,
-    borderWidth: 1,
+    borderWidth: 0.5,
     shadowColor: "black",
     shadowOffset: { width: 0, height: 0 },
     shadowRadius: 6,
@@ -151,9 +157,9 @@ const styles = StyleSheet.create({
   },
 
   nameTextBox: {
-    borderWidth: 2,
+    borderWidth: 0.5,
     borderRadius: 15,
-    padding: 10,
+    padding: 9,
     marginBottom: 10,
     width: "60%",
     textAlign: "center",
@@ -161,10 +167,10 @@ const styles = StyleSheet.create({
   },
 
   ageTextBox: {
-    borderWidth: 2,
+    borderWidth: 0.5,
     borderRadius: 15,
-    padding: 10,
-    marginBottom: 10,
+    padding: 9,
+    marginBottom: 5,
     width: "18%",
     textAlign: "center",
     backgroundColor: "white",
@@ -174,22 +180,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 5,
     marginTop: 10,
   },
 
   radioButton: {
-    borderWidth: 2,
-    marginBottom: 10,
+    borderWidth: 0.5,
     borderRadius: 15,
     marginHorizontal: 10,
     backgroundColor: "white",
+    height: 50,
+    width: 100,
   },
 
   buttonView: {
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 40,
+    marginTop: 30,
   },
 });
 

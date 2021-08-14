@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 15,
-    borderWidth: 1.5,
+    borderWidth: 0.5,
     backgroundColor: Colors.colors.primary,
     width: 140,
     height: 60,
@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    padding: 10,
     fontSize: 18,
     textAlign: "center",
     fontFamily: Fonts.primary,

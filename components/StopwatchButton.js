@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import Fonts from "../constants/fonts";
+import Colors from "../constants/colors";
 
 const StopwatchButton = (props) => {
   return (
@@ -21,6 +22,7 @@ const styles = StyleSheet.create({
   view: {
     alignItems: "center",
     justifyContent: "center",
+    borderColor: Colors.colors.primary,
     borderWidth: 1,
     borderRadius: 100,
     width: 60,
@@ -30,6 +32,7 @@ const styles = StyleSheet.create({
   border: {
     alignItems: "center",
     justifyContent: "center",
+    borderColor: Colors.colors.primary,
     borderWidth: 1,
     borderRadius: 100,
     width: 65,
@@ -41,6 +44,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: "center",
     fontFamily: Fonts.secondary,
+    color: Colors.colors.primary,
   },
 });
 

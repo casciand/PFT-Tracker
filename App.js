@@ -8,35 +8,22 @@ import uuid from "react-native-uuid";
 import RosterScreen from "./screens/RosterScreen";
 import FitnessTestsScreen from "./screens/FitnessTestsScreen";
 
-import ValidationFunctions from "./assets/ValidationFunctions";
+import ValidationFunctions from "./functions/ValidationFunctions";
 
 import Navigator from "./components/Navigator";
 
-const defaultStudent = {
-  key: "key",
-  firstName: "Placeholder",
-  lastName: "Student",
-  age: "2",
-  gender: "Boy",
-  curlUps: [],
-  pullUps: [],
-  pushUps: [],
-  mile: [],
-  shuttle: [],
-  sitAndReach: [],
-  flexedArmHang: [],
-  lapCount: 0,
-  passedPresidential: false,
-  passedNational: false,
-};
-
 export default function App() {
   const [studentList, setStudentList] = useState([]);
-  const [currentStudent, setCurrentStudent] = useState(defaultStudent);
+  const [currentStudent, setCurrentStudent] = useState();
 
   const [rosterMode, setRosterMode] = useState(true);
   const [addStudentMode, setAddStudentMode] = useState(false);
   const [studentInfoMode, setStudentInfoMode] = useState(false);
+
+  // load students on initial render
+  useEffect(() => {
+    loadStudents();
+  }, []);
 
   // AsyncStorage functions
   const saveStudent = async (student) => {
@@ -57,10 +44,10 @@ export default function App() {
 
   const loadStudents = async () => {
     try {
-      let keys = await AsyncStorage.getAllKeys();
+      const keys = await AsyncStorage.getAllKeys();
 
       for (let i = 0; i < keys.length; ++i) {
-        let student = await AsyncStorage.getItem(keys[i]);
+        const student = await AsyncStorage.getItem(keys[i]);
 
         if (student != null) {
           setStudentList((currentStudents) => [
@@ -73,11 +60,6 @@ export default function App() {
       alert(err);
     }
   };
-
-  useEffect(() => {
-    loadStudents();
-    AsyncStorage.clear();
-  }, []);
 
   // event handlers
   const addStudentHandler = (student) => {
@@ -129,18 +111,7 @@ export default function App() {
     setStudentInfoMode(false);
   };
 
-  const studentInfoModeHandler = (studentID) => {
-    for (let i = 0; i < studentList.length; ++i) {
-      let student = studentList[i];
-
-      if (studentID == student.key) {
-        setCurrentStudent(student);
-        setStudentInfoMode(true);
-
-        break;
-      }
-    }
-
+  const updateTestStanding = () => {
     if (ValidationFunctions.passedNational(currentStudent)) {
       currentStudent.passedNational = true;
     } else {
@@ -152,7 +123,20 @@ export default function App() {
     } else {
       currentStudent.passedPresidential = false;
     }
+  };
 
+  const studentInfoModeHandler = (studentID) => {
+    for (let i = 0; i < studentList.length; ++i) {
+      let student = studentList[i];
+
+      if (studentID == student.key) {
+        setCurrentStudent(student);
+        setStudentInfoMode(true);
+        break;
+      }
+    }
+
+    updateTestStanding();
     saveStudent(currentStudent);
   };
 
@@ -160,6 +144,7 @@ export default function App() {
     <RosterScreen
       studentList={studentList}
       currentStudent={currentStudent}
+      setCurrentStudent={setCurrentStudent}
       setStudentList={setStudentList}
       setAddStudentMode={setAddStudentMode}
       setStudentInfoMode={setStudentInfoMode}

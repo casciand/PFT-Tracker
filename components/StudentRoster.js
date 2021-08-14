@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
 import Student from "./Student";
@@ -19,23 +19,27 @@ const StudentRoster = (props) => {
 
   let students = [];
 
-  for (let i = 0; i < props.students.length; ++i) {
+  for (let i = 0; i < props.studentList.length; ++i) {
     students.push(
       <Student
-        key={props.students[i].key}
-        firstName={props.students[i].firstName}
-        lastName={props.students[i].lastName}
-        age={props.students[i].age}
-        gender={props.students[i].gender}
-        curlUps={props.students[i].curlUps}
-        pullUps={props.students[i].pullUps}
-        pushUps={props.students[i].pushUps}
-        mile={props.students[i].mile}
-        shuttle={props.students[i].shuttle}
-        sitAndReach={props.students[i].sitAndReach}
-        flexedArmHang={props.students[i].flexedArmHang}
-        passedPresidential={props.students[i].passedPresidential}
-        passedNational={props.students[i].passedNational}
+        // base properties
+        key={props.studentList[i].key}
+        firstName={props.studentList[i].firstName}
+        lastName={props.studentList[i].lastName}
+        age={props.studentList[i].age}
+        gender={props.studentList[i].gender}
+        curlUps={props.studentList[i].curlUps}
+        pullUps={props.studentList[i].pullUps}
+        pushUps={props.studentList[i].pushUps}
+        mile={props.studentList[i].mile}
+        shuttle={props.studentList[i].shuttle}
+        sitAndReach={props.studentList[i].sitAndReach}
+        flexedArmHang={props.studentList[i].flexedArmHang}
+        passedPresidential={props.studentList[i].passedPresidential}
+        passedNational={props.studentList[i].passedNational}
+        lapCount={props.studentList[i].lapCount}
+        // current status properties
+        onPress={props.onPress.bind(this, props.studentList[i].key)}
         curlUpsMode={props.curlUpsMode}
         pullUpsMode={props.pullUpsMode}
         pushUpsMode={props.pushUpsMode}
@@ -43,19 +47,16 @@ const StudentRoster = (props) => {
         flexedArmHangMode={props.flexedArmHangMode}
         mileMode={props.mileMode}
         shuttleMode={props.shuttleMode}
-        lapCount={props.students[i].lapCount}
-        onPress={props.onPress.bind(this, props.students[i].key)}
       />
     );
   }
 
   insertionSort(students);
 
-  let rosterStyle = styles.staticStyle;
-
-  if (props.mileMode || props.shuttleMode || props.flexedArmHangMode) {
-    rosterStyle = styles.timerStyle;
-  }
+  let rosterStyle =
+    props.mileMode || props.shuttleMode || props.flexedArmHangMode
+      ? styles.timerStyle
+      : styles.staticStyle;
 
   return (
     <ScrollView contentContainerStyle={rosterStyle}>{students}</ScrollView>

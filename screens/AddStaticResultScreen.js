@@ -6,59 +6,54 @@ import {
   TextInput,
   Alert,
   ScrollView,
+  Image,
 } from "react-native";
+import uuid from "react-native-uuid";
 
 import Header from "../components/Header";
 import CustomButton from "../components/CustomButton";
 
-import backArrow from "../assets/backarrow.png";
+import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 
 import Colors from "../constants/colors";
 
-const AddStaticResultScreen = (props) => {
+import backArrow from "../assets/backarrow.png";
+import addResultArt from "../assets/staticfitness.png";
+
+const AddStaticResultScreen = ({ student, ...props }) => {
   const [enteredValue, setEnteredValue] = useState("");
-
-  const inputHandler = (enteredText) => {
-    setEnteredValue(enteredText);
-  };
-
-  const formatDate = () => {
-    const now = new Date();
-
-    const day = now.getDate();
-    const month = now.getMonth() + 1;
-    const year = now.getFullYear() % 100;
-
-    return `${month}/${day}/${year}`;
-  };
 
   const addInputHandler = () => {
     if (enteredValue == "") {
       Alert.alert("Missing Field", "Please enter a number to submit.", [
         { text: "OK", style: "cancel", onPress: () => {} },
       ]);
-
-      return;
-    }
-
-    const entry = [formatDate(), enteredValue];
-
-    if (props.curlUpsMode) {
-      props.student.curlUps.push(entry);
-    } else if (props.pullUpsMode) {
-      props.student.pullUps.push(entry);
-    } else if (props.pushUpsMode) {
-      props.student.pushUps.push(entry);
     } else {
-      props.student.sitAndReach.push(entry);
-    }
+      let entry = {
+        key: uuid.v1(),
+        date: FormatTimeFunctions.formatDate(),
+        value: enteredValue,
+      };
 
-    props.setStaticResultScreen(false);
-    props.saveStudent(props.student);
-    setEnteredValue("");
+      if (props.curlUpsMode) {
+        student.curlUps.push(entry);
+      } else if (props.pullUpsMode) {
+        student.pullUps.push(entry);
+      } else if (props.pushUpsMode) {
+        student.pushUps.push(entry);
+      } else {
+        student.sitAndReach.push(entry);
+      }
+
+      props.saveStudent(props.student);
+      props.setStaticResultScreen(false);
+
+      setEnteredValue("");
+    }
   };
 
   let placeholder;
+  let keyboard = "number-pad";
 
   if (props.curlUpsMode) {
     placeholder = "# of Curl-Ups";
@@ -67,7 +62,8 @@ const AddStaticResultScreen = (props) => {
   } else if (props.pushUpsMode) {
     placeholder = "# of Push-Ups";
   } else {
-    placeholder = "Reach Length";
+    placeholder = "Reach Length (cm)";
+    keyboard = "numeric";
   }
 
   return (
@@ -79,16 +75,17 @@ const AddStaticResultScreen = (props) => {
           imageSource={backArrow}
           onPress={props.onCancel}
         />
-
-        <View style={styles.staticView}>
+        <View style={{ alignItems: "center" }}>
           <View style={styles.inputView}>
             <TextInput
               placeholder={placeholder}
               style={styles.input}
-              onChangeText={inputHandler}
+              onChangeText={(input) => {
+                setEnteredValue(input);
+              }}
               value={enteredValue}
               maxLength={3}
-              keyboardType="number-pad"
+              keyboardType={keyboard}
             />
             <View style={styles.button}>
               <CustomButton title="Submit" onPress={addInputHandler} />
@@ -96,6 +93,9 @@ const AddStaticResultScreen = (props) => {
           </View>
         </View>
       </ScrollView>
+      <View style={{ alignItems: "center", zIndex: -1 }}>
+        <Image source={addResultArt} style={styles.backgroundImage} />
+      </View>
     </Modal>
   );
 };
@@ -103,17 +103,24 @@ const AddStaticResultScreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: Colors.colors.background,
+    backgroundColor: "white",
   },
 
   studentName: {
     fontSize: 20,
   },
 
+  backgroundImage: {
+    position: "absolute",
+    bottom: 10,
+    height: 280,
+    width: 280,
+  },
+
   inputView: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 80,
+    marginTop: 30,
     backgroundColor: Colors.shades.secondary,
     paddingVertical: 30,
     marginHorizontal: 30,
@@ -127,11 +134,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     elevation: 5,
     zIndex: 2,
-  },
-
-  staticView: {
-    justifyContent: "center",
-    alignItems: "center",
   },
 
   input: {

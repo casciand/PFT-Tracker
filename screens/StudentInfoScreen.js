@@ -24,7 +24,7 @@ const StudentInfoScreen = ({ student, ...props }) => {
       let score = scores[i].value;
 
       if (min) {
-        score = FormatTimeFunctions.formatTimeMinutes(score);
+        score = FormatTimeFunctions.formatTimeMinutes(score * 100);
       } else if (sec) {
         score = score + " s";
       } else if (cm) {
@@ -101,7 +101,7 @@ const StudentInfoScreen = ({ student, ...props }) => {
     }
 
     if (minutes) {
-      return FormatTimeFunctions.formatTimeMinutes(best);
+      return FormatTimeFunctions.formatTimeMinutes(best * 100);
     }
 
     return best + " s";

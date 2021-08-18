@@ -44,7 +44,7 @@ const RosterScreen = (props) => {
       </View>
       <View style={styles.roster}>
         <StudentRoster
-          students={props.studentList}
+          studentList={props.studentList}
           onPress={props.studentInfoModeHandler}
         />
       </View>

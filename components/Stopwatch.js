@@ -65,7 +65,7 @@ const Stopwatch = (props, ref) => {
     <View>
       <View style={styles.stopwatchView}>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.stopwatchText}>{props.format()}</Text>
+          <Text style={styles.stopwatchText}>{props.format(props.csecs)}</Text>
         </View>
       </View>
       <View style={styles.buttonView}>

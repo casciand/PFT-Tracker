@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle, forwardRef } from "react";
-import { View, StyleSheet, Modal } from "react-native";
+import { View, StyleSheet, Modal, Image } from "react-native";
 import uuid from "react-native-uuid";
 
 import Header from "../components/Header";
@@ -11,6 +11,7 @@ import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 import Colors from "../constants/colors";
 
 import backArrow from "../assets/backarrow.png";
+import timerArt from "../assets/timerfitness.png";
 
 const TimerFitnessScreen = (props, ref) => {
   const [currentList, setCurrentList] = useState(props.studentList);
@@ -114,12 +115,15 @@ const TimerFitnessScreen = (props, ref) => {
         <View style={styles.roster}>
           <StudentRoster
             onPress={onPressStudent}
-            students={currentList}
+            studentList={currentList}
             mileMode={props.mileMode}
             shuttleMode={props.shuttleMode}
             flexedArmHangMode={props.flexedArmHangMode}
           />
         </View>
+      </View>
+      <View style={{ alignItems: "center", zIndex: -1 }}>
+        <Image source={timerArt} style={styles.backgroundImage} />
       </View>
     </Modal>
   );
@@ -129,6 +133,13 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: "white",
+  },
+
+  backgroundImage: {
+    bottom: 20,
+    height: 280,
+    width: 280,
+    opacity: 0.4,
   },
 
   stopwatchView: {
@@ -147,7 +158,7 @@ const styles = StyleSheet.create({
   },
 
   roster: {
-    height: "56.5%",
+    height: "90%",
     padding: 5,
   },
 });

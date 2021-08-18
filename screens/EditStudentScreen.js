@@ -39,49 +39,77 @@ const EditStudentScreen = ({ student, ...props }) => {
 
   // add/delete entry handlers
   const addCurlUpsEntryHandler = () => {
-    let entry = { key: uuid.v1(), date: "Set Date", value: "Set Score" };
+    let entry = {
+      key: uuid.v1(),
+      date: FormatTimeFunctions.formatDate(),
+      value: "Set Score",
+    };
     student.curlUps.push(entry);
 
     forceUpdate();
   };
 
   const addSitAndReachEntryHandler = () => {
-    let entry = { key: uuid.v1(), date: "Set Date", value: "Set Score" };
+    let entry = {
+      key: uuid.v1(),
+      date: FormatTimeFunctions.formatDate(),
+      value: "Set Score",
+    };
     student.sitAndReach.push(entry);
 
     forceUpdate();
   };
 
   const addPullUpsEntryHandler = () => {
-    let entry = { key: uuid.v1(), date: "Set Date", value: "Set Score" };
+    let entry = {
+      key: uuid.v1(),
+      date: FormatTimeFunctions.formatDate(),
+      value: "Set Score",
+    };
     student.pullUps.push(entry);
 
     forceUpdate();
   };
 
   const addPushUpsEntryHandler = () => {
-    let entry = { key: uuid.v1(), date: "Set Date", value: "Set Score" };
+    let entry = {
+      key: uuid.v1(),
+      date: FormatTimeFunctions.formatDate(),
+      value: "Set Score",
+    };
     student.pushUps.push(entry);
 
     forceUpdate();
   };
 
   const addFlexedArmHangEntryHandler = () => {
-    let entry = { key: uuid.v1(), date: "Set Date", value: "Set Score" };
+    let entry = {
+      key: uuid.v1(),
+      date: FormatTimeFunctions.formatDate(),
+      value: "Set Score",
+    };
     student.flexedArmHang.push(entry);
 
     forceUpdate();
   };
 
   const addMileEntryHandler = () => {
-    let entry = { key: uuid.v1(), date: "Set Date", value: "Set Score" };
+    let entry = {
+      key: uuid.v1(),
+      date: FormatTimeFunctions.formatDate(),
+      value: "Set Score",
+    };
     student.mile.push(entry);
 
     forceUpdate();
   };
 
   const addShuttleEntryHandler = () => {
-    let entry = { key: uuid.v1(), date: "Set Date", value: "Set Score" };
+    let entry = {
+      key: uuid.v1(),
+      date: FormatTimeFunctions.formatDate(),
+      value: "Set Score",
+    };
     student.shuttle.push(entry);
 
     forceUpdate();
@@ -140,6 +168,7 @@ const EditStudentScreen = ({ student, ...props }) => {
 
       if (min) {
         score = FormatTimeFunctions.formatTimeMinutes(score);
+        units = " s";
       } else if (sec) {
         units = " s";
       } else if (cm) {
@@ -604,7 +633,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     marginTop: 5,
-    marginLeft: 5,
+    marginLeft: 20,
   },
 
   infoBlock: {

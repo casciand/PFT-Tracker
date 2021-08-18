@@ -118,10 +118,10 @@ const AddStudentScreen = (props) => {
             <CustomButton title="Add Student" onPress={addStudentHandler} />
           </View>
         </View>
+        <View style={{ alignItems: "center", zIndex: -1 }}>
+          <Image source={newStudentArt} style={styles.backgroundImage} />
+        </View>
       </ScrollView>
-      <View style={{ alignItems: "center", zIndex: -1 }}>
-        <Image source={newStudentArt} style={styles.backgroundImage} />
-      </View>
     </Modal>
   );
 };
@@ -133,8 +133,7 @@ const styles = StyleSheet.create({
   },
 
   backgroundImage: {
-    position: "absolute",
-    bottom: 10,
+    bottom: 100,
     height: 300,
     width: 300,
   },

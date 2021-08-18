@@ -49,7 +49,7 @@ const Timer = (props, ref) => {
     props.setCsecs(6000);
   };
 
-  if (props.csecs == 0) {
+  if (props.csecs <= 0) {
     clearInterval(timerRef.current);
   }
 

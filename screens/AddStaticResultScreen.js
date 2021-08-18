@@ -45,7 +45,7 @@ const AddStaticResultScreen = ({ student, ...props }) => {
         student.sitAndReach.push(entry);
       }
 
-      props.saveStudent(props.student);
+      props.saveStudent(student);
       props.setStaticResultScreen(false);
 
       setEnteredValue("");
@@ -92,10 +92,10 @@ const AddStaticResultScreen = ({ student, ...props }) => {
             </View>
           </View>
         </View>
+        <View style={{ alignItems: "center", zIndex: -1 }}>
+          <Image source={addResultArt} style={styles.backgroundImage} />
+        </View>
       </ScrollView>
-      <View style={{ alignItems: "center", zIndex: -1 }}>
-        <Image source={addResultArt} style={styles.backgroundImage} />
-      </View>
     </Modal>
   );
 };
@@ -111,8 +111,7 @@ const styles = StyleSheet.create({
   },
 
   backgroundImage: {
-    position: "absolute",
-    bottom: 10,
+    bottom: 120,
     height: 280,
     width: 280,
   },

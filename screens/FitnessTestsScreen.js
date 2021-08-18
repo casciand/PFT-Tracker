@@ -202,9 +202,9 @@ const styles = StyleSheet.create({
 
   backgroundImage: {
     position: "absolute",
-    bottom: -20,
+    bottom: -30,
     height: 400,
-    width: 300,
+    width: 350,
     opacity: 0.4,
   },
 
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     width: 90,
     height: 90,
-    marginHorizontal: 15,
+    marginHorizontal: 20,
     padding: 10,
   },
 });

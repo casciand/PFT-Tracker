@@ -13,8 +13,26 @@ import ValidationFunctions from "./functions/ValidationFunctions";
 import Navigator from "./components/Navigator";
 
 export default function App() {
+  const placeholder = {
+    key: "0",
+    firstName: null,
+    lastName: null,
+    age: null,
+    gender: null,
+    curlUps: [],
+    pullUps: [],
+    pushUps: [],
+    mile: [],
+    shuttle: [],
+    sitAndReach: [],
+    flexedArmHang: [],
+    lapCount: 0,
+    passedPresidential: false,
+    passedNational: false,
+  };
+
   const [studentList, setStudentList] = useState([]);
-  const [currentStudent, setCurrentStudent] = useState();
+  const [currentStudent, setCurrentStudent] = useState(placeholder);
 
   const [rosterMode, setRosterMode] = useState(true);
   const [addStudentMode, setAddStudentMode] = useState(false);
@@ -23,6 +41,7 @@ export default function App() {
   // load students on initial render
   useEffect(() => {
     loadStudents();
+    //AsyncStorage.clear();
   }, []);
 
   // AsyncStorage functions
@@ -36,7 +55,11 @@ export default function App() {
 
   const deleteStudent = async () => {
     try {
+      console.log("before");
+      console.log(await AsyncStorage.getAllKeys());
       await AsyncStorage.removeItem(currentStudent.key);
+      console.log("after");
+      console.log(await AsyncStorage.getAllKeys());
     } catch (err) {
       alert(err);
     }
@@ -111,23 +134,24 @@ export default function App() {
     setStudentInfoMode(false);
   };
 
-  const updateTestStanding = () => {
-    if (ValidationFunctions.passedNational(currentStudent)) {
-      currentStudent.passedNational = true;
+  const updateTestStanding = (student) => {
+    if (ValidationFunctions.passedNational(student)) {
+      student.passedNational = true;
     } else {
-      currentStudent.passedNational = false;
+      student.passedNational = false;
     }
 
-    if (ValidationFunctions.passedPresidential(currentStudent)) {
-      currentStudent.passedPresidential = true;
+    if (ValidationFunctions.passedPresidential(student)) {
+      student.passedPresidential = true;
     } else {
-      currentStudent.passedPresidential = false;
+      student.passedPresidential = false;
     }
   };
 
   const studentInfoModeHandler = (studentID) => {
+    let student;
     for (let i = 0; i < studentList.length; ++i) {
-      let student = studentList[i];
+      student = studentList[i];
 
       if (studentID == student.key) {
         setCurrentStudent(student);
@@ -136,9 +160,12 @@ export default function App() {
       }
     }
 
-    updateTestStanding();
     saveStudent(currentStudent);
   };
+
+  useEffect(() => {
+    updateTestStanding(currentStudent);
+  }, [currentStudent]);
 
   let content = (
     <RosterScreen

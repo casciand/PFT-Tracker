@@ -96,36 +96,26 @@ const TimerFitnessScreen = (props, ref) => {
       : FormatTimeFunctions.formatTimeMinutes;
 
   return (
-    <Modal visible={props.visible} animationType="fade">
-      <View style={styles.screen}>
-        <Header
-          title={props.title}
-          imageSource={backArrow}
-          onPress={props.onCancel}
-        />
-        <View style={styles.stopwatchView}>
-          <Stopwatch
-            csecs={csecs}
-            studentList={props.studentList}
-            setCsecs={setCsecs}
-            format={timeFormat}
-            ref={props.stopwatchRef}
-          />
-        </View>
-        <View style={styles.roster}>
-          <StudentRoster
-            onPress={onPressStudent}
-            studentList={currentList}
-            mileMode={props.mileMode}
-            shuttleMode={props.shuttleMode}
-            flexedArmHangMode={props.flexedArmHangMode}
-          />
-        </View>
+      <><View style={styles.screen}>
+      <View style={styles.stopwatchView}>
+        <Stopwatch
+          csecs={csecs}
+          studentList={props.studentList}
+          setCsecs={setCsecs}
+          format={timeFormat}
+          ref={props.stopwatchRef} />
       </View>
-      <View style={{ alignItems: "center", zIndex: -1 }}>
+      <View style={styles.roster}>
+        <StudentRoster
+          onPress={onPressStudent}
+          studentList={currentList}
+          mileMode={props.mileMode}
+          shuttleMode={props.shuttleMode}
+          flexedArmHangMode={props.flexedArmHangMode} />
+      </View>
+    </View><View style={{ alignItems: "center", zIndex: -1 }}>
         <Image source={timerArt} style={styles.backgroundImage} />
-      </View>
-    </Modal>
+      </View></>
   );
 };
 

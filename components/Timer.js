@@ -7,9 +7,7 @@ import React, {
 import { View, StyleSheet, Text } from "react-native";
 
 import StopwatchButton from "../components/StopwatchButton";
-
 import FormatTimeFunctions from "../functions/FormatTimeFunctions";
-
 import Colors from "../constants/colors";
 
 const Timer = (props, ref) => {

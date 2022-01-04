@@ -1,34 +1,31 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from '@react-navigation/core';
 
 import Fonts from "../constants/fonts";
 import Colors from "../constants/colors";
 
 const Student = (props) => {
-  let moreInfo;
+  const navigation = useNavigation();
 
-  if (props.curlUpsMode) {
-    moreInfo = `Attempts: ${props.curlUps.length}`;
-  } else if (props.pullUpsMode) {
-    moreInfo = `Attempts: ${props.pullUps.length}`;
-  } else if (props.pushUpsMode) {
-    moreInfo = `Attempts: ${props.pushUps.length}`;
-  } else if (props.sitAndReachMode) {
-    moreInfo = `Attempts: ${props.sitAndReach.length}`;
-  } else if (props.mileMode) {
-    moreInfo = props.lapCount == 0 ? "" : " ";
+  let checks;
+
+  if (props.mileMode) {
+    checks = props.lapCount == 0 ? "" : " ";
 
     for (let i = 0; i < props.lapCount; ++i) {
-      moreInfo += "✓";
+      checks += "✓";
     }
   } else {
-    moreInfo = "";
+    checks = "";
   }
 
-  let additionalText = <Text style={styles.name}>{moreInfo}</Text>;
+  let additionalText = <Text style={styles.name}>{checks}</Text>;
 
   return (
-    <TouchableOpacity onPress={props.onPress}>
+    <TouchableOpacity onPress={() => navigation.navigate("InfoStudent", {
+      id: props.id
+    })}>
       <View style={styles.student}>
         <Text style={styles.name}>
           {props.lastName}, {props.firstName}

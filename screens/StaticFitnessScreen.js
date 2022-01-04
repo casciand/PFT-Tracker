@@ -12,27 +12,17 @@ import Colors from "../constants/colors";
 import backArrow from "../assets/backarrow.png";
 import staticArt from "../assets/staticback.png";
 
-const StaticFitnessScreen = (props) => {
-  const [staticResultScreenMode, setStaticResultScreenMode] = useState(false);
-
+const StaticFitnessScreen = ({route}) => {
   const [csecs, setCsecs] = useState(6000);
 
-  const staticResultScreenHandler = (studentID) => {
-    for (let i = 0; i < props.studentList.length; ++i) {
-      if (studentID == props.studentList[i].key) {
-        props.setCurrentStudent(props.studentList[i]);
-        setStaticResultScreenMode(true);
-        return;
-      }
-    }
-  };
+  const { curlUpsMode, timerRef, roster } = route.params;
 
   let timer, rosterStyle, imageStyle;
 
-  if (props.curlUpsMode) {
+  if (curlUpsMode) {
     timer = (
       <View style={styles.timerView}>
-        <Timer ref={props.timerRef} csecs={csecs} setCsecs={setCsecs} />
+        <Timer ref={timerRef} csecs={csecs} setCsecs={setCsecs} />
       </View>
     );
     rosterStyle = { ...styles.roster, height: "53%" };
@@ -44,44 +34,18 @@ const StaticFitnessScreen = (props) => {
   }
 
   return (
-    <Modal visible={props.visible} animationType="fade">
       <View style={styles.screen}>
-        <Header
-          title={props.title}
-          imageSource={backArrow}
-          onPress={props.onCancel}
-        />
-        <AddStaticResultScreen
-          visible={staticResultScreenMode}
-          setStaticResultScreen={setStaticResultScreenMode}
-          student={props.student}
-          title={`${props.student.lastName}, ${props.student.firstName}`}
-          curlUpsMode={props.curlUpsMode}
-          pullUpsMode={props.pullUpsMode}
-          pushUpsMode={props.pushUpsMode}
-          sitAndReachMode={props.sitAndReachMode}
-          flexedArmHangMode={props.flexedArmHangMode}
-          saveStudent={props.saveStudent}
-          setScore={() => setStaticResultScreenMode(false)}
-          onCancel={() => setStaticResultScreenMode(false)}
-        />
         {timer}
         <View style={rosterStyle}>
           <StudentRoster
-            studentList={props.studentList}
-            onPress={staticResultScreenHandler}
-            curlUpsMode={props.curlUpsMode}
-            pullUpsMode={props.pullUpsMode}
-            pushUpsMode={props.pushUpsMode}
-            sitAndReachMode={props.sitAndReachMode}
-            flexedArmHangMode={props.flexedArmHangMode}
+            studentList={roster}
+            onPress={() => {}}
           />
         </View>
         <View style={{ ...imageStyle, alignItems: "center", zIndex: -1 }}>
           <Image source={staticArt} style={styles.backgroundImage} />
         </View>
       </View>
-    </Modal>
   );
 };
 

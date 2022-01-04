@@ -1,21 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, Modal } from "react-native";
-
-import EditStudentScreen from "./EditStudentScreen";
-
-import Header from "../components/Header";
-import CustomButton from "../components/CustomButton";
+import { useNavigation } from '@react-navigation/core';
+import { auth, database } from "../firebase";
 
 import ValidationFunctions from "../functions/ValidationFunctions";
 import FormatTimeFunctions from "../functions/FormatTimeFunctions";
-
 import Fonts from "../constants/fonts";
 import Colors from "../constants/colors";
 
-import backArrow from "../assets/backarrow.png";
+const StudentInfoScreen = ({route, ...props}) => {
+  const [student, setStudent] = useState({});
 
-const StudentInfoScreen = ({ student, ...props }) => {
-  const [editStudentMode, setEditStudentMode] = useState(false);
+  const navigation = useNavigation();
+  const { id } = route.params;
 
   const formatScores = (scores, min, sec, cm) => {
     let formattedScores = [];
@@ -134,29 +131,23 @@ const StudentInfoScreen = ({ student, ...props }) => {
       student.passedPresidential = false;
     }
   };
-
-  const closeEditStudentScreenHandler = () => {
-    removeEmptyEntries();
-    updateTestStanding();
-
-    props.saveStudent(student);
-    setEditStudentMode(false);
-  };
+  
+  useEffect(() => {
+    const dbRef = database.ref();
+    dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).get().then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log("found");
+        setStudent(snapshot.val());
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+  }, [])
 
   return (
-    <Modal visible={props.visible} animationType="slide">
-      <EditStudentScreen
-        visible={editStudentMode}
-        student={student}
-        onCancel={closeEditStudentScreenHandler}
-      />
       <View style={styles.screen}>
-        <Header
-          style={{ fontSize: 20 }}
-          title={`${student.lastName}, ${student.firstName}`}
-          imageSource={backArrow}
-          onPress={props.onCancel}
-        />
         <ScrollView
           contentContainerStyle={styles.information}
           showsVerticalScrollIndicator={false}
@@ -267,7 +258,6 @@ const StudentInfoScreen = ({ student, ...props }) => {
           </View>
         </ScrollView>
       </View>
-    </Modal>
   );
 };
 

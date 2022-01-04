@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Modal,
   View,
   TextInput,
   Alert,
@@ -9,13 +8,11 @@ import {
   Image,
 } from "react-native";
 import { RadioButton } from "react-native-paper";
+import uuid from "react-native-uuid";
+import { auth, database } from "../firebase";
 
-import Header from "../components/Header";
 import CustomButton from "../components/CustomButton";
-
 import Colors from "../constants/colors";
-
-import backArrow from "../assets/backarrow.png";
 import newStudentArt from "../assets/newstudent.png";
 
 const AddStudentScreen = (props) => {
@@ -23,6 +20,25 @@ const AddStudentScreen = (props) => {
   const [enteredLastName, setEnteredLastName] = useState("");
   const [enteredAge, setEnteredAge] = useState("");
   const [enteredGender, setEnteredGender] = useState("");
+
+  const addStudent = (newStudent) => {
+    database.ref('users/' + auth.currentUser.uid + '/students/' + newStudent.id).set({
+        firstName: newStudent.firstName,
+        lastName: newStudent.lastName,
+        age: newStudent.age,
+        isMale: newStudent.isMale,
+        lapCount: 0,
+        passedPresidential: false,
+        passedNational: false,
+        curlUps: [],
+        sitAndReach: [],
+        pushUps: [],
+        pullUps: [],
+        armHang: [],
+        mileRun: [],
+        shuttleRun: []
+    });
+  }
 
   const addStudentHandler = () => {
     if (
@@ -42,20 +58,11 @@ const AddStudentScreen = (props) => {
         firstName: enteredFirstName,
         lastName: enteredLastName,
         age: enteredAge,
-        gender: enteredGender,
-        curlUps: [],
-        pullUps: [],
-        pushUps: [],
-        mile: [],
-        shuttle: [],
-        sitAndReach: [],
-        flexedArmHang: [],
-        lapCount: 0,
-        passedPresidential: false,
-        passedNational: false,
+        isMale: enteredGender == "Boy",
+        id: uuid.v1()
       };
 
-      props.addStudent(newStudent);
+      addStudent(newStudent);
 
       setEnteredFirstName("");
       setEnteredLastName("");
@@ -65,13 +72,7 @@ const AddStudentScreen = (props) => {
   };
 
   return (
-    <Modal visible={props.visible} animationType="slide">
       <ScrollView contentContainerStyle={styles.screen} scrollEnabled={false}>
-        <Header
-          title="New Student"
-          imageSource={backArrow}
-          onPress={props.onCancel}
-        />
         <View style={styles.inputView}>
           <TextInput
             placeholder="First Name"
@@ -122,7 +123,6 @@ const AddStudentScreen = (props) => {
           <Image source={newStudentArt} style={styles.backgroundImage} />
         </View>
       </ScrollView>
-    </Modal>
   );
 };
 

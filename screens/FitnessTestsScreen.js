@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { View, StyleSheet, Image } from "react-native";
+import { useNavigation } from '@react-navigation/core';
 
 import StaticFitnessScreen from "./StaticFitnessScreen";
 import TimerFitnessScreen from "./TimerFitnessScreen";
@@ -9,15 +10,8 @@ import CustomButton from "../components/CustomButton";
 
 import activitiesArt from "../assets/activities.png";
 
-const FitnessTestScreen = (props) => {
-  const [staticFitnessScreenMode, setStaticFitnessScreenMode] = useState(false);
-  const [timerFitnessScreenMode, setTimerFitnessScreenMode] = useState(false);
-
-  const [curlUpsMode, setCurlUpsMode] = useState(false);
-  const [pullUpsMode, setPullUpsMode] = useState(false);
-  const [pushUpsMode, setPushUpsMode] = useState(false);
+const FitnessTestScreen = ({route}) => {
   const [flexedArmHangMode, setFlexedArmHangMode] = useState(false);
-  const [sitAndReachMode, setSitAndReachMode] = useState(false);
   const [mileMode, setMileMode] = useState(false);
   const [shuttleMode, setShuttleMode] = useState(false);
 
@@ -27,123 +21,88 @@ const FitnessTestScreen = (props) => {
   const timerRef = useRef();
   const timerScreenRef = useRef();
 
+  const navigation = useNavigation();
+  const { roster } = route.params;
+
   // open/close activity screen handlers
   const openCurlUpsHandler = () => {
     setCurrentActivity("Curl-Ups");
-
-    setCurlUpsMode(true);
-    setStaticFitnessScreenMode(true);
+    navigation.navigate("Static", {
+      curlUpsMode: true,
+      roster: roster,
+      timerRef: timerRef
+    });
   };
 
   const openPullUpsHandler = () => {
     setCurrentActivity("Pull-Ups");
-
-    setPullUpsMode(true);
-    setStaticFitnessScreenMode(true);
+    navigation.navigate("Static", {
+      curlUpsMode: false,
+      roster: roster,
+    });
   };
 
   const openPushUpsHandler = () => {
     setCurrentActivity("Push-Ups");
-
-    setPushUpsMode(true);
-    setStaticFitnessScreenMode(true);
+    navigation.navigate("Static", {
+      curlUpsMode: false,
+      roster: roster
+    });
   };
 
   const openFlexedArmHangHandler = () => {
     setCurrentActivity("Flexed Arm Hang");
-
     setFlexedArmHangMode(true);
-    setTimerFitnessScreenMode(true);
+    navigation.navigate("Timer");
   };
 
   const openMileHandler = () => {
     setCurrentActivity("Mile Run");
-
     setMileMode(true);
-    setTimerFitnessScreenMode(true);
+    navigation.navigate("Timer");
   };
 
   const openShuttleHandler = () => {
     setCurrentActivity("Shuttle Run");
-
     setShuttleMode(true);
-    setTimerFitnessScreenMode(true);
+    navigation.navigate("Timer");
   };
 
   const openSitAndReachHandler = () => {
     setCurrentActivity("Sit & Reach");
-
-    setSitAndReachMode(true);
-    setStaticFitnessScreenMode(true);
+    navigation.navigate("Static", {
+      curlUpsMode: false,
+      roster: roster
+    });
   };
 
-  const closeStaticFitnessScreenHandler = () => {
-    if (curlUpsMode) {
-      timerRef.current.resetTimerHandler();
-    }
+  // const closeStaticFitnessScreenHandler = () => {
+  //   if (curlUpsMode) {
+  //     timerRef.current.resetTimerHandler();
+  //   }
 
-    setPullUpsMode(false);
-    setCurlUpsMode(false);
-    setPushUpsMode(false);
-    setSitAndReachMode(false);
+  //   setPullUpsMode(false);
+  //   setCurlUpsMode(false);
+  //   setPushUpsMode(false);
+  //   setSitAndReachMode(false);
+  // };
 
-    setStaticFitnessScreenMode(false);
-  };
+  // const closeTimerFitnessScreenHandler = () => {
+  //   setMileMode(false);
+  //   setShuttleMode(false);
+  //   setFlexedArmHangMode(false);
 
-  const closeTimerFitnessScreenHandler = () => {
-    setMileMode(false);
-    setShuttleMode(false);
-    setFlexedArmHangMode(false);
+  //   stopwatchRef.current.resetStopwatchHandler();
+  //   timerScreenRef.current.resetCurrentList();
 
-    setTimerFitnessScreenMode(false);
-    stopwatchRef.current.resetStopwatchHandler();
-    timerScreenRef.current.resetCurrentList();
-
-    for (let i = 0; i < props.studentList.length; ++i) {
-      props.studentList[i].lapCount = 0;
-      props.saveStudent(props.studentList[i]);
-    }
-  };
-
-  let content = props.currentStudent ? (
-    <>
-      <StaticFitnessScreen
-        visible={staticFitnessScreenMode}
-        title={currentActivity}
-        onCancel={closeStaticFitnessScreenHandler}
-        studentInfoModeHandler={props.studentInfoModeHandler}
-        studentList={props.studentList}
-        student={props.currentStudent}
-        setCurrentStudent={props.setCurrentStudent}
-        saveStudent={props.saveStudent}
-        curlUpsMode={curlUpsMode}
-        pullUpsMode={pullUpsMode}
-        pushUpsMode={pushUpsMode}
-        sitAndReachMode={sitAndReachMode}
-        timerRef={timerRef}
-      />
-      <TimerFitnessScreen
-        visible={timerFitnessScreenMode}
-        title={currentActivity}
-        onCancel={closeTimerFitnessScreenHandler}
-        studentInfoModeHandler={props.studentInfoModeHandler}
-        studentList={props.studentList}
-        student={props.currentStudent}
-        setCurrentStudent={props.setCurrentStudent}
-        saveStudent={props.saveStudent}
-        mileMode={mileMode}
-        shuttleMode={shuttleMode}
-        flexedArmHangMode={flexedArmHangMode}
-        stopwatchRef={stopwatchRef}
-        ref={timerScreenRef}
-      />
-    </>
-  ) : null;
+  //   for (let i = 0; i < props.studentList.length; ++i) {
+  //     props.studentList[i].lapCount = 0;
+  //     props.saveStudent(props.studentList[i]);
+  //   }
+  // };
 
   return (
     <View style={styles.screen}>
-      {content}
-      <Header title="Activities" />
       <View style={styles.fitnessTestsView}>
         <View style={styles.fitnessTestsRow}>
           <CustomButton

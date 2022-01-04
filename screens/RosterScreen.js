@@ -1,53 +1,67 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
+import { useNavigation } from '@react-navigation/core';
+import { auth, database } from "../firebase";
 
-import AddStudentScreen from "../screens/AddStudentScreen";
-import StudentInfoScreen from "../screens/StudentInfoScreen";
-
-import Header from "../components/Header";
 import StudentRoster from "../components/StudentRoster";
-
+import Student from "../components/Student";
 import plusSign from "../assets/plussign.png";
 import rosterArt from "../assets/rosterback.png";
+import CustomButton from "../components/CustomButton";
 
-const RosterScreen = (props) => {
-  let content = props.currentStudent ? (
-    <StudentInfoScreen
-      visible={props.studentInfoMode}
-      studentList={props.studentList}
-      student={props.currentStudent}
-      setStudentList={props.setStudentList}
-      setCurrentStudent={props.setCurrentStudent}
-      saveStudent={props.saveStudent}
-      onCancel={props.setStudentInfoMode.bind(this, false)}
-      onDelete={props.confirmDeleteStudentHandler.bind(
-        this,
-        props.currentStudent
-      )}
-    />
-  ) : null;
+const RosterScreen = ({ route }) => {
+  const navigation = useNavigation();
+
+  let roster = [];
+
+  // TODO: improve efficiency so entire roster isn't remade
+  const createRoster = (data) => {
+    roster = [];
+
+    for (const [key, value] of Object.entries(data)) {
+      const newStudent = <Student id={key} firstName={value.firstName} lastName={value.lastName} />;
+      roster.push(newStudent);
+    }
+  };
+
+  // listen for changes to this users' students in the database
+  const dbRef = database.ref('users/' + auth.currentUser.uid + '/students');
+  dbRef.on('value', (snapshot) => {
+    const data = snapshot.val();
+    createRoster(data);
+  });
+
+  // useEffect(() => {
+  //   const dbRef = database.ref();
+  //   dbRef.child("users").child(auth.currentUser.uid).child("students").get().then((snapshot) => {
+  //     if (snapshot.exists()) {
+  //       console.log("found");
+  //       createRoster(snapshot.val());
+  //     } else {
+  //       console.log("No data available");
+  //     }
+  //   }).catch((error) => {
+  //     console.error(error);
+  //   });
+  // }, [])
 
   return (
     <View style={styles.screen}>
-      <AddStudentScreen
-        visible={props.addStudentMode}
-        addStudent={props.addStudentHandler}
-        onCancel={props.setAddStudentMode.bind(this, false)}
-      />
-      {content}
-      <View style={styles.header}>
-        <Header
-          title="Class Roster"
-          imageSource={plusSign}
-          onPress={props.setAddStudentMode.bind(this, true)}
-        />
-      </View>
       <View style={styles.roster}>
         <StudentRoster
-          studentList={props.studentList}
-          onPress={props.studentInfoModeHandler}
+          students={roster}
         />
       </View>
+      <CustomButton
+          title="To Fitness Page"
+          onPress={() => {navigation.navigate("Fitness", {
+            roster: roster
+          })}}
+        />
+        <CustomButton
+          title="New Student"
+          onPress={() => navigation.navigate("AddStudent")}
+        />
       <View style={{ alignItems: "center", zIndex: -1 }}>
         <Image source={rosterArt} style={styles.backgroundImage} />
       </View>

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Alert } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -7,10 +9,18 @@ import uuid from "react-native-uuid";
 
 import RosterScreen from "./screens/RosterScreen";
 import FitnessTestsScreen from "./screens/FitnessTestsScreen";
+import AddStaticResultScreen from "./screens/AddStaticResultScreen";
+import AddStudentScreen from "./screens/AddStudentScreen";
+import EditStudentScreen from "./screens/EditStudentScreen";
+import LoginScreen from "./screens/LoginScreen";
+import StaticFitnessScreen from "./screens/StaticFitnessScreen";
+import StudentInfoScreen from "./screens/StudentInfoScreen";
+import TimerFitnessScreen from "./screens/TimerFitnessScreen";
 
 import ValidationFunctions from "./functions/ValidationFunctions";
-
 import Navigator from "./components/Navigator";
+import Colors from "./constants/colors";
+import Fonts from "./constants/fonts";
 
 export default function App() {
   const placeholder = {
@@ -33,10 +43,6 @@ export default function App() {
 
   const [studentList, setStudentList] = useState([]);
   const [currentStudent, setCurrentStudent] = useState(placeholder);
-
-  const [rosterMode, setRosterMode] = useState(true);
-  const [addStudentMode, setAddStudentMode] = useState(false);
-  const [studentInfoMode, setStudentInfoMode] = useState(false);
 
   // load students on initial render
   useEffect(() => {
@@ -167,58 +173,89 @@ export default function App() {
     updateTestStanding(currentStudent);
   }, [currentStudent]);
 
-  let content = (
-    <RosterScreen
-      studentList={studentList}
-      currentStudent={currentStudent}
-      setCurrentStudent={setCurrentStudent}
-      setStudentList={setStudentList}
-      setAddStudentMode={setAddStudentMode}
-      setStudentInfoMode={setStudentInfoMode}
-      studentInfoModeHandler={studentInfoModeHandler}
-      addStudentHandler={addStudentHandler}
-      saveStudent={saveStudent}
-      deleteStudent={deleteStudent}
-      studentInfoMode={studentInfoMode}
-      addStudentMode={addStudentMode}
-      confirmDeleteStudentHandler={confirmDeleteStudentHandler}
-      onPressRoster={() => setRosterMode(true)}
-      onPressFitness={() => setRosterMode(false)}
-    />
-  );
+  // let content = (
+  //   <RosterScreen
+  //     studentList={studentList}
+  //     currentStudent={currentStudent}
+  //     setCurrentStudent={setCurrentStudent}
+  //     setStudentList={setStudentList}
+  //     setAddStudentMode={setAddStudentMode}
+  //     setStudentInfoMode={setStudentInfoMode}
+  //     studentInfoModeHandler={studentInfoModeHandler}
+  //     addStudentHandler={addStudentHandler}
+  //     saveStudent={saveStudent}
+  //     deleteStudent={deleteStudent}
+  //     studentInfoMode={studentInfoMode}
+  //     addStudentMode={addStudentMode}
+  //     confirmDeleteStudentHandler={confirmDeleteStudentHandler}
+  //     onPressRoster={() => setRosterMode(true)}
+  //     onPressFitness={() => setRosterMode(false)}
+  //   />
+  // );
 
-  if (!rosterMode) {
-    content = (
-      <FitnessTestsScreen
-        studentList={studentList}
-        currentStudent={currentStudent}
-        setCurrentStudent={setCurrentStudent}
-        studentInfoModeHandler={studentInfoModeHandler}
-        saveStudent={saveStudent}
-        onPressRoster={() => setRosterMode(true)}
-        onPressFitness={() => setRosterMode(false)}
-      />
-    );
-  }
+  // if (!rosterMode) {
+  //   content = (
+  //     <FitnessTestsScreen
+  //       studentList={studentList}
+  //       currentStudent={currentStudent}
+  //       setCurrentStudent={setCurrentStudent}
+  //       studentInfoModeHandler={studentInfoModeHandler}
+  //       saveStudent={saveStudent}
+  //       onPressRoster={() => setRosterMode(true)}
+  //       onPressFitness={() => setRosterMode(false)}
+  //     />
+  //   );
+  // }
+
+  const Stack = createNativeStackNavigator();
 
   return (
-    <View style={styles.container}>
-      {content}
-      <StatusBar style="auto" />
-      <View style={styles.navigator}>
-        <Navigator
-          onPressRoster={() => setRosterMode(true)}
-          onPressFitness={() => setRosterMode(false)}
-          rosterMode={rosterMode}
-        />
-      </View>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{headerStyle: styles.header}}
+        initialRoute="Login"
+      >
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Roster" component={RosterScreen} />
+        <Stack.Screen name="Fitness" component={FitnessTestsScreen} />
+        <Stack.Screen name="AddStudent" component={AddStudentScreen} />
+        <Stack.Screen name="EditStudent" component={EditStudentScreen} />
+        <Stack.Screen name="InfoStudent" component={StudentInfoScreen} />
+        <Stack.Screen name="Static" component={StaticFitnessScreen} />
+        <Stack.Screen name="Timer" component={TimerFitnessScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+
+  header: {
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    shadowOpacity: 0.5,
+    elevation: 5,
+    borderBottomRightRadius: 15,
+    borderBottomLeftRadius: 15,
+    width: "100%",
+    height: 120,
+    paddingTop: 36,
+    paddingLeft: 25,
+    backgroundColor: "white",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  headerTitle: {
+    color: Colors.colors.primary,
+    fontSize: 30,
+    fontFamily: Fonts.primary,
+    width: "80%",
   },
 
   navigator: {

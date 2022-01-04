@@ -1,9 +1,7 @@
-import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 import { auth } from '../firebase';
-import StudentRoster from '../components/StudentRoster';
-import Student from '../components/Student';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -11,17 +9,16 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged(user => {
-  //     if (user) {
-  //       navigation.navigate("Roster", {
-  //           roster: <StudentRoster students={[<Student firstName="Example" lastName="Student"/>]}/>
-  //       });
-  //     }
-  //   })
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        navigation.replace("Roster");
 
-  //   return unsubscribe;
-  // }, [])
+      }
+    })
+
+    return unsubscribe;
+  }, [])
 
   const handleSignUp = () => {
     auth
@@ -39,7 +36,7 @@ const LoginScreen = () => {
       .then(userCredentials => {
         const user = userCredentials.user;
         console.log('Logged in with:', user.uid);
-        navigation.replace("Roster");
+        // navigation.replace("Roster");
       })
       .catch(error => alert(error.message));
   };

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, Modal } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from '@react-navigation/core';
 import { auth, database } from "../firebase";
 
+import CustomButton from "../components/CustomButton";
 import ValidationFunctions from "../functions/ValidationFunctions";
 import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 import Fonts from "../constants/fonts";
@@ -17,7 +18,7 @@ const StudentInfoScreen = ({route, ...props}) => {
   const formatScores = (scores, min, sec, cm) => {
     let formattedScores = [];
 
-    for (let i = 0; i < scores.length; ++i) {
+    for (let i = 0; i < scores?.length; ++i) {
       let score = scores[i].value;
 
       if (min) {
@@ -48,7 +49,7 @@ const StudentInfoScreen = ({route, ...props}) => {
       </View>
     );
 
-    if (scores.length != 0) {
+    if (scores) {
       contents = (
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -63,13 +64,13 @@ const StudentInfoScreen = ({route, ...props}) => {
   };
 
   const getBestStatic = (scores, cm = false, sec = false) => {
-    if (scores.length == 0) {
+    if (!scores) {
       return "N/A";
     }
 
     let best = parseFloat(scores[0].value);
 
-    for (let i = 0; i < scores.length; ++i) {
+    for (let i = 0; i < scores?.length; ++i) {
       if (parseFloat(scores[i].value) > best) {
         best = parseFloat(scores[i].value);
       }
@@ -85,13 +86,13 @@ const StudentInfoScreen = ({route, ...props}) => {
   };
 
   const getBestTimer = (scores, minutes = false) => {
-    if (scores.length == 0) {
+    if (!scores) {
       return "N/A";
     }
 
     let best = parseFloat(scores[0].value);
 
-    for (let i = 0; i < scores.length; ++i) {
+    for (let i = 0; i < scores?.length; ++i) {
       if (parseFloat(scores[i].value) < best) {
         best = parseFloat(scores[i].value);
       }
@@ -131,20 +132,24 @@ const StudentInfoScreen = ({route, ...props}) => {
       student.passedPresidential = false;
     }
   };
+
+  const deleteStudentHandler = () => {
+
+  };
   
-  useEffect(() => {
-    const dbRef = database.ref();
-    dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).get().then((snapshot) => {
-      if (snapshot.exists()) {
-        console.log("found");
-        setStudent(snapshot.val());
-      } else {
-        console.log("No data available");
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
-  }, [])
+  // useEffect(() => {
+  //   const dbRef = database.ref();
+  //   dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).get().then((snapshot) => {
+  //     if (snapshot.exists()) {
+  //       console.log("found");
+  //       setStudent(snapshot.val());
+  //     } else {
+  //       console.log("No data available");
+  //     }
+  //   }).catch((error) => {
+  //     console.error(error);
+  //   });
+  // }, [])
 
   return (
       <View style={styles.screen}>
@@ -247,13 +252,13 @@ const StudentInfoScreen = ({route, ...props}) => {
             <CustomButton
               textStyle={styles.button}
               title="Edit Student"
-              onPress={() => setEditStudentMode(true)}
+              onPress={() => navigation.navigate("EditStudent")}
             />
             <CustomButton
               textStyle={styles.button}
               title="Delete Student"
               color="red"
-              onPress={props.onDelete}
+              onPress={deleteStudentHandler}
             />
           </View>
         </ScrollView>

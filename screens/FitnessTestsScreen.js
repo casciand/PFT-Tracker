@@ -2,19 +2,10 @@ import React, { useState, useRef } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { useNavigation } from '@react-navigation/core';
 
-import StaticFitnessScreen from "./StaticFitnessScreen";
-import TimerFitnessScreen from "./TimerFitnessScreen";
-
-import Header from "../components/Header";
 import CustomButton from "../components/CustomButton";
-
 import activitiesArt from "../assets/activities.png";
 
-const FitnessTestScreen = ({route}) => {
-  const [flexedArmHangMode, setFlexedArmHangMode] = useState(false);
-  const [mileMode, setMileMode] = useState(false);
-  const [shuttleMode, setShuttleMode] = useState(false);
-
+const FitnessTestScreen = ({ route }) => {
   const [currentActivity, setCurrentActivity] = useState("");
 
   const stopwatchRef = useRef();
@@ -22,84 +13,29 @@ const FitnessTestScreen = ({route}) => {
   const timerScreenRef = useRef();
 
   const navigation = useNavigation();
-  const { roster } = route.params;
+  const { studentIDs } = route.params;
 
-  // open/close activity screen handlers
-  const openCurlUpsHandler = () => {
-    setCurrentActivity("Curl-Ups");
+  // open activity screen handlers
+  const openStaticHandler = ({curlUps=false, pullUps=false, pushUps=false, sitAndReach=false}) => {
     navigation.navigate("Static", {
-      curlUpsMode: true,
-      roster: roster,
-      timerRef: timerRef
+      studentIDs: studentIDs,
+      timerRef: timerRef,
+      curlUps: curlUps,
+      pullUps: pullUps,
+      pushUps: pushUps,
+      sitAndReach: sitAndReach
     });
   };
 
-  const openPullUpsHandler = () => {
-    setCurrentActivity("Pull-Ups");
-    navigation.navigate("Static", {
-      curlUpsMode: false,
-      roster: roster,
+  const openTimerHandler = ({mile=false, shuttle=false, armHang=false}) => {
+    navigation.navigate("Timer", {
+      studentIDs: studentIDs,
+      stopwatchRef: stopwatchRef,
+      mile: mile,
+      shuttle: shuttle,
+      armHang: armHang
     });
   };
-
-  const openPushUpsHandler = () => {
-    setCurrentActivity("Push-Ups");
-    navigation.navigate("Static", {
-      curlUpsMode: false,
-      roster: roster
-    });
-  };
-
-  const openFlexedArmHangHandler = () => {
-    setCurrentActivity("Flexed Arm Hang");
-    setFlexedArmHangMode(true);
-    navigation.navigate("Timer");
-  };
-
-  const openMileHandler = () => {
-    setCurrentActivity("Mile Run");
-    setMileMode(true);
-    navigation.navigate("Timer");
-  };
-
-  const openShuttleHandler = () => {
-    setCurrentActivity("Shuttle Run");
-    setShuttleMode(true);
-    navigation.navigate("Timer");
-  };
-
-  const openSitAndReachHandler = () => {
-    setCurrentActivity("Sit & Reach");
-    navigation.navigate("Static", {
-      curlUpsMode: false,
-      roster: roster
-    });
-  };
-
-  // const closeStaticFitnessScreenHandler = () => {
-  //   if (curlUpsMode) {
-  //     timerRef.current.resetTimerHandler();
-  //   }
-
-  //   setPullUpsMode(false);
-  //   setCurlUpsMode(false);
-  //   setPushUpsMode(false);
-  //   setSitAndReachMode(false);
-  // };
-
-  // const closeTimerFitnessScreenHandler = () => {
-  //   setMileMode(false);
-  //   setShuttleMode(false);
-  //   setFlexedArmHangMode(false);
-
-  //   stopwatchRef.current.resetStopwatchHandler();
-  //   timerScreenRef.current.resetCurrentList();
-
-  //   for (let i = 0; i < props.studentList.length; ++i) {
-  //     props.studentList[i].lapCount = 0;
-  //     props.saveStudent(props.studentList[i]);
-  //   }
-  // };
 
   return (
     <View style={styles.screen}>
@@ -108,41 +44,41 @@ const FitnessTestScreen = ({route}) => {
           <CustomButton
             title="Curl-Ups"
             borderStyle={styles.button}
-            onPress={openCurlUpsHandler}
+            onPress={() => openStaticHandler({curlUps: true})}
           />
           <CustomButton
             title="Sit & Reach"
             borderStyle={styles.button}
-            onPress={openSitAndReachHandler}
+            onPress={() => openStaticHandler({sitAndReach: true})}
           />
         </View>
         <View style={styles.fitnessTestsRow}>
           <CustomButton
             title="Push-Ups"
             borderStyle={styles.button}
-            onPress={openPushUpsHandler}
+            onPress={() => openStaticHandler({pushUps: true})}
           />
           <CustomButton
             title="Pull-Ups"
             borderStyle={styles.button}
-            onPress={openPullUpsHandler}
+            onPress={() => openStaticHandler({pullUps: true})}
           />
           <CustomButton
             title="Arm Hang"
             borderStyle={styles.button}
-            onPress={openFlexedArmHangHandler}
+            onPress={() => openTimerHandler({armHang: true})}
           />
         </View>
         <View style={styles.fitnessTestsRow}>
           <CustomButton
             title="Mile Run"
             borderStyle={styles.button}
-            onPress={openMileHandler}
+            onPress={() => openTimerHandler({mile: true})}
           />
           <CustomButton
             title="Shuttle Run"
             borderStyle={styles.button}
-            onPress={openShuttleHandler}
+            onPress={() => openTimerHandler({shuttle: true})}
           />
         </View>
       </View>

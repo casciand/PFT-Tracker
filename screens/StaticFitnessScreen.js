@@ -1,28 +1,51 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Modal, Image } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, StyleSheet, Image } from "react-native";
+import { auth, database } from "../firebase";
 
-import AddStaticResultScreen from "./AddStaticResultScreen";
-
-import Header from "../components/Header";
 import StudentRoster from "../components/StudentRoster";
+import Student from "../components/Student";
 import Timer from "../components/Timer";
-
 import Colors from "../constants/colors";
-
-import backArrow from "../assets/backarrow.png";
 import staticArt from "../assets/staticback.png";
 
-const StaticFitnessScreen = ({route}) => {
+const StaticFitnessScreen = ({ route }) => {
   const [csecs, setCsecs] = useState(6000);
+  const [roster, setRoster] = useState([]);
 
-  const { curlUpsMode, timerRef, roster } = route.params;
+  const timersRef = useRef();
+
+  const { studentIDs, curlUps } = route.params;
+
+  const createRoster = () => {
+    const dbRef = database.ref();
+
+    studentIDs.forEach((id) => {
+      dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).get().then((snapshot) => {
+        if (snapshot.exists()) {
+          const ret = snapshot.val();
+          let newStudent = <Student id={id} firstName={ret.firstName} lastName={ret.lastName} />;
+          setRoster((currentRoster) => [...currentRoster, newStudent]);
+        } else {
+          console.log("No data available");
+        }
+      }).catch((error) => {
+        console.error(error);
+      });
+    });
+  };
+
+  // create student roster
+  useEffect(() => {
+    setRoster([]);
+    createRoster();
+  }, [])
 
   let timer, rosterStyle, imageStyle;
 
-  if (curlUpsMode) {
+  if (curlUps) {
     timer = (
       <View style={styles.timerView}>
-        <Timer ref={timerRef} csecs={csecs} setCsecs={setCsecs} />
+        <Timer ref={timersRef} csecs={csecs} setCsecs={setCsecs} />
       </View>
     );
     rosterStyle = { ...styles.roster, height: "53%" };
@@ -38,8 +61,7 @@ const StaticFitnessScreen = ({route}) => {
         {timer}
         <View style={rosterStyle}>
           <StudentRoster
-            studentList={roster}
-            onPress={() => {}}
+            students={roster}
           />
         </View>
         <View style={{ ...imageStyle, alignItems: "center", zIndex: -1 }}>

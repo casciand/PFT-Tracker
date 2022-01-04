@@ -21,251 +21,245 @@ import Colors from "../constants/colors";
 
 import backArrow from "../assets/backarrow.png";
 
-const EditStudentScreen = ({ student, ...props }) => {
-  const [deleteCurlUpsMode, setDeleteCurlUpsMode] = useState(false);
-  const [deleteSitAndReachMode, setDeleteSitAndReachMode] = useState(false);
-  const [deletePullUpsMode, setDeletePullUpsMode] = useState(false);
-  const [deletePushUpsMode, setDeletePushUpsMode] = useState(false);
-  const [deleteFlexedArmHangMode, setDeleteFlexedArmHangMode] = useState(false);
-  const [deleteMileMode, setDeleteMileMode] = useState(false);
-  const [deleteShuttleMode, setDeleteShuttleMode] = useState(false);
+const EditStudentScreen = (props) => {
+  // const [deleteCurlUpsMode, setDeleteCurlUpsMode] = useState(false);
+  // const [deleteSitAndReachMode, setDeleteSitAndReachMode] = useState(false);
+  // const [deletePullUpsMode, setDeletePullUpsMode] = useState(false);
+  // const [deletePushUpsMode, setDeletePushUpsMode] = useState(false);
+  // const [deleteFlexedArmHangMode, setDeleteFlexedArmHangMode] = useState(false);
+  // const [deleteMileMode, setDeleteMileMode] = useState(false);
+  // const [deleteShuttleMode, setDeleteShuttleMode] = useState(false);
 
-  // dummy state to force certain re-renders
-  const [, setDummyValue] = useState(false);
+  // // dummy state to force certain re-renders
+  // const [, setDummyValue] = useState(false);
 
-  const forceUpdate = () => {
-    setDummyValue((val) => !val);
-  };
+  // const forceUpdate = () => {
+  //   setDummyValue((val) => !val);
+  // };
 
-  // add/delete entry handlers
-  const addCurlUpsEntryHandler = () => {
-    let entry = {
-      key: uuid.v1(),
-      date: FormatTimeFunctions.formatDate(),
-      value: "Set Score",
-    };
-    student.curlUps.push(entry);
+  // // add/delete entry handlers
+  // const addCurlUpsEntryHandler = () => {
+  //   let entry = {
+  //     key: uuid.v1(),
+  //     date: FormatTimeFunctions.formatDate(),
+  //     value: "Set Score",
+  //   };
+  //   student.curlUps.push(entry);
 
-    forceUpdate();
-  };
+  //   forceUpdate();
+  // };
 
-  const addSitAndReachEntryHandler = () => {
-    let entry = {
-      key: uuid.v1(),
-      date: FormatTimeFunctions.formatDate(),
-      value: "Set Score",
-    };
-    student.sitAndReach.push(entry);
+  // const addSitAndReachEntryHandler = () => {
+  //   let entry = {
+  //     key: uuid.v1(),
+  //     date: FormatTimeFunctions.formatDate(),
+  //     value: "Set Score",
+  //   };
+  //   student.sitAndReach.push(entry);
 
-    forceUpdate();
-  };
+  //   forceUpdate();
+  // };
 
-  const addPullUpsEntryHandler = () => {
-    let entry = {
-      key: uuid.v1(),
-      date: FormatTimeFunctions.formatDate(),
-      value: "Set Score",
-    };
-    student.pullUps.push(entry);
+  // const addPullUpsEntryHandler = () => {
+  //   let entry = {
+  //     key: uuid.v1(),
+  //     date: FormatTimeFunctions.formatDate(),
+  //     value: "Set Score",
+  //   };
+  //   student.pullUps.push(entry);
 
-    forceUpdate();
-  };
+  //   forceUpdate();
+  // };
 
-  const addPushUpsEntryHandler = () => {
-    let entry = {
-      key: uuid.v1(),
-      date: FormatTimeFunctions.formatDate(),
-      value: "Set Score",
-    };
-    student.pushUps.push(entry);
+  // const addPushUpsEntryHandler = () => {
+  //   let entry = {
+  //     key: uuid.v1(),
+  //     date: FormatTimeFunctions.formatDate(),
+  //     value: "Set Score",
+  //   };
+  //   student.pushUps.push(entry);
 
-    forceUpdate();
-  };
+  //   forceUpdate();
+  // };
 
-  const addFlexedArmHangEntryHandler = () => {
-    let entry = {
-      key: uuid.v1(),
-      date: FormatTimeFunctions.formatDate(),
-      value: "Set Score",
-    };
-    student.flexedArmHang.push(entry);
+  // const addFlexedArmHangEntryHandler = () => {
+  //   let entry = {
+  //     key: uuid.v1(),
+  //     date: FormatTimeFunctions.formatDate(),
+  //     value: "Set Score",
+  //   };
+  //   student.flexedArmHang.push(entry);
 
-    forceUpdate();
-  };
+  //   forceUpdate();
+  // };
 
-  const addMileEntryHandler = () => {
-    let entry = {
-      key: uuid.v1(),
-      date: FormatTimeFunctions.formatDate(),
-      value: "Set Score",
-    };
-    student.mile.push(entry);
+  // const addMileEntryHandler = () => {
+  //   let entry = {
+  //     key: uuid.v1(),
+  //     date: FormatTimeFunctions.formatDate(),
+  //     value: "Set Score",
+  //   };
+  //   student.mile.push(entry);
 
-    forceUpdate();
-  };
+  //   forceUpdate();
+  // };
 
-  const addShuttleEntryHandler = () => {
-    let entry = {
-      key: uuid.v1(),
-      date: FormatTimeFunctions.formatDate(),
-      value: "Set Score",
-    };
-    student.shuttle.push(entry);
+  // const addShuttleEntryHandler = () => {
+  //   let entry = {
+  //     key: uuid.v1(),
+  //     date: FormatTimeFunctions.formatDate(),
+  //     value: "Set Score",
+  //   };
+  //   student.shuttle.push(entry);
 
-    forceUpdate();
-  };
+  //   forceUpdate();
+  // };
 
-  const deleteEntryHandler = (entryID) => {
-    if (deleteCurlUpsMode) {
-      student.curlUps = student.curlUps.filter(
-        (entry) => entry.key !== entryID
-      );
-    } else if (deleteSitAndReachMode) {
-      student.sitAndReach = student.sitAndReach.filter(
-        (entry) => entry.key !== entryID
-      );
-    } else if (deletePullUpsMode) {
-      student.pullUps = student.pullUps.filter(
-        (entry) => entry.key !== entryID
-      );
-    } else if (deletePushUpsMode) {
-      student.pushUps = student.pushUps.filter(
-        (entry) => entry.key !== entryID
-      );
-    } else if (deleteFlexedArmHangMode) {
-      student.flexedArmHang = student.flexedArmHang.filter(
-        (entry) => entry.key !== entryID
-      );
-    } else if (deleteMileMode) {
-      student.mile = student.mile.filter((entry) => entry.key !== entryID);
-    } else if (deleteShuttleMode) {
-      student.shuttle = student.shuttle.filter(
-        (entry) => entry.key !== entryID
-      );
-    } else {
-      return;
-    }
+  // const deleteEntryHandler = (entryID) => {
+  //   if (deleteCurlUpsMode) {
+  //     student.curlUps = student.curlUps.filter(
+  //       (entry) => entry.key !== entryID
+  //     );
+  //   } else if (deleteSitAndReachMode) {
+  //     student.sitAndReach = student.sitAndReach.filter(
+  //       (entry) => entry.key !== entryID
+  //     );
+  //   } else if (deletePullUpsMode) {
+  //     student.pullUps = student.pullUps.filter(
+  //       (entry) => entry.key !== entryID
+  //     );
+  //   } else if (deletePushUpsMode) {
+  //     student.pushUps = student.pushUps.filter(
+  //       (entry) => entry.key !== entryID
+  //     );
+  //   } else if (deleteFlexedArmHangMode) {
+  //     student.flexedArmHang = student.flexedArmHang.filter(
+  //       (entry) => entry.key !== entryID
+  //     );
+  //   } else if (deleteMileMode) {
+  //     student.mile = student.mile.filter((entry) => entry.key !== entryID);
+  //   } else if (deleteShuttleMode) {
+  //     student.shuttle = student.shuttle.filter(
+  //       (entry) => entry.key !== entryID
+  //     );
+  //   } else {
+  //     return;
+  //   }
 
-    forceUpdate();
-  };
+  //   forceUpdate();
+  // };
 
-  const resetDeleteModes = () => {
-    setDeleteCurlUpsMode(false);
-    setDeleteSitAndReachMode(false);
-    setDeletePullUpsMode(false);
-    setDeletePushUpsMode(false);
-    setDeleteFlexedArmHangMode(false);
-    setDeleteMileMode(false);
-    setDeleteShuttleMode(false);
-  };
+  // const resetDeleteModes = () => {
+  //   setDeleteCurlUpsMode(false);
+  //   setDeleteSitAndReachMode(false);
+  //   setDeletePullUpsMode(false);
+  //   setDeletePushUpsMode(false);
+  //   setDeleteFlexedArmHangMode(false);
+  //   setDeleteMileMode(false);
+  //   setDeleteShuttleMode(false);
+  // };
 
-  const formatScores = (scores, min, sec, cm) => {
-    let formattedScores = [];
+  // const formatScores = (scores, min, sec, cm) => {
+  //   let formattedScores = [];
 
-    for (let i = 0; i < scores.length; ++i) {
-      let score = scores[i].value;
-      let units = "";
+  //   for (let i = 0; i < scores.length; ++i) {
+  //     let score = scores[i].value;
+  //     let units = "";
 
-      if (min) {
-        score = FormatTimeFunctions.formatTimeMinutes(score);
-        units = " s";
-      } else if (sec) {
-        units = " s";
-      } else if (cm) {
-        units = " cm";
-      }
+  //     if (min) {
+  //       score = FormatTimeFunctions.formatTimeMinutes(score);
+  //       units = " s";
+  //     } else if (sec) {
+  //       units = " s";
+  //     } else if (cm) {
+  //       units = " cm";
+  //     }
 
-      // convert test entry to modifiable TextInputs
-      const entry = (
-        <TouchableOpacity onPress={() => deleteEntryHandler(scores[i].key)}>
-          <View style={styles.entry}>
-            <TextInput
-              style={styles.textBox}
-              placeholder={scores[i].date}
-              placeholderTextColor="white"
-              onChangeText={(input) => {
-                scores[i].date = input;
-              }}
-              maxLength={9}
-            />
-            <View style={{ flexDirection: "row" }}>
-              <TextInput
-                style={styles.textBox}
-                placeholder={scores[i].value.toString()}
-                placeholderTextColor="white"
-                onChangeText={(input) => {
-                  scores[i].value = input;
-                }}
-                maxLength={3}
-                keyboardType={"numeric"}
-              />
-              <Text style={styles.units}>{units}</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      );
+  //     // convert test entry to modifiable TextInputs
+  //     const entry = (
+  //       <TouchableOpacity onPress={() => deleteEntryHandler(scores[i].key)}>
+  //         <View style={styles.entry}>
+  //           <TextInput
+  //             style={styles.textBox}
+  //             placeholder={scores[i].date}
+  //             placeholderTextColor="white"
+  //             onChangeText={(input) => {
+  //               scores[i].date = input;
+  //             }}
+  //             maxLength={9}
+  //           />
+  //           <View style={{ flexDirection: "row" }}>
+  //             <TextInput
+  //               style={styles.textBox}
+  //               placeholder={scores[i].value.toString()}
+  //               placeholderTextColor="white"
+  //               onChangeText={(input) => {
+  //                 scores[i].value = input;
+  //               }}
+  //               maxLength={3}
+  //               keyboardType={"numeric"}
+  //             />
+  //             <Text style={styles.units}>{units}</Text>
+  //           </View>
+  //         </View>
+  //       </TouchableOpacity>
+  //     );
 
-      formattedScores.push(entry);
-    }
+  //     formattedScores.push(entry);
+  //   }
 
-    return formattedScores;
-  };
+  //   return formattedScores;
+  // };
 
-  const createInfoBlock = (scores, min = false, sec = false, cm = false) => {
-    let contents = <Text style={styles.noEntry}>No Entries</Text>;
+  // const createInfoBlock = (scores, min = false, sec = false, cm = false) => {
+  //   let contents = <Text style={styles.noEntry}>No Entries</Text>;
 
-    if (scores.length != 0) {
-      contents = (
-        <ScrollView
-          contentContainerStyle={{ padding: 10 }}
-          showsVerticalScrollIndicator={false}
-        >
-          {formatScores(scores, min, sec, cm)}
-        </ScrollView>
-      );
-    }
+  //   if (scores.length != 0) {
+  //     contents = (
+  //       <ScrollView
+  //         contentContainerStyle={{ padding: 10 }}
+  //         showsVerticalScrollIndicator={false}
+  //       >
+  //         {formatScores(scores, min, sec, cm)}
+  //       </ScrollView>
+  //     );
+  //   }
 
-    return contents;
-  };
+  //   return contents;
+  // };
 
-  // changes `-` button style when pressed
-  let curlUpsStyle = styles.editButton;
-  let sitAndReachStyle = styles.editButton;
-  let pullUpsStyle = styles.editButton;
-  let pushUpsStyle = styles.editButton;
-  let flexedArmHangStyle = styles.editButton;
-  let mileStyle = styles.editButton;
-  let shuttleStyle = styles.editButton;
+  // // changes `-` button style when pressed
+  // let curlUpsStyle = styles.editButton;
+  // let sitAndReachStyle = styles.editButton;
+  // let pullUpsStyle = styles.editButton;
+  // let pushUpsStyle = styles.editButton;
+  // let flexedArmHangStyle = styles.editButton;
+  // let mileStyle = styles.editButton;
+  // let shuttleStyle = styles.editButton;
 
-  if (deleteCurlUpsMode) {
-    curlUpsStyle = { ...styles.editButton, opacity: 0.4 };
-  } else if (deleteSitAndReachMode) {
-    sitAndReachStyle = { ...styles.editButton, opacity: 0.4 };
-  } else if (deletePullUpsMode) {
-    pullUpsStyle = { ...styles.editButton, opacity: 0.4 };
-  } else if (deletePushUpsMode) {
-    pushUpsStyle = { ...styles.editButton, opacity: 0.4 };
-  } else if (deleteFlexedArmHangMode) {
-    flexedArmHangStyle = { ...styles.editButton, opacity: 0.4 };
-  } else if (deleteMileMode) {
-    mileStyle = { ...styles.editButton, opacity: 0.4 };
-  } else if (deleteShuttleMode) {
-    shuttleStyle = { ...styles.editButton, opacity: 0.4 };
-  }
+  // if (deleteCurlUpsMode) {
+  //   curlUpsStyle = { ...styles.editButton, opacity: 0.4 };
+  // } else if (deleteSitAndReachMode) {
+  //   sitAndReachStyle = { ...styles.editButton, opacity: 0.4 };
+  // } else if (deletePullUpsMode) {
+  //   pullUpsStyle = { ...styles.editButton, opacity: 0.4 };
+  // } else if (deletePushUpsMode) {
+  //   pushUpsStyle = { ...styles.editButton, opacity: 0.4 };
+  // } else if (deleteFlexedArmHangMode) {
+  //   flexedArmHangStyle = { ...styles.editButton, opacity: 0.4 };
+  // } else if (deleteMileMode) {
+  //   mileStyle = { ...styles.editButton, opacity: 0.4 };
+  // } else if (deleteShuttleMode) {
+  //   shuttleStyle = { ...styles.editButton, opacity: 0.4 };
+  // }
 
   return (
-    <Modal visible={props.visible} animationType="fade">
       <View style={styles.screen}>
-        <Header
-          title="Edit Student"
-          imageSource={backArrow}
-          onPress={props.onCancel}
-        />
         <ScrollView
           contentContainerStyle={styles.information}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.fitnessInfo}>
+          {/* <View style={styles.fitnessInfo}>
             <Text style={styles.infoTitle}>Fitness Scores</Text>
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={styles.activityTitleView}>
@@ -531,10 +525,9 @@ const EditStudentScreen = ({ student, ...props }) => {
                 </View>
               </View>
             </RadioButton.Group>
-          </View>
+          </View> */}
         </ScrollView>
       </View>
-    </Modal>
   );
 };
 

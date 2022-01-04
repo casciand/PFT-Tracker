@@ -8,6 +8,38 @@ import Colors from "../constants/colors";
 const Student = (props) => {
   const navigation = useNavigation();
 
+  const handleTimerResult = () => {
+    const state = navigation.getState();
+    const mile = state.routes[state.index].params.mile;
+    const shuttle = state.routes[state.index].params.shuttle;
+    const armHang = state.routes[state.index].params.armHang;
+
+    if (mile) {
+
+    } else if (shuttle) {
+
+    }
+  };
+
+  const handleOnPress = () => {
+    const state = navigation.getState();
+    const currentPage = state.routes[state.index].name;
+    
+    if (currentPage == "Roster") {
+      navigation.navigate("InfoStudent", {
+        id: props.id
+      });
+    } else if (currentPage == "Static") {
+      navigation.navigate("AddStatic", {
+        id: props.id
+      });
+    } else if (currentPage == "AddStatic") {
+      handleStaticResult();
+    } else { // timer screen
+      handleTimerResult();
+    }
+  };
+
   let checks;
 
   if (props.mileMode) {
@@ -23,9 +55,7 @@ const Student = (props) => {
   let additionalText = <Text style={styles.name}>{checks}</Text>;
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate("InfoStudent", {
-      id: props.id
-    })}>
+    <TouchableOpacity onPress={() => handleOnPress()}>
       <View style={styles.student}>
         <Text style={styles.name}>
           {props.lastName}, {props.firstName}

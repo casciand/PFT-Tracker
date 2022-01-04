@@ -67,14 +67,7 @@ const AddStaticResultScreen = ({ student, ...props }) => {
   }
 
   return (
-    <Modal visible={props.visible} animationType="slide">
       <ScrollView contentContainerStyle={styles.screen} scrollEnabled={false}>
-        <Header
-          title={props.title}
-          style={styles.studentName}
-          imageSource={backArrow}
-          onPress={props.onCancel}
-        />
         <View style={{ alignItems: "center" }}>
           <View style={styles.inputView}>
             <TextInput
@@ -96,7 +89,6 @@ const AddStaticResultScreen = ({ student, ...props }) => {
           <Image source={addResultArt} style={styles.backgroundImage} />
         </View>
       </ScrollView>
-    </Modal>
   );
 };
 

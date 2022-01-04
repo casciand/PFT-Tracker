@@ -7,7 +7,6 @@ import React, {
 import { View, StyleSheet, Text } from "react-native";
 
 import StopwatchButton from "../components/StopwatchButton";
-
 import Colors from "../constants/colors";
 
 const Stopwatch = (props, ref) => {
@@ -46,20 +45,14 @@ const Stopwatch = (props, ref) => {
     setCurrTime(0);
     props.setCsecs(0);
 
-    for (let i = 0; i < props.studentList.length; ++i) {
-      props.studentList[i].lapCount = 0;
-    }
+    // for (let i = 0; i < props.studentList.length; ++i) {
+    //   props.studentList[i].lapCount = 0;
+    // }
   };
 
-  let statusButton = (
+  let statusButton = isRunning ? <StopwatchButton onPress={stopStopwatchHandler} title="Stop" /> : (
     <StopwatchButton onPress={startStopwatchHandler} title="Start" />
   );
-
-  if (isRunning) {
-    statusButton = (
-      <StopwatchButton onPress={stopStopwatchHandler} title="Stop" />
-    );
-  }
 
   return (
     <View>

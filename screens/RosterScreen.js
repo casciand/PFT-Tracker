@@ -1,49 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { useNavigation } from '@react-navigation/core';
 import { auth, database } from "../firebase";
 
 import StudentRoster from "../components/StudentRoster";
 import Student from "../components/Student";
-import plusSign from "../assets/plussign.png";
 import rosterArt from "../assets/rosterback.png";
 import CustomButton from "../components/CustomButton";
 
-const RosterScreen = ({ route }) => {
-  const navigation = useNavigation();
+const RosterScreen = () => {
+  const [roster, setRoster] = useState([]);
+  const [studentIDs, setStudentIDs] = useState([]);
 
-  let roster = [];
+  const navigation = useNavigation();
 
   // TODO: improve efficiency so entire roster isn't remade
   const createRoster = (data) => {
-    roster = [];
+    let newRoster = [];
+    let newIDs = [];
 
-    for (const [key, value] of Object.entries(data)) {
-      const newStudent = <Student id={key} firstName={value.firstName} lastName={value.lastName} />;
-      roster.push(newStudent);
+    if (data != null) {
+      for (const [key, value] of Object.entries(data)) {
+        let newStudent = <Student id={key} firstName={value.firstName} lastName={value.lastName} />;
+        newRoster.push(newStudent);
+        newIDs.push(key);
+      }
+
+      return { newRoster, newIDs };
     }
   };
 
-  // listen for changes to this users' students in the database
-  const dbRef = database.ref('users/' + auth.currentUser.uid + '/students');
-  dbRef.on('value', (snapshot) => {
-    const data = snapshot.val();
-    createRoster(data);
-  });
-
-  // useEffect(() => {
-  //   const dbRef = database.ref();
-  //   dbRef.child("users").child(auth.currentUser.uid).child("students").get().then((snapshot) => {
-  //     if (snapshot.exists()) {
-  //       console.log("found");
-  //       createRoster(snapshot.val());
-  //     } else {
-  //       console.log("No data available");
-  //     }
-  //   }).catch((error) => {
-  //     console.error(error);
-  //   });
-  // }, [])
+  useEffect(() => {
+    // listen for changes to this users' students in the database
+    const dbRef = database.ref('users/' + auth.currentUser.uid + '/students');
+    dbRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      console.log("listened");
+      let { newRoster, newIDs } = createRoster(data);
+      setRoster(newRoster);
+      setStudentIDs(newIDs);
+    });
+  }, [])
 
   return (
     <View style={styles.screen}>
@@ -55,7 +52,7 @@ const RosterScreen = ({ route }) => {
       <CustomButton
           title="To Fitness Page"
           onPress={() => {navigation.navigate("Fitness", {
-            roster: roster
+            studentIDs: studentIDs // pass IDs to avoid passing components
           })}}
         />
         <CustomButton

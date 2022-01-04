@@ -22,7 +22,8 @@ const AddStudentScreen = (props) => {
   const [enteredGender, setEnteredGender] = useState("");
 
   const addStudent = (newStudent) => {
-    database.ref('users/' + auth.currentUser.uid + '/students/' + newStudent.id).set({
+    try {
+      database.ref('users/' + auth.currentUser.uid + '/students/' + newStudent.id).set({
         firstName: newStudent.firstName,
         lastName: newStudent.lastName,
         age: newStudent.age,
@@ -30,14 +31,23 @@ const AddStudentScreen = (props) => {
         lapCount: 0,
         passedPresidential: false,
         passedNational: false,
-        curlUps: [],
-        sitAndReach: [],
-        pushUps: [],
-        pullUps: [],
-        armHang: [],
-        mileRun: [],
-        shuttleRun: []
+        // curlUps: [],
+        // sitAndReach: [],
+        // pushUps: [],
+        // pullUps: [],
+        // armHang: [],
+        // mileRun: [],
+        // shuttleRun: []
     });
+
+    Alert.alert(
+      "Success!",
+      `${newStudent.firstName} ${newStudent.lastName}${newStudent.lastName.slice(-1) == 's' ? "'" : "'s"} profile was created.`,
+      [{ text: "OK", style: "cancel", onPress: () => {} }]
+    );
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const addStudentHandler = () => {

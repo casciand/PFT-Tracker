@@ -28,7 +28,7 @@ export default {
 
     const day = now.getDate();
     const month = now.getMonth() + 1;
-    const year = now.getFullYear() % 100;
+    const year = now.getFullYear();
 
     return `${month}/${day}/${year}`;
   },

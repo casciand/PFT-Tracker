@@ -15,7 +15,7 @@ import CustomButton from "../components/CustomButton";
 import Colors from "../constants/colors";
 import newStudentArt from "../assets/newstudent.png";
 
-const AddStudentScreen = (props) => {
+const AddStudentScreen = () => {
   const [enteredFirstName, setEnteredFirstName] = useState("");
   const [enteredLastName, setEnteredLastName] = useState("");
   const [enteredAge, setEnteredAge] = useState("");
@@ -28,16 +28,8 @@ const AddStudentScreen = (props) => {
         lastName: newStudent.lastName,
         age: newStudent.age,
         isMale: newStudent.isMale,
-        lapCount: 0,
         passedPresidential: false,
         passedNational: false,
-        // curlUps: [],
-        // sitAndReach: [],
-        // pushUps: [],
-        // pullUps: [],
-        // armHang: [],
-        // mileRun: [],
-        // shuttleRun: []
     });
 
     Alert.alert(

@@ -10,7 +10,6 @@ const FitnessTestScreen = ({ route }) => {
 
   const stopwatchRef = useRef();
   const timerRef = useRef();
-  const timerScreenRef = useRef();
 
   const navigation = useNavigation();
   const { studentIDs } = route.params;
@@ -19,7 +18,6 @@ const FitnessTestScreen = ({ route }) => {
   const openStaticHandler = ({curlUps=false, pullUps=false, pushUps=false, sitAndReach=false}) => {
     navigation.navigate("Static", {
       studentIDs: studentIDs,
-      timerRef: timerRef,
       curlUps: curlUps,
       pullUps: pullUps,
       pushUps: pushUps,

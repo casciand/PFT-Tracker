@@ -9,8 +9,8 @@ import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 import Fonts from "../constants/fonts";
 import Colors from "../constants/colors";
 
-const StudentInfoScreen = ({route, ...props}) => {
-  const [student, setStudent] = useState({});
+const StudentInfoScreen = ({ route }) => {
+  const [data, setData] = useState({});
 
   const navigation = useNavigation();
   const { id } = route.params;
@@ -18,20 +18,20 @@ const StudentInfoScreen = ({route, ...props}) => {
   const formatScores = (scores, min, sec, cm) => {
     let formattedScores = [];
 
-    for (let i = 0; i < scores?.length; ++i) {
-      let score = scores[i].value;
+    for (const [, value] of Object.entries(scores)) {
+      let score = value.score;
 
       if (min) {
         score = FormatTimeFunctions.formatTimeMinutes(score * 100);
       } else if (sec) {
-        score = score + " s";
+        score = `${score} s`;
       } else if (cm) {
-        score = score + " cm";
+        score = `${score} cm`;
       }
 
       const entry = (
         <View style={styles.entry}>
-          <Text style={styles.activity}>{scores[i].date}</Text>
+          <Text style={styles.activity}>{value.date}</Text>
           <Text style={styles.activity}>{score}</Text>
         </View>
       );
@@ -42,7 +42,7 @@ const StudentInfoScreen = ({route, ...props}) => {
     return formattedScores;
   };
 
-  const createInfoBlock = (scores, min = false, sec = false, cm = false) => {
+  const createInfoBlock = (scores, min=false, sec=false, cm=false) => {
     let contents = (
       <View style={{ padding: 10 }}>
         <Text style={styles.noEntry}>No Entries</Text>
@@ -63,93 +63,89 @@ const StudentInfoScreen = ({route, ...props}) => {
     return contents;
   };
 
-  const getBestStatic = (scores, cm = false, sec = false) => {
+  const getBestStatic = (scores, cm=false) => {
     if (!scores) {
       return "N/A";
     }
 
-    let best = parseFloat(scores[0].value);
+    let best = scores[Object.keys(scores)[0]].score;
 
-    for (let i = 0; i < scores?.length; ++i) {
-      if (parseFloat(scores[i].value) > best) {
-        best = parseFloat(scores[i].value);
+    for (const [, value] of Object.entries(scores)) {
+      if (value.score > best) {
+        best = value.score;
       }
     }
 
     if (cm) {
-      return best + " cm";
-    } else if (sec) {
-      return best + " s";
-    } else {
-      return best;
+      best += " cm";
     }
+
+    return parseFloat(best);
   };
 
-  const getBestTimer = (scores, minutes = false) => {
+  const getBestTimer = (scores, minutes=false) => {
     if (!scores) {
       return "N/A";
     }
 
-    let best = parseFloat(scores[0].value);
+    let best = scores[Object.keys(scores)[0]].score;
 
-    for (let i = 0; i < scores?.length; ++i) {
-      if (parseFloat(scores[i].value) < best) {
-        best = parseFloat(scores[i].value);
+    for (const [, value] of Object.entries(scores)) {
+      if (value.score < best) {
+        best = value.score;
       }
     }
 
     if (minutes) {
       return FormatTimeFunctions.formatTimeMinutes(best * 100);
+    } else {
+      return `${best} s`;
     }
-
-    return best + " s";
   };
 
-  const removeEmptyEntries = () => {
-    student.curlUps = student.curlUps.filter((entry) => !isNaN(entry.value));
-    student.sitAndReach = student.sitAndReach.filter(
-      (entry) => !isNaN(entry.value)
-    );
-    student.pullUps = student.pullUps.filter((entry) => !isNaN(entry.value));
-    student.pushUps = student.pushUps.filter((entry) => !isNaN(entry.value));
-    student.flexedArmHang = student.flexedArmHang.filter(
-      (entry) => !isNaN(entry.value)
-    );
-    student.mile = student.mile.filter((entry) => !isNaN(entry.value));
-    student.shuttle = student.shuttle.filter((entry) => !isNaN(entry.value));
-  };
+  // const removeEmptyEntries = () => {
+  //   student.curlUps = student.curlUps.filter((entry) => !isNaN(entry.value));
+  //   student.sitAndReach = student.sitAndReach.filter(
+  //     (entry) => !isNaN(entry.value)
+  //   );
+  //   student.pullUps = student.pullUps.filter((entry) => !isNaN(entry.value));
+  //   student.pushUps = student.pushUps.filter((entry) => !isNaN(entry.value));
+  //   student.flexedArmHang = student.flexedArmHang.filter(
+  //     (entry) => !isNaN(entry.value)
+  //   );
+  //   student.mile = student.mile.filter((entry) => !isNaN(entry.value));
+  //   student.shuttle = student.shuttle.filter((entry) => !isNaN(entry.value));
+  // };
 
   const updateTestStanding = () => {
-    if (ValidationFunctions.passedNational(student)) {
-      student.passedNational = true;
-    } else {
-      student.passedNational = false;
-    }
+    let national = ValidationFunctions.passedNational(data)
+    let presidential = ValidationFunctions.passedPresidential(data);
 
-    if (ValidationFunctions.passedPresidential(student)) {
-      student.passedPresidential = true;
-    } else {
-      student.passedPresidential = false;
-    }
+    database.ref('users/' + auth.currentUser.uid + "/students/" + id).set({
+      passedNational: national,
+      passedPresidential: presidential
+    });
   };
 
   const deleteStudentHandler = () => {
-
+    navigation.goBack();
   };
   
-  // useEffect(() => {
-  //   const dbRef = database.ref();
-  //   dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).get().then((snapshot) => {
-  //     if (snapshot.exists()) {
-  //       console.log("found");
-  //       setStudent(snapshot.val());
-  //     } else {
-  //       console.log("No data available");
-  //     }
-  //   }).catch((error) => {
-  //     console.error(error);
-  //   });
-  // }, [])
+  // get student data on initial render
+  useEffect(() => {
+    updateTestStanding();
+
+    const dbRef = database.ref();
+    dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).get().then((snapshot) => {
+      if (snapshot.exists()) {
+        setData(snapshot.val());
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+  }, [])
 
   return (
       <View style={styles.screen}>
@@ -163,71 +159,71 @@ const StudentInfoScreen = ({route, ...props}) => {
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Curl-Ups</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestStatic(student.curlUps)}
+                  Best: {getBestStatic(data.curlUps)}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(student.curlUps)}
+                {createInfoBlock(data.curlUps)}
               </View>
 
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Sit & Reach</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestStatic(student.sitAndReach, true, false)}
+                  Best: {getBestStatic(data.sitAndReach, true)}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(student.sitAndReach, false, false, true)}
+                {createInfoBlock(data.sitAndReach, false, false, true)}
               </View>
 
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Pull-Ups</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestStatic(student.pullUps)}
+                  Best: {getBestStatic(data.pullUps)}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(student.pullUps)}
+                {createInfoBlock(data.pullUps)}
               </View>
 
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Push-Ups</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestStatic(student.pushUps)}
+                  Best: {getBestStatic(data.pushUps)}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(student.pushUps)}
+                {createInfoBlock(data.pushUps)}
               </View>
 
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Flexed Arm Hang</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestTimer(student.flexedArmHang)}
+                  Best: {getBestTimer(data.flexedArmHang)}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(student.flexedArmHang, false, true, false)}
+                {createInfoBlock(data.flexedArmHang, false, true, false)}
               </View>
 
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Mile Run</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestTimer(student.mile, true)}
+                  Best: {getBestTimer(data.mile, true)}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(student.mile, true, false, false)}
+                {createInfoBlock(data.mile, true, false, false)}
               </View>
 
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Shuttle Run</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestTimer(student.shuttle)}
+                  Best: {getBestTimer(data.shuttle)}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(student.shuttle, false, true, false)}
+                {createInfoBlock(data.shuttle, false, true, false)}
               </View>
             </ScrollView>
           </View>
@@ -237,13 +233,13 @@ const StudentInfoScreen = ({route, ...props}) => {
               <View style={styles.awardTextView}>
                 <Text style={styles.activity}>Presidential Fitness Award</Text>
                 <Text style={styles.activity}>
-                  {student.passedPresidential ? "Passed" : "Has Not Passed"}
+                  {data.passedPresidential ? "Passed" : "Has Not Passed"}
                 </Text>
               </View>
               <View style={styles.awardTextView}>
                 <Text style={styles.activity}>National Fitness Award</Text>
                 <Text style={styles.activity}>
-                  {student.passedNational ? "Passed" : "Has Not Passed"}
+                  {data.passedNational ? "Passed" : "Has Not Passed"}
                 </Text>
               </View>
             </View>

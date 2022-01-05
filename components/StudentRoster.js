@@ -1,7 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ScrollView, StyleSheet } from "react-native";
-
-import Student from "./Student";
 
 const StudentRoster = (props) => {
   const insertionSort = (arr) => {
@@ -17,7 +15,9 @@ const StudentRoster = (props) => {
     }
   };
 
-  // insertionSort(students);
+  useEffect(() => {
+    insertionSort(props.students);
+  }, [])
 
   // let rosterStyle =
   //   props.mileMode || props.shuttleMode || props.flexedArmHangMode
@@ -25,7 +25,7 @@ const StudentRoster = (props) => {
   //     : styles.staticStyle;
 
   return (
-    <ScrollView>{props.students}</ScrollView>
+    <ScrollView contentContainerStyle={styles.staticStyle}>{props.students}</ScrollView>
   );
 };
 

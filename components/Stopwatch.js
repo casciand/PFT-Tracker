@@ -10,7 +10,9 @@ import StopwatchButton from "../components/StopwatchButton";
 import Colors from "../constants/colors";
 
 const Stopwatch = (props, ref) => {
-  const timerRef = useRef();
+  const [csecs, setCsecs] = useState(0);
+
+  const stopwatchRef = useRef();
 
   const [isRunning, setIsRunning] = useState(false);
   const [currTime, setCurrTime] = useState(0);
@@ -19,6 +21,7 @@ const Stopwatch = (props, ref) => {
     resetStopwatchHandler: () => {
       resetStopwatchHandler();
     },
+    csecs: csecs
   }));
 
   const startStopwatchHandler = () => {
@@ -26,28 +29,24 @@ const Stopwatch = (props, ref) => {
 
     const now = new Date().getTime();
 
-    timerRef.current = setInterval(() => {
-      props.setCsecs(currTime + Math.floor((new Date().getTime() - now) / 10));
+    stopwatchRef.current = setInterval(() => {
+      setCsecs(currTime + Math.floor((new Date().getTime() - now) / 10));
     }, 10);
   };
 
   const stopStopwatchHandler = () => {
     setIsRunning(false);
-    setCurrTime(props.csecs);
+    setCurrTime(csecs);
 
-    clearInterval(timerRef.current);
+    clearInterval(stopwatchRef.current);
   };
 
   const resetStopwatchHandler = () => {
     setIsRunning(false);
-    clearInterval(timerRef.current);
+    clearInterval(stopwatchRef.current);
 
     setCurrTime(0);
-    props.setCsecs(0);
-
-    // for (let i = 0; i < props.studentList.length; ++i) {
-    //   props.studentList[i].lapCount = 0;
-    // }
+    setCsecs(0);
   };
 
   let statusButton = isRunning ? <StopwatchButton onPress={stopStopwatchHandler} title="Stop" /> : (
@@ -58,7 +57,7 @@ const Stopwatch = (props, ref) => {
     <View>
       <View style={styles.stopwatchView}>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.stopwatchText}>{props.format(props.csecs)}</Text>
+          <Text style={styles.stopwatchText}>{props.format(csecs)}</Text>
         </View>
       </View>
       <View style={styles.buttonView}>

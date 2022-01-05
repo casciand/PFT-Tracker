@@ -12,8 +12,6 @@ const StaticFitnessScreen = ({ route }) => {
   const [csecs, setCsecs] = useState(6000);
   const [roster, setRoster] = useState([]);
 
-  const timersRef = useRef();
-
   const { studentIDs, curlUps } = route.params;
 
   const createRoster = () => {
@@ -45,7 +43,7 @@ const StaticFitnessScreen = ({ route }) => {
   if (curlUps) {
     timer = (
       <View style={styles.timerView}>
-        <Timer ref={timersRef} csecs={csecs} setCsecs={setCsecs} />
+        <Timer csecs={csecs} setCsecs={setCsecs} />
       </View>
     );
     rosterStyle = { ...styles.roster, height: "53%" };

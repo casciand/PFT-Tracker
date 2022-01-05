@@ -11,14 +11,11 @@ import timerArt from "../assets/timerfitness.png";
 
 const TimerFitnessScreen = ({ route }) => {
   const [roster, setRoster] = useState([]);
-  const [csecs, setCsecs] = useState(0);
   
   // dummy state to force certain re-renders
   const [, setDummyValue] = useState(false);
 
-  const stopwatchRef = useRef();
-
-  const { mileMode, studentIDs } = route.params;
+  const { stopwatchRef, studentIDs } = route.params;
 
   const createRoster = () => {
     const dbRef = database.ref();
@@ -44,83 +41,12 @@ const TimerFitnessScreen = ({ route }) => {
     createRoster();
   }, [])
 
-  // const forceUpdate = () => {
-  //   setDummyValue((val) => !val);
-  // };
-
-  // useImperativeHandle(ref, () => ({
-  //   resetCurrentList: () => {
-  //     setCurrentList(props.studentList);
-  //   },
-  // }));
-
-  // const setTimerScoreHandler = (studentID) => {
-  //   const currentSeconds = csecs / 100;
-
-  //   let currentStudent;
-
-  //   for (let i = 0; i < props.studentList.length; ++i) {
-  //     currentStudent = props.studentList[i];
-
-  //     if (studentID == currentStudent.key) {
-  //       break;
-  //     }
-  //   }
-
-  //   let entry = {
-  //     key: uuid.v1(),
-  //     date: FormatTimeFunctions.formatDate(),
-  //     value: currentSeconds,
-  //   };
-
-  //   if (props.mileMode) {
-  //     currentStudent.mile.push(entry);
-  //   } else if (props.shuttleMode) {
-  //     currentStudent.shuttle.push(entry);
-  //   } else {
-  //     currentStudent.flexedArmHang.push(entry);
-  //   }
-
-  //   forceUpdate();
-  // };
-
-  // const onPressStudent = (studentID) => {
-  //   if (csecs == 0) {
-  //     return;
-  //   }
-
-  //   let student;
-
-  //   for (let i = 0; i < props.studentList.length; ++i) {
-  //     student = props.studentList[i];
-
-  //     if (studentID == student.key) {
-  //       break;
-  //     }
-  //   }
-
-  //   if (props.mileMode) {
-  //     if (student.lapCount < 3) {
-  //       student.lapCount += 1;
-  //       forceUpdate();
-  //       return;
-  //     }
-  //   }
-
-  //   setTimerScoreHandler(studentID);
-  //   setCurrentList((list) => {
-  //     return list.filter((student) => student.key != studentID);
-  //   });
-  // };
-
   return (
     <View style={styles.screen}>
       <View style={styles.stopwatchView}>
         <Stopwatch
-          csecs={csecs}
-          setCsecs={setCsecs}
           format={FormatTimeFunctions.formatTimeMinutes}
-          // ref={stopwatchRef} 
+          ref={stopwatchRef} 
         />
       </View>
       <View style={styles.roster}>

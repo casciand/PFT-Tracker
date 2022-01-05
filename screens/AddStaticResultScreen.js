@@ -2,26 +2,42 @@ import React, { useState } from "react";
 import {
   View,
   StyleSheet,
-  Modal,
   TextInput,
   Alert,
   ScrollView,
   Image,
 } from "react-native";
 import uuid from "react-native-uuid";
+import { auth, database } from "../firebase";
 
-import Header from "../components/Header";
 import CustomButton from "../components/CustomButton";
-
-import FormatTimeFunctions from "../functions/FormatTimeFunctions";
-
 import Colors from "../constants/colors";
-
-import backArrow from "../assets/backarrow.png";
+import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 import addResultArt from "../assets/staticfitness.png";
 
-const AddStaticResultScreen = ({ student, ...props }) => {
+const AddStaticResultScreen = ({ route }) => {
   const [enteredValue, setEnteredValue] = useState("");
+
+  const { id, curlUps, pullUps, pushUps, sitAndReach } = route.params;
+
+  const setScore = (score) => {
+    let activity;
+
+    if (curlUps) {
+      activity = "curlUps";
+    } else if (pullUps) {
+      activity = "pullUps";
+    } else if (pushUps) {
+      activity = "pushUps";
+    } else {
+      activity = "sitAndReach"
+    }
+
+    database.ref('users/' + auth.currentUser.uid + "/students/" + id + `/${activity}/` + uuid.v1()).set({
+      date: FormatTimeFunctions.formatDate(),
+      score: score
+    });
+  };
 
   const addInputHandler = () => {
     if (enteredValue == "") {
@@ -29,37 +45,20 @@ const AddStaticResultScreen = ({ student, ...props }) => {
         { text: "OK", style: "cancel", onPress: () => {} },
       ]);
     } else {
-      let entry = {
-        key: uuid.v1(),
-        date: FormatTimeFunctions.formatDate(),
-        value: enteredValue,
-      };
-
-      if (props.curlUpsMode) {
-        student.curlUps.push(entry);
-      } else if (props.pullUpsMode) {
-        student.pullUps.push(entry);
-      } else if (props.pushUpsMode) {
-        student.pushUps.push(entry);
-      } else {
-        student.sitAndReach.push(entry);
-      }
-
-      props.saveStudent(student);
-      props.setStaticResultScreen(false);
-
+      setScore(enteredValue);
       setEnteredValue("");
     }
   };
 
+  // set keyboard type and placeholder text
   let placeholder;
   let keyboard = "number-pad";
 
-  if (props.curlUpsMode) {
+  if (curlUps) {
     placeholder = "# of Curl-Ups";
-  } else if (props.pullUpsMode) {
+  } else if (pullUps) {
     placeholder = "# of Pull-Ups";
-  } else if (props.pushUpsMode) {
+  } else if (pushUps) {
     placeholder = "# of Push-Ups";
   } else {
     placeholder = "Reach Length (cm)";

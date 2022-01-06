@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { auth, database } from "../firebase";
 
@@ -7,28 +7,45 @@ import Student from "../components/Student";
 import Stopwatch from "../components/Stopwatch";
 import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 import Colors from "../constants/colors";
-import timerArt from "../assets/timerfitness.png";
+import backgroundImage from "../assets/runner.png";
 
 const TimerFitnessScreen = ({ route }) => {
   const [roster, setRoster] = useState([]);
 
-  const { stopwatchRef, studentIDs } = route.params;
+  const { classID, stopwatchRef, studentIDs } = route.params;
 
   const createRoster = () => {
     const dbRef = database.ref();
 
     studentIDs.forEach((id) => {
-      dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).get().then((snapshot) => {
-        if (snapshot.exists()) {
-          const ret = snapshot.val();
-          let newStudent = <Student id={id} firstName={ret.firstName} lastName={ret.lastName} multipleCol={true} />;
-          setRoster((currentRoster) => [...currentRoster, newStudent]);
-        } else {
-          console.log("No data available");
-        }
-      }).catch((error) => {
-        console.error(error);
-      });
+      dbRef
+        .child("users")
+        .child(auth.currentUser.uid)
+        .child("classes")
+        .child(classID)
+        .child("students")
+        .child(id)
+        .get()
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            const ret = snapshot.val();
+            let newStudent = (
+              <Student
+                classID={classID}
+                id={id}
+                firstName={ret.firstName}
+                lastName={ret.lastName}
+                multipleCol={true}
+              />
+            );
+            setRoster((currentRoster) => [...currentRoster, newStudent]);
+          } else {
+            console.log("No data available");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     });
   };
 
@@ -36,25 +53,15 @@ const TimerFitnessScreen = ({ route }) => {
   useEffect(() => {
     setRoster([]);
     createRoster();
-  }, [])
+  }, []);
 
   return (
     <View style={styles.screen}>
       <View style={styles.stopwatchView}>
-        <Stopwatch
-          format={FormatTimeFunctions.formatTimeMinutes}
-          ref={stopwatchRef} 
-        />
+        <Stopwatch format={FormatTimeFunctions.formatTimeMinutes} ref={stopwatchRef} />
       </View>
-      <View style={styles.roster}>
-        <StudentRoster
-          students={roster}
-          multipleCol={true}
-        />
-      </View>
-      <View style={{ alignItems: "center", zIndex: -1 }}>
-          <Image source={timerArt} style={styles.backgroundImage} />
-      </View>
+      <Image source={backgroundImage} style={styles.backgroundImage} />
+      <StudentRoster students={roster} multipleCol={true} />
     </View>
   );
 };
@@ -66,10 +73,13 @@ const styles = StyleSheet.create({
   },
 
   backgroundImage: {
-    bottom: 20,
-    height: 280,
-    width: 280,
-    opacity: 0.4,
+    marginTop: "40%",
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    resizeMode: "contain",
+    opacity: 0.2,
+    zIndex: -1,
   },
 
   stopwatchView: {
@@ -85,11 +95,6 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     shadowOpacity: 0.2,
     elevation: 5,
-  },
-
-  roster: {
-    height: "90%",
-    padding: 5,
   },
 });
 

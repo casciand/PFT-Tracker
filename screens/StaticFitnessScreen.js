@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { auth, database } from "../firebase";
 
@@ -6,28 +6,45 @@ import StudentRoster from "../components/StudentRoster";
 import Student from "../components/Student";
 import Timer from "../components/Timer";
 import Colors from "../constants/colors";
-import staticArt from "../assets/staticback.png";
+import backgroundImage from "../assets/situp.png";
 
 const StaticFitnessScreen = ({ route }) => {
   const [roster, setRoster] = useState([]);
 
-  const { studentIDs, curlUps } = route.params;
+  const { classID, studentIDs, curlUps } = route.params;
 
   const createRoster = () => {
     const dbRef = database.ref();
 
     studentIDs.forEach((id) => {
-      dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).get().then((snapshot) => {
-        if (snapshot.exists()) {
-          const ret = snapshot.val();
-          let newStudent = <Student id={id} firstName={ret.firstName} lastName={ret.lastName} multipleCol={false} />;
-          setRoster((currentRoster) => [...currentRoster, newStudent]);
-        } else {
-          console.log("No data available");
-        }
-      }).catch((error) => {
-        console.error(error);
-      });
+      dbRef
+        .child("users")
+        .child(auth.currentUser.uid)
+        .child("classes")
+        .child(classID)
+        .child("students")
+        .child(id)
+        .get()
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            const ret = snapshot.val();
+            let newStudent = (
+              <Student
+                id={id}
+                classID={classID}
+                firstName={ret.firstName}
+                lastName={ret.lastName}
+                multipleCol={false}
+              />
+            );
+            setRoster((currentRoster) => [...currentRoster, newStudent]);
+          } else {
+            console.log("No data available");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     });
   };
 
@@ -35,7 +52,7 @@ const StaticFitnessScreen = ({ route }) => {
   useEffect(() => {
     setRoster([]);
     createRoster();
-  }, [])
+  }, []);
 
   let timer, rosterStyle, imageStyle;
 
@@ -45,27 +62,18 @@ const StaticFitnessScreen = ({ route }) => {
         <Timer />
       </View>
     );
-    rosterStyle = { ...styles.roster, height: "53%" };
-    imageStyle = { marginTop: 120 };
+    imageStyle = { ...styles.backgroundImage, marginTop: "40%" };
   } else {
     timer = null;
-    rosterStyle = styles.roster;
-    imageStyle = {};
+    imageStyle = styles.backgroundImage;
   }
 
   return (
-      <View style={styles.screen}>
-        {timer}
-        <View style={rosterStyle}>
-          <StudentRoster
-            students={roster}
-            multipleCol={false}
-          />
-        </View>
-        <View style={{ ...imageStyle, alignItems: "center", zIndex: -1 }}>
-          <Image source={staticArt} style={styles.backgroundImage} />
-        </View>
-      </View>
+    <View style={styles.screen}>
+      {timer}
+      <Image source={backgroundImage} style={imageStyle} />
+      <StudentRoster students={roster} multipleCol={false} />
+    </View>
   );
 };
 
@@ -77,15 +85,11 @@ const styles = StyleSheet.create({
 
   backgroundImage: {
     position: "absolute",
-    bottom: 150,
-    height: 250,
-    width: 300,
-    opacity: 0.4,
-  },
-
-  roster: {
-    height: "84.5%",
-    padding: 5,
+    height: "100%",
+    width: "100%",
+    resizeMode: "contain",
+    zIndex: -1,
+    opacity: 0.2,
   },
 
   timerView: {

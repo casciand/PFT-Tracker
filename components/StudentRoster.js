@@ -17,25 +17,23 @@ const StudentRoster = (props) => {
 
   useEffect(() => {
     insertionSort(props.students);
-  }, [])
+  }, []);
 
   let rosterStyle = props.multipleCol ? styles.timerStyle : styles.staticStyle;
 
-  return (
-    <ScrollView contentContainerStyle={rosterStyle}>{props.students}</ScrollView>
-  );
+  return <ScrollView contentContainerStyle={rosterStyle}>{props.students}</ScrollView>;
 };
 
 const styles = StyleSheet.create({
   staticStyle: {
-    padding: 15,
+    padding: "3%",
   },
 
   timerStyle: {
-    padding: 15,
+    padding: "3%",
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 });
 

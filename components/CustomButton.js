@@ -7,10 +7,8 @@ import Fonts from "../constants/fonts";
 const CustomButton = (props) => {
   return (
     <TouchableOpacity onPress={props.onPress}>
-      <View style={{ ...styles.border, ...props.borderStyle }}>
-        <Text style={{ ...styles.text, ...props.textStyle }}>
-          {props.title}
-        </Text>
+      <View style={props.borderStyle ? props.borderStyle : styles.border}>
+        <Text style={props.textStyle ? props.textStyle : styles.text}>{props.title}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -32,7 +30,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: 18,
+    fontSize: 16,
     textAlign: "center",
     fontFamily: Fonts.primary,
     color: Colors.colors.background,

@@ -4,7 +4,9 @@ import {
   TextInput,
   Alert,
   StyleSheet,
-  ScrollView,
+  KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback,
   Image,
 } from "react-native";
 import { RadioButton } from "react-native-paper";
@@ -13,32 +15,38 @@ import { auth, database } from "../firebase";
 
 import CustomButton from "../components/CustomButton";
 import Colors from "../constants/colors";
-import newStudentArt from "../assets/newstudent.png";
+import backgroundImage from "../assets/ponder.png";
 
-const AddStudentScreen = () => {
+const AddStudentScreen = ({ route }) => {
   const [enteredFirstName, setEnteredFirstName] = useState("");
   const [enteredLastName, setEnteredLastName] = useState("");
   const [enteredAge, setEnteredAge] = useState("");
   const [enteredGender, setEnteredGender] = useState("");
 
+  const { classID } = route.params;
+
   const addStudent = (newStudent) => {
     try {
-      database.ref('users/' + auth.currentUser.uid + '/students/' + newStudent.id).set({
-        firstName: newStudent.firstName,
-        lastName: newStudent.lastName,
-        age: newStudent.age,
-        isMale: newStudent.isMale
-    });
+      database
+        .ref(`users/${auth.currentUser.uid}/classes/${classID}/students/${newStudent.id}`)
+        .set({
+          firstName: newStudent.firstName,
+          lastName: newStudent.lastName,
+          age: newStudent.age,
+          isMale: newStudent.isMale,
+        });
 
-    Alert.alert(
-      "Success!",
-      `${newStudent.firstName} ${newStudent.lastName}${newStudent.lastName.slice(-1) == 's' ? "'" : "'s"} profile was created.`,
-      [{ text: "OK", style: "cancel", onPress: () => {} }]
-    );
+      Alert.alert(
+        "Success!",
+        `${newStudent.firstName} ${newStudent.lastName}${
+          newStudent.lastName.slice(-1) == "s" ? "'" : "'s"
+        } profile was created.`,
+        [{ text: "OK", style: "cancel", onPress: () => {} }]
+      );
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const addStudentHandler = () => {
     if (
@@ -47,11 +55,9 @@ const AddStudentScreen = () => {
       enteredAge == "" ||
       enteredGender == ""
     ) {
-      Alert.alert(
-        "Missing Fields",
-        "Please fill in all fields to create a student.",
-        [{ text: "OK", style: "cancel", onPress: () => {} }]
-      );
+      Alert.alert("Missing Fields", "Please fill in all fields to create a student.", [
+        { text: "OK", style: "cancel", onPress: () => {} },
+      ]);
     } else {
       // define a new student
       let newStudent = {
@@ -59,7 +65,7 @@ const AddStudentScreen = () => {
         lastName: enteredLastName,
         age: parseInt(enteredAge),
         isMale: enteredGender == "Boy",
-        id: uuid.v1()
+        id: uuid.v1(),
       };
 
       addStudent(newStudent);
@@ -72,7 +78,8 @@ const AddStudentScreen = () => {
   };
 
   return (
-      <ScrollView contentContainerStyle={styles.screen} scrollEnabled={false}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView style={styles.screen}>
         <View style={styles.inputView}>
           <TextInput
             placeholder="First Name"
@@ -100,10 +107,7 @@ const AddStudentScreen = () => {
             keyboardType="number-pad"
             maxLength={2}
           />
-          <RadioButton.Group
-            onValueChange={(val) => setEnteredGender(val)}
-            value={enteredGender}
-          >
+          <RadioButton.Group onValueChange={(val) => setEnteredGender(val)} value={enteredGender}>
             <View style={styles.radioButtons}>
               <View style={styles.radioButton}>
                 <RadioButton.Item label="Boy" value="Boy" />
@@ -119,10 +123,9 @@ const AddStudentScreen = () => {
             <CustomButton title="Add Student" onPress={addStudentHandler} />
           </View>
         </View>
-        <View style={{ alignItems: "center", zIndex: -1 }}>
-          <Image source={newStudentArt} style={styles.backgroundImage} />
-        </View>
-      </ScrollView>
+        <Image source={backgroundImage} style={styles.backgroundImage} />
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -133,9 +136,12 @@ const styles = StyleSheet.create({
   },
 
   backgroundImage: {
-    bottom: 100,
-    height: 300,
-    width: 300,
+    marginTop: "40%",
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    resizeMode: "contain",
+    zIndex: -1,
   },
 
   inputView: {

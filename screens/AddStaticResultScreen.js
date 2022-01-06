@@ -4,21 +4,23 @@ import {
   StyleSheet,
   TextInput,
   Alert,
-  ScrollView,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
   Image,
 } from "react-native";
 import uuid from "react-native-uuid";
 import { auth, database } from "../firebase";
 
 import CustomButton from "../components/CustomButton";
-import Colors from "../constants/colors";
 import FormatTimeFunctions from "../functions/FormatTimeFunctions";
-import addResultArt from "../assets/staticfitness.png";
+import Colors from "../constants/colors";
+import backgroundImage from "../assets/situp.png";
 
 const AddStaticResultScreen = ({ route }) => {
   const [enteredValue, setEnteredValue] = useState("");
 
-  const { id, curlUps, pullUps, pushUps, sitAndReach } = route.params;
+  const { classID, studentID, curlUps, pullUps, pushUps, sitAndReach } = route.params;
 
   const setScore = (score) => {
     let activity;
@@ -30,13 +32,19 @@ const AddStaticResultScreen = ({ route }) => {
     } else if (pushUps) {
       activity = "pushUps";
     } else {
-      activity = "sitAndReach"
+      activity = "sitAndReach";
     }
 
-    database.ref('users/' + auth.currentUser.uid + "/students/" + id + `/${activity}/` + uuid.v1()).set({
-      date: FormatTimeFunctions.formatDate(),
-      score: score
-    });
+    database
+      .ref(
+        `users/${
+          auth.currentUser.uid
+        }/classes/${classID}/students/${studentID}/${activity}/${uuid.v1()}`
+      )
+      .set({
+        date: FormatTimeFunctions.formatDate(),
+        score: score,
+      });
   };
 
   const addInputHandler = () => {
@@ -66,45 +74,43 @@ const AddStaticResultScreen = ({ route }) => {
   }
 
   return (
-      <ScrollView contentContainerStyle={styles.screen} scrollEnabled={false}>
-        <View style={{ alignItems: "center" }}>
-          <View style={styles.inputView}>
-            <TextInput
-              placeholder={placeholder}
-              style={styles.input}
-              onChangeText={(input) => {
-                setEnteredValue(input);
-              }}
-              value={enteredValue}
-              maxLength={3}
-              keyboardType={keyboard}
-            />
-            <View style={styles.button}>
-              <CustomButton title="Submit" onPress={addInputHandler} />
-            </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView style={styles.screen}>
+        <View style={styles.inputView}>
+          <TextInput
+            placeholder={placeholder}
+            style={styles.input}
+            onChangeText={(input) => {
+              setEnteredValue(input);
+            }}
+            value={enteredValue}
+            maxLength={3}
+            keyboardType={keyboard}
+          />
+          <View style={styles.buttonContainer}>
+            <CustomButton title="Submit" onPress={addInputHandler} />
           </View>
         </View>
-        <View style={{ alignItems: "center", zIndex: -1 }}>
-          <Image source={addResultArt} style={styles.backgroundImage} />
-        </View>
-      </ScrollView>
+        <Image source={backgroundImage} style={styles.backgroundImage} />
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    alignItems: "center",
     backgroundColor: "white",
   },
 
-  studentName: {
-    fontSize: 20,
-  },
-
   backgroundImage: {
-    bottom: 120,
-    height: 280,
-    width: 280,
+    marginTop: "40%",
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    resizeMode: "contain",
+    zIndex: -1,
   },
 
   inputView: {
@@ -116,7 +122,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     borderRadius: 15,
     borderWidth: 1,
-    height: "60%",
+    height: "40%",
     width: "80%",
     shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
@@ -135,9 +141,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
 
-  button: {
+  buttonContainer: {
     marginTop: 20,
-    margin: 10,
   },
 });
 

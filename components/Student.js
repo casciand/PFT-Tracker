@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import uuid from "react-native-uuid";
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation } from "@react-navigation/core";
 import { auth, database } from "../firebase";
 
+import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 import Fonts from "../constants/fonts";
 import Colors from "../constants/colors";
-import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 
 const Student = (props) => {
   const [checks, setChecks] = useState(" ");
@@ -17,17 +17,23 @@ const Student = (props) => {
 
   const disablePress = () => {
     setDisabled(true);
-    setOpacity(.2);
+    setOpacity(0.2);
   };
 
   const handleMilePress = (time) => {
     if (checks.length < 4) {
       setChecks((curr) => curr + "✓");
     } else {
-      database.ref('users/' + auth.currentUser.uid + "/students/" + props.id + "/mile/" + uuid.v1()).set({
-        date: FormatTimeFunctions.formatDate(),
-        score: time
-      });
+      database
+        .ref(
+          `users/${auth.currentUser.uid}/classes/${props.classID}/students/${
+            props.id
+          }/mile/${uuid.v1()}`
+        )
+        .set({
+          date: FormatTimeFunctions.formatDate(),
+          score: time,
+        });
 
       disablePress();
     }
@@ -46,10 +52,16 @@ const Student = (props) => {
     if (mile) {
       handleMilePress(stopwatchTime);
     } else {
-      database.ref('users/' + auth.currentUser.uid + "/students/" + props.id + `/${shuttle ? "shuttle" : "armHang"}/` + uuid.v1()).set({
-        date: FormatTimeFunctions.formatDate(),
-        score: stopwatchTime
-      });
+      database
+        .ref(
+          `users/${auth.currentUser.uid}/classes/${props.classID}/students/${props.id}/${
+            shuttle ? "shuttle" : "armHang"
+          }/${uuid.v1()}`
+        )
+        .set({
+          date: FormatTimeFunctions.formatDate(),
+          score: stopwatchTime,
+        });
 
       disablePress();
     }
@@ -57,18 +69,19 @@ const Student = (props) => {
 
   const handleStaticResult = () => {
     const state = navigation.getState();
-    
+
     const curlUps = state.routes[state.index].params.curlUps;
     const pullUps = state.routes[state.index].params.pullUps;
     const pushUps = state.routes[state.index].params.pushUps;
     const sitAndReach = state.routes[state.index].params.sitAndReach;
 
     navigation.navigate("AddStatic", {
-      id: props.id,
+      classID: props.classID,
+      studentID: props.id,
       curlUps: curlUps,
       pullUps: pullUps,
       pushUps: pushUps,
-      sitAndReach: sitAndReach
+      sitAndReach: sitAndReach,
     });
   };
 
@@ -78,7 +91,8 @@ const Student = (props) => {
 
     if (currentPage == "Roster") {
       navigation.navigate("InfoStudent", {
-        id: props.id
+        classID: props.classID,
+        id: props.id,
       });
     } else if (currentPage == "Static") {
       handleStaticResult();
@@ -102,13 +116,13 @@ const Student = (props) => {
       </Text>
     );
 
-    style = {...styles.student, opacity: opacity, width: "45%"}
+    style = { ...styles.student, opacity: opacity, width: "45%" };
   }
 
   return (
     <TouchableOpacity style={style} disabled={disabled} onPress={() => handleOnPress()}>
-        {nameFormat}
-        <Text style={styles.name}>{checks}</Text>
+      {nameFormat}
+      <Text style={styles.name}>{checks}</Text>
     </TouchableOpacity>
   );
 };

@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Alert } from "react-native";
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 
+import LoginScreen from "./screens/LoginScreen";
+import ClassScreen from "./screens/ClassScreen";
 import RosterScreen from "./screens/RosterScreen";
 import FitnessTestsScreen from "./screens/FitnessTestsScreen";
-import AddStaticResultScreen from "./screens/AddStaticResultScreen";
-import AddStudentScreen from "./screens/AddStudentScreen";
-import LoginScreen from "./screens/LoginScreen";
-import StaticFitnessScreen from "./screens/StaticFitnessScreen";
 import StudentInfoScreen from "./screens/StudentInfoScreen";
+import StaticFitnessScreen from "./screens/StaticFitnessScreen";
 import TimerFitnessScreen from "./screens/TimerFitnessScreen";
+import AddClassScreen from "./screens/AddClassScreen";
+import AddStudentScreen from "./screens/AddStudentScreen";
+import AddStaticResultScreen from "./screens/AddStaticResultScreen";
 
 import Colors from "./constants/colors";
 import Fonts from "./constants/fonts";
@@ -21,17 +23,16 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{headerStyle: styles.header}}
-        initialRoute="Login"
-      >
+      <Stack.Navigator screenOptions={{ headerStyle: styles.header }} initialRoute="Login">
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Class" component={ClassScreen} />
         <Stack.Screen name="Roster" component={RosterScreen} />
         <Stack.Screen name="Fitness" component={FitnessTestsScreen} />
-        <Stack.Screen name="AddStudent" component={AddStudentScreen} />
         <Stack.Screen name="InfoStudent" component={StudentInfoScreen} />
         <Stack.Screen name="Static" component={StaticFitnessScreen} />
         <Stack.Screen name="Timer" component={TimerFitnessScreen} />
+        <Stack.Screen name="AddStudent" component={AddStudentScreen} />
+        <Stack.Screen name="AddClass" component={AddClassScreen} />
         <Stack.Screen name="AddStatic" component={AddStaticResultScreen} />
       </Stack.Navigator>
     </NavigationContainer>

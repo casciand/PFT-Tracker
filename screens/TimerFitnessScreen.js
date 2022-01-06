@@ -11,9 +11,6 @@ import timerArt from "../assets/timerfitness.png";
 
 const TimerFitnessScreen = ({ route }) => {
   const [roster, setRoster] = useState([]);
-  
-  // dummy state to force certain re-renders
-  const [, setDummyValue] = useState(false);
 
   const { stopwatchRef, studentIDs } = route.params;
 
@@ -24,7 +21,7 @@ const TimerFitnessScreen = ({ route }) => {
       dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).get().then((snapshot) => {
         if (snapshot.exists()) {
           const ret = snapshot.val();
-          let newStudent = <Student id={id} firstName={ret.firstName} lastName={ret.lastName} />;
+          let newStudent = <Student id={id} firstName={ret.firstName} lastName={ret.lastName} multipleCol={true} />;
           setRoster((currentRoster) => [...currentRoster, newStudent]);
         } else {
           console.log("No data available");
@@ -52,6 +49,7 @@ const TimerFitnessScreen = ({ route }) => {
       <View style={styles.roster}>
         <StudentRoster
           students={roster}
+          multipleCol={true}
         />
       </View>
       <View style={{ alignItems: "center", zIndex: -1 }}>

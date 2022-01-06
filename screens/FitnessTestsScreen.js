@@ -9,7 +9,6 @@ const FitnessTestScreen = ({ route }) => {
   const [currentActivity, setCurrentActivity] = useState("");
 
   const stopwatchRef = useRef();
-  const timerRef = useRef();
 
   const navigation = useNavigation();
   const { studentIDs } = route.params;

@@ -8,7 +8,6 @@ import RosterScreen from "./screens/RosterScreen";
 import FitnessTestsScreen from "./screens/FitnessTestsScreen";
 import AddStaticResultScreen from "./screens/AddStaticResultScreen";
 import AddStudentScreen from "./screens/AddStudentScreen";
-import EditStudentScreen from "./screens/EditStudentScreen";
 import LoginScreen from "./screens/LoginScreen";
 import StaticFitnessScreen from "./screens/StaticFitnessScreen";
 import StudentInfoScreen from "./screens/StudentInfoScreen";
@@ -30,7 +29,6 @@ export default function App() {
         <Stack.Screen name="Roster" component={RosterScreen} />
         <Stack.Screen name="Fitness" component={FitnessTestsScreen} />
         <Stack.Screen name="AddStudent" component={AddStudentScreen} />
-        <Stack.Screen name="EditStudent" component={EditStudentScreen} />
         <Stack.Screen name="InfoStudent" component={StudentInfoScreen} />
         <Stack.Screen name="Static" component={StaticFitnessScreen} />
         <Stack.Screen name="Timer" component={TimerFitnessScreen} />

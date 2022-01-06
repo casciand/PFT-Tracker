@@ -9,45 +9,55 @@ import Colors from "../constants/colors";
 import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 
 const Student = (props) => {
-  const [checks, setChecks] = useState("");
+  const [checks, setChecks] = useState(" ");
+  const [disabled, setDisabled] = useState(false);
+  const [opacity, setOpacity] = useState(1);
 
   const navigation = useNavigation();
 
-  const state = navigation.getState();
-  const currentPage = state.routes[state.index].name;
+  const disablePress = () => {
+    setDisabled(true);
+    setOpacity(.2);
+  };
 
   const handleMilePress = (time) => {
-    if (checks.length < 3) {
+    if (checks.length < 4) {
       setChecks((curr) => curr + "✓");
     } else {
       database.ref('users/' + auth.currentUser.uid + "/students/" + props.id + "/mile/" + uuid.v1()).set({
         date: FormatTimeFunctions.formatDate(),
-        score: FormatTimeFunctions.formatTimeMinutes(time)
+        score: time
       });
 
-      setChecks("");
+      disablePress();
     }
   };
 
   const handleTimerResult = () => {
+    const state = navigation.getState();
+
     const mile = state.routes[state.index].params.mile;
     const shuttle = state.routes[state.index].params.shuttle;
     // const armHang = state.routes[state.index].params.armHang;
 
     const stopwatchRef = state.routes[state.index].params.stopwatchRef;
-    let stopwatchTime = stopwatchRef.current.csecs;
+    let stopwatchTime = stopwatchRef.current.csecs / 100;
 
     if (mile) {
       handleMilePress(stopwatchTime);
     } else {
       database.ref('users/' + auth.currentUser.uid + "/students/" + props.id + `/${shuttle ? "shuttle" : "armHang"}/` + uuid.v1()).set({
         date: FormatTimeFunctions.formatDate(),
-        score: FormatTimeFunctions.formatTimeMinutes(stopwatchTime)
+        score: stopwatchTime
       });
+
+      disablePress();
     }
   };
 
   const handleStaticResult = () => {
+    const state = navigation.getState();
+    
     const curlUps = state.routes[state.index].params.curlUps;
     const pullUps = state.routes[state.index].params.pullUps;
     const pushUps = state.routes[state.index].params.pushUps;
@@ -63,27 +73,42 @@ const Student = (props) => {
   };
 
   const handleOnPress = () => {
+    const state = navigation.getState();
+    const currentPage = state.routes[state.index].name;
+
     if (currentPage == "Roster") {
       navigation.navigate("InfoStudent", {
         id: props.id
       });
     } else if (currentPage == "Static") {
       handleStaticResult();
-    } else { // timer screen
+    } else if (currentPage == "Timer") {
       handleTimerResult();
     }
   };
 
-  let mileChecks = <Text style={styles.name}>{checks}</Text>;
+  let nameFormat = (
+    <Text style={styles.name}>
+      {props.lastName}, {props.firstName}
+    </Text>
+  );
+
+  let style = styles.student;
+
+  if (props.multipleCol) {
+    nameFormat = (
+      <Text style={styles.name}>
+        {props.firstName} {props.lastName.charAt(0)}.
+      </Text>
+    );
+
+    style = {...styles.student, opacity: opacity, width: "45%"}
+  }
 
   return (
-    <TouchableOpacity onPress={() => handleOnPress()}>
-      <View style={styles.student}>
-        <Text style={styles.name}>
-          {props.lastName}, {props.firstName}
-        </Text>
-        {mileChecks}
-      </View>
+    <TouchableOpacity style={style} disabled={disabled} onPress={() => handleOnPress()}>
+        {nameFormat}
+        <Text style={styles.name}>{checks}</Text>
     </TouchableOpacity>
   );
 };
@@ -102,7 +127,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 2, height: 2 },
     shadowRadius: 6,
     shadowOpacity: 0.24,
-    elevation: 5
+    elevation: 5,
   },
 
   name: {

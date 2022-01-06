@@ -10,11 +10,13 @@ import StopwatchButton from "../components/StopwatchButton";
 import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 import Colors from "../constants/colors";
 
+// a one minute timer
 const Timer = (props, ref) => {
-  const timerRef = useRef();
-
-  const [isRunning, setIsRunning] = useState(false);
+  const [csecs, setCsecs] = useState(6000);
   const [currTime, setCurrTime] = useState(6000);
+  const [isRunning, setIsRunning] = useState(false);
+
+  const timerRef = useRef();
 
   useImperativeHandle(ref, () => ({
     resetTimerHandler: () => {
@@ -28,13 +30,13 @@ const Timer = (props, ref) => {
     const now = new Date().getTime();
 
     timerRef.current = setInterval(() => {
-      props.setCsecs(currTime - Math.floor((new Date().getTime() - now) / 10));
+      setCsecs(currTime - Math.floor((new Date().getTime() - now) / 10));
     }, 10);
   };
 
   const stopTimerHandler = () => {
     setIsRunning(false);
-    setCurrTime(props.csecs);
+    setCurrTime(csecs);
 
     clearInterval(timerRef.current);
   };
@@ -44,27 +46,23 @@ const Timer = (props, ref) => {
     clearInterval(timerRef.current);
 
     setCurrTime(6000);
-    props.setCsecs(6000);
+    setCsecs(6000);
   };
 
-  if (props.csecs <= 0) {
+  if (csecs <= 0) {
     clearInterval(timerRef.current);
   }
 
-  let statusButton = (
+  let statusButton = isRunning ? statusButton = <StopwatchButton onPress={stopTimerHandler} title="Stop" /> : (
     <StopwatchButton onPress={startTimerHandler} title="Start" />
   );
-
-  if (isRunning) {
-    statusButton = <StopwatchButton onPress={stopTimerHandler} title="Stop" />;
-  }
 
   return (
     <View>
       <View style={styles.stopwatchView}>
         <View style={{ alignItems: "center" }}>
           <Text style={styles.stopwatchText}>
-            {FormatTimeFunctions.formatTimeMinutes(props.csecs)}
+            {FormatTimeFunctions.formatTimeMinutes(csecs / 100)}
           </Text>
         </View>
       </View>

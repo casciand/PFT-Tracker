@@ -27,9 +27,7 @@ const AddStudentScreen = () => {
         firstName: newStudent.firstName,
         lastName: newStudent.lastName,
         age: newStudent.age,
-        isMale: newStudent.isMale,
-        passedPresidential: false,
-        passedNational: false,
+        isMale: newStudent.isMale
     });
 
     Alert.alert(
@@ -59,7 +57,7 @@ const AddStudentScreen = () => {
       let newStudent = {
         firstName: enteredFirstName,
         lastName: enteredLastName,
-        age: enteredAge,
+        age: parseInt(enteredAge),
         isMale: enteredGender == "Boy",
         id: uuid.v1()
       };

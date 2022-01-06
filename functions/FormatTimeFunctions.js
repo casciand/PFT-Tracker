@@ -1,29 +1,24 @@
-export default {
-  formatTimeMinutes: (csecs) => {
-    const centisecs = `0${csecs % 100}`.slice(-2);
-    const seconds = `0${Math.floor(csecs / 100) % 60}`.slice(-2);
-    const minutes = `0${Math.floor(csecs / 100 / 60)}`.slice(-2);
+
+  const formatTimeMinutes = (secs) => {
+    const centisecs = `0${secs * 100 % 100}`.slice(-2);
+    const seconds = `0${Math.floor(secs) % 60}`.slice(-2);
+    const minutes = `0${Math.floor(secs / 60)}`.slice(-2);
 
     return `${minutes}:${seconds}.${centisecs}`;
-  },
+  };
 
-  formatTimeSeconds: (csecs) => {
-    let format;
-
-    const centisecs = `0${csecs % 100}`.slice(-2);
-    const seconds = `0${Math.floor(csecs / 100) % 60}`.slice(-2);
-
-    if (csecs / 100 >= 60) {
-      const minutes = `0${Math.floor(csecs / 100 / 60)}`.slice(-2);
-      format = `${minutes}:${seconds}.${centisecs}`;
-    } else {
-      format = `${seconds}.${centisecs}`;
+  const formatTimeSeconds = (secs) => {
+    if (secs >= 60) {
+      return formatTimeMinutes(secs);
     }
 
-    return format;
-  },
+    const centisecs = `0${secs * 100 % 100}`.slice(-2);
+    const seconds = `0${Math.floor(secs) % 60}`.slice(-2);
 
-  formatDate: () => {
+    return `${seconds}.${centisecs}`;
+  };
+
+  const formatDate = () => {
     const now = new Date();
 
     const day = now.getDate();
@@ -31,5 +26,6 @@ export default {
     const year = now.getFullYear();
 
     return `${month}/${day}/${year}`;
-  },
-};
+  };
+
+  export default { formatTimeMinutes, formatTimeSeconds, formatDate };

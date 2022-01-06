@@ -9,7 +9,6 @@ import Colors from "../constants/colors";
 import staticArt from "../assets/staticback.png";
 
 const StaticFitnessScreen = ({ route }) => {
-  const [csecs, setCsecs] = useState(6000);
   const [roster, setRoster] = useState([]);
 
   const { studentIDs, curlUps } = route.params;
@@ -21,7 +20,7 @@ const StaticFitnessScreen = ({ route }) => {
       dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).get().then((snapshot) => {
         if (snapshot.exists()) {
           const ret = snapshot.val();
-          let newStudent = <Student id={id} firstName={ret.firstName} lastName={ret.lastName} />;
+          let newStudent = <Student id={id} firstName={ret.firstName} lastName={ret.lastName} multipleCol={false} />;
           setRoster((currentRoster) => [...currentRoster, newStudent]);
         } else {
           console.log("No data available");
@@ -43,7 +42,7 @@ const StaticFitnessScreen = ({ route }) => {
   if (curlUps) {
     timer = (
       <View style={styles.timerView}>
-        <Timer csecs={csecs} setCsecs={setCsecs} />
+        <Timer />
       </View>
     );
     rosterStyle = { ...styles.roster, height: "53%" };
@@ -60,6 +59,7 @@ const StaticFitnessScreen = ({ route }) => {
         <View style={rosterStyle}>
           <StudentRoster
             students={roster}
+            multipleCol={false}
           />
         </View>
         <View style={{ ...imageStyle, alignItems: "center", zIndex: -1 }}>

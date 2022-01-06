@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/core';
 import { auth, database } from "../firebase";
 
@@ -11,18 +11,31 @@ import Colors from "../constants/colors";
 
 const StudentInfoScreen = ({ route }) => {
   const [data, setData] = useState({});
+  const [deleted, setDeleted] = useState(false); // bool for forcing re-renders on delete
 
   const navigation = useNavigation();
   const { id } = route.params;
 
-  const formatScores = (scores, min, sec, cm) => {
+  const deleteEntryHandler = (activity, entryID) => {
+    const dbRef = database.ref();
+    dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).child(activity).child(entryID).remove();
+    setDeleted((val) => !val);
+  };
+
+  const deleteStudentHandler = () => {
+    navigation.goBack();
+    const dbRef = database.ref();
+    dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).remove();
+  };
+
+  const formatScores = (scores, activity, min, sec, cm) => {
     let formattedScores = [];
 
-    for (const [, value] of Object.entries(scores)) {
+    for (const [key, value] of Object.entries(scores)) {
       let score = value.score;
 
       if (min) {
-        score = FormatTimeFunctions.formatTimeMinutes(score * 100);
+        score = FormatTimeFunctions.formatTimeMinutes(score);
       } else if (sec) {
         score = `${score} s`;
       } else if (cm) {
@@ -30,10 +43,17 @@ const StudentInfoScreen = ({ route }) => {
       }
 
       const entry = (
-        <View style={styles.entry}>
+        <TouchableOpacity style={styles.entry} onPress={() => {
+          Alert.alert(
+            "Delete Entry?",
+            `Date: ${value.date}, Score: ${score}`,
+            [{ text: "Cancel", style: "cancel", onPress: () => {} },
+             { text: "Delete", style: "destructive", onPress: () => deleteEntryHandler(activity, key) }]
+          );
+        }}>
           <Text style={styles.activity}>{value.date}</Text>
           <Text style={styles.activity}>{score}</Text>
-        </View>
+        </TouchableOpacity>
       );
 
       formattedScores.push(entry);
@@ -42,7 +62,7 @@ const StudentInfoScreen = ({ route }) => {
     return formattedScores;
   };
 
-  const createInfoBlock = (scores, min=false, sec=false, cm=false) => {
+  const createInfoBlock = ({scores, activity, min=false, sec=false, cm=false}) => {
     let contents = (
       <View style={{ padding: 10 }}>
         <Text style={styles.noEntry}>No Entries</Text>
@@ -55,86 +75,16 @@ const StudentInfoScreen = ({ route }) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ padding: 10 }}
         >
-          {formatScores(scores, min, sec, cm)}
+          {formatScores(scores, activity, min, sec, cm)}
         </ScrollView>
       );
     }
 
     return contents;
   };
-
-  const getBestStatic = (scores, cm=false) => {
-    if (!scores) {
-      return "N/A";
-    }
-
-    let best = scores[Object.keys(scores)[0]].score;
-
-    for (const [, value] of Object.entries(scores)) {
-      if (value.score > best) {
-        best = value.score;
-      }
-    }
-
-    if (cm) {
-      best += " cm";
-    }
-
-    return parseFloat(best);
-  };
-
-  const getBestTimer = (scores, minutes=false) => {
-    if (!scores) {
-      return "N/A";
-    }
-
-    let best = scores[Object.keys(scores)[0]].score;
-
-    for (const [, value] of Object.entries(scores)) {
-      if (value.score < best) {
-        best = value.score;
-      }
-    }
-
-    if (minutes) {
-      return FormatTimeFunctions.formatTimeMinutes(best * 100);
-    } else {
-      return `${best} s`;
-    }
-  };
-
-  // const removeEmptyEntries = () => {
-  //   student.curlUps = student.curlUps.filter((entry) => !isNaN(entry.value));
-  //   student.sitAndReach = student.sitAndReach.filter(
-  //     (entry) => !isNaN(entry.value)
-  //   );
-  //   student.pullUps = student.pullUps.filter((entry) => !isNaN(entry.value));
-  //   student.pushUps = student.pushUps.filter((entry) => !isNaN(entry.value));
-  //   student.flexedArmHang = student.flexedArmHang.filter(
-  //     (entry) => !isNaN(entry.value)
-  //   );
-  //   student.mile = student.mile.filter((entry) => !isNaN(entry.value));
-  //   student.shuttle = student.shuttle.filter((entry) => !isNaN(entry.value));
-  // };
-
-  const updateTestStanding = () => {
-    let national = ValidationFunctions.passedNational(data)
-    let presidential = ValidationFunctions.passedPresidential(data);
-
-    database.ref('users/' + auth.currentUser.uid + "/students/" + id).set({
-      passedNational: national,
-      passedPresidential: presidential
-    });
-  };
-
-  const deleteStudentHandler = () => {
-    navigation.goBack();
-  };
   
-  // get student data on initial render
+  // get student data on page open
   useEffect(() => {
-    updateTestStanding();
-
     const dbRef = database.ref();
     dbRef.child("users").child(auth.currentUser.uid).child("students").child(id).get().then((snapshot) => {
       if (snapshot.exists()) {
@@ -145,7 +95,7 @@ const StudentInfoScreen = ({ route }) => {
     }).catch((error) => {
       console.error(error);
     });
-  }, [])
+  }, [deleted])
 
   return (
       <View style={styles.screen}>
@@ -159,71 +109,71 @@ const StudentInfoScreen = ({ route }) => {
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Curl-Ups</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestStatic(data.curlUps)}
+                  Best: {ValidationFunctions.getHighestScore(data.curlUps)}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(data.curlUps)}
+                {createInfoBlock({scores: data.curlUps, activity: "curlUps"})}
               </View>
 
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Sit & Reach</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestStatic(data.sitAndReach, true)}
+                  Best: {ValidationFunctions.getHighestScore(data.sitAndReach) == "N/A" ? "N/A" : `${ValidationFunctions.getHighestScore(data.sitAndReach)} cm`}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(data.sitAndReach, false, false, true)}
+                {createInfoBlock({scores: data.sitAndReach, activity: "sitAndReach", cm: true})}
               </View>
 
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Pull-Ups</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestStatic(data.pullUps)}
+                  Best: {ValidationFunctions.getHighestScore(data.pullUps)}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(data.pullUps)}
+                {createInfoBlock({scores: data.pullUps, activity: "pullUps"})}
               </View>
 
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Push-Ups</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestStatic(data.pushUps)}
+                  Best: {ValidationFunctions.getHighestScore(data.pushUps)}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(data.pushUps)}
+                {createInfoBlock({scores: data.pushUps, activity: "pushUps"})}
               </View>
 
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Flexed Arm Hang</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestTimer(data.flexedArmHang)}
+                  Best: {ValidationFunctions.getHighestScore(data.armHang) == "N/A" ? "N/A" : `${ValidationFunctions.getHighestScore(data.armHang)} s`}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(data.flexedArmHang, false, true, false)}
+                {createInfoBlock({scores: data.armHang, activity: "armHang", sec: true})}
               </View>
 
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Mile Run</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestTimer(data.mile, true)}
+                  Best: {ValidationFunctions.getLowestScore(data.mile) == "N/A" ? "N/A" : FormatTimeFunctions.formatTimeMinutes(ValidationFunctions.getLowestScore(data.mile))}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(data.mile, true, false, false)}
+                {createInfoBlock({scores: data.mile, activity: "mile", min: true})}
               </View>
 
               <View style={styles.activityTitleView}>
                 <Text style={styles.activityTitle}>Shuttle Run</Text>
                 <Text style={styles.activityTitle}>
-                  Best: {getBestTimer(data.shuttle)}
+                  Best: {ValidationFunctions.getLowestScore(data.shuttle) == "N/A" ? "N/A" : `${ValidationFunctions.getLowestScore(data.shuttle)} s`}
                 </Text>
               </View>
               <View style={styles.infoBlock}>
-                {createInfoBlock(data.shuttle, false, true, false)}
+                {createInfoBlock({scores: data.shuttle, activity: "shuttle", sec: true})}
               </View>
             </ScrollView>
           </View>
@@ -233,13 +183,13 @@ const StudentInfoScreen = ({ route }) => {
               <View style={styles.awardTextView}>
                 <Text style={styles.activity}>Presidential Fitness Award</Text>
                 <Text style={styles.activity}>
-                  {data.passedPresidential ? "Passed" : "Has Not Passed"}
+                  {ValidationFunctions.passedPresidential(data) ? "Passed" : "Has Not Passed"}
                 </Text>
               </View>
               <View style={styles.awardTextView}>
                 <Text style={styles.activity}>National Fitness Award</Text>
                 <Text style={styles.activity}>
-                  {data.passedNational ? "Passed" : "Has Not Passed"}
+                  {ValidationFunctions.passedNational(data) ? "Passed" : "Has Not Passed"}
                 </Text>
               </View>
             </View>
@@ -247,14 +197,15 @@ const StudentInfoScreen = ({ route }) => {
           <View style={styles.buttonContainer}>
             <CustomButton
               textStyle={styles.button}
-              title="Edit Student"
-              onPress={() => navigation.navigate("EditStudent")}
-            />
-            <CustomButton
-              textStyle={styles.button}
               title="Delete Student"
-              color="red"
-              onPress={deleteStudentHandler}
+              onPress={() => {
+                Alert.alert(
+                  "Delete Student?",
+                  "All of this students' data will be lost.",
+                  [{ text: "Cancel", style: "cancel", onPress: () => {} },
+                   { text: "Delete", style: "destructive", onPress: () => deleteStudentHandler() }]
+                );
+              }}
             />
           </View>
         </ScrollView>
@@ -374,9 +325,7 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    width: "100%",
     alignItems: "center",
-    justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingVertical: 20,
     flexDirection: "row",

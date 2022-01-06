@@ -19,13 +19,10 @@ const StudentRoster = (props) => {
     insertionSort(props.students);
   }, [])
 
-  // let rosterStyle =
-  //   props.mileMode || props.shuttleMode || props.flexedArmHangMode
-  //     ? styles.timerStyle
-  //     : styles.staticStyle;
+  let rosterStyle = props.multipleCol ? styles.timerStyle : styles.staticStyle;
 
   return (
-    <ScrollView contentContainerStyle={styles.staticStyle}>{props.students}</ScrollView>
+    <ScrollView contentContainerStyle={rosterStyle}>{props.students}</ScrollView>
   );
 };
 
@@ -35,10 +32,10 @@ const styles = StyleSheet.create({
   },
 
   timerStyle: {
+    padding: 15,
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "center"
   },
 });
 

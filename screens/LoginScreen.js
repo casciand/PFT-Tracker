@@ -7,14 +7,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useNavigation } from "@react-navigation/core";
 import { auth } from "../firebase";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const navigation = useNavigation();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -59,6 +56,7 @@ const LoginScreen = () => {
         <TouchableOpacity onPress={signUpHandler} style={[styles.button, styles.buttonOutline]}>
           <Text style={styles.buttonOutlineText}>Register</Text>
         </TouchableOpacity>
+        <Text>Dont have an account? Register now!</Text>
       </View>
     </KeyboardAvoidingView>
   );
@@ -98,6 +96,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
+    marginBottom: 10
   },
 
   buttonOutline: {

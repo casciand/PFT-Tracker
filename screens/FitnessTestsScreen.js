@@ -1,15 +1,14 @@
 import React, { useRef } from "react";
 import { View, StyleSheet, Image } from "react-native";
-import { useNavigation } from "@react-navigation/core";
 
 import CustomButton from "../components/CustomButton";
 import Colors from "../constants/colors";
 import backgroundImage from "../assets/hurdles.png";
 
-const FitnessTestScreen = ({ route }) => {
+const FitnessTestScreen = ({ route, navigation }) => {
   const stopwatchRef = useRef();
+  const timerRef = useRef();
 
-  const navigation = useNavigation();
   const { classID, studentIDs } = route.params;
 
   // open activity screen handlers
@@ -22,6 +21,7 @@ const FitnessTestScreen = ({ route }) => {
     navigation.navigate("Static", {
       classID: classID,
       studentIDs: studentIDs,
+      timerRef: timerRef,
       curlUps: curlUps,
       pullUps: pullUps,
       pushUps: pushUps,

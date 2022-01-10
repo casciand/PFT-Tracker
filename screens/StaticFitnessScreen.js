@@ -11,7 +11,7 @@ import backgroundImage from "../assets/situp.png";
 const StaticFitnessScreen = ({ route }) => {
   const [roster, setRoster] = useState([]);
 
-  const { classID, studentIDs, curlUps } = route.params;
+  const { timerRef, classID, studentIDs, curlUps } = route.params;
 
   const createRoster = () => {
     const dbRef = database.ref();
@@ -38,8 +38,6 @@ const StaticFitnessScreen = ({ route }) => {
               />
             );
             setRoster((currentRoster) => [...currentRoster, newStudent]);
-          } else {
-            console.log("No data available");
           }
         })
         .catch((error) => {
@@ -52,14 +50,21 @@ const StaticFitnessScreen = ({ route }) => {
   useEffect(() => {
     setRoster([]);
     createRoster();
+
+    // unsubscribe when component unmounts to prevent memory leak
+    return () => {
+      if (curlUps) {
+        timerRef.current.resetTimerHandler();
+      }
+    }
   }, []);
 
-  let timer, rosterStyle, imageStyle;
+  let timer, imageStyle;
 
   if (curlUps) {
     timer = (
       <View style={styles.timerView}>
-        <Timer />
+        <Timer ref={timerRef} />
       </View>
     );
     imageStyle = { ...styles.backgroundImage, marginTop: "40%" };

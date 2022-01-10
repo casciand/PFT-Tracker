@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
-import { useNavigation } from "@react-navigation/core";
 import { auth, database } from "../firebase";
 
 import CustomButton from "../components/CustomButton";
@@ -8,10 +7,8 @@ import Class from "../components/Class";
 import ClassList from "../components/ClassList";
 import backgroundImage from "../assets/santa.png";
 
-const ClassScreen = () => {
+const ClassScreen = ({ navigation }) => {
   const [list, setList] = useState([]);
-
-  const navigation = useNavigation();
 
   const signOutHandler = () => {
     auth
@@ -44,8 +41,8 @@ const ClassScreen = () => {
     const dbRef = database.ref("users/" + auth.currentUser.uid + "/classes");
     dbRef.on("value", (snapshot) => {
       const data = snapshot.val();
-      console.log("listened");
       let newList = createList(data);
+      
       setList(newList);
     });
   }, []);

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
-import { useNavigation } from "@react-navigation/core";
 import { auth, database } from "../firebase";
 
 import StudentRoster from "../components/StudentRoster";
@@ -8,11 +7,10 @@ import Student from "../components/Student";
 import CustomButton from "../components/CustomButton";
 import backgroundImage from "../assets/student.png";
 
-const RosterScreen = ({ route }) => {
+const RosterScreen = ({ route, navigation }) => {
   const [roster, setRoster] = useState([]);
   const [studentIDs, setStudentIDs] = useState([]);
 
-  const navigation = useNavigation();
   const { classID } = route.params;
 
   // TODO: improve efficiency so entire roster isn't remade
@@ -43,8 +41,8 @@ const RosterScreen = ({ route }) => {
     const dbRef = database.ref(`users/${auth.currentUser.uid}/classes/${classID}/students`);
     dbRef.on("value", (snapshot) => {
       const data = snapshot.val();
-      console.log("listened");
       let { newRoster, newIDs } = createRoster(data);
+      
       setRoster(newRoster);
       setStudentIDs(newIDs);
     });

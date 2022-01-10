@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/core";
 import { auth, database } from "../firebase";
 
 import CustomButton from "../components/CustomButton";
@@ -9,11 +8,10 @@ import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 import Fonts from "../constants/fonts";
 import Colors from "../constants/colors";
 
-const StudentInfoScreen = ({ route }) => {
+const StudentInfoScreen = ({ route, navigation }) => {
   const [data, setData] = useState({});
   const [deleted, setDeleted] = useState(false); // bool for forcing re-renders on delete
 
-  const navigation = useNavigation();
   const { classID, id } = route.params;
 
   const deleteEntryHandler = (activity, entryID) => {
@@ -115,8 +113,6 @@ const StudentInfoScreen = ({ route }) => {
       .then((snapshot) => {
         if (snapshot.exists()) {
           setData(snapshot.val());
-        } else {
-          console.log("No data available");
         }
       })
       .catch((error) => {
@@ -276,12 +272,11 @@ const styles = StyleSheet.create({
   information: {
     justifyContent: "center",
     alignItems: "center",
-    height: "150%",
-    marginVertical: 10,
+
   },
 
   fitnessInfo: {
-    height: "60%",
+    height: "72%",
     width: "90%",
     backgroundColor: Colors.shades.secondary,
     borderRadius: 15,
@@ -347,7 +342,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     margin: 20,
     width: "90%",
-    height: "18%",
     backgroundColor: Colors.shades.secondary,
     borderRadius: 15,
     borderWidth: 1,

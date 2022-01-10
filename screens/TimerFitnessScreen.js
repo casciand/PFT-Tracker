@@ -12,7 +12,7 @@ import backgroundImage from "../assets/runner.png";
 const TimerFitnessScreen = ({ route }) => {
   const [roster, setRoster] = useState([]);
 
-  const { classID, stopwatchRef, studentIDs } = route.params;
+  const { stopwatchRef, classID, studentIDs } = route.params;
 
   const createRoster = () => {
     const dbRef = database.ref();
@@ -39,8 +39,6 @@ const TimerFitnessScreen = ({ route }) => {
               />
             );
             setRoster((currentRoster) => [...currentRoster, newStudent]);
-          } else {
-            console.log("No data available");
           }
         })
         .catch((error) => {
@@ -53,6 +51,11 @@ const TimerFitnessScreen = ({ route }) => {
   useEffect(() => {
     setRoster([]);
     createRoster();
+
+    // unsubscribe when component unmounts to prevent memory leak
+    return () => {
+      stopwatchRef.current.resetStopwatchHandler();
+    }
   }, []);
 
   return (

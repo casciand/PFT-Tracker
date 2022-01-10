@@ -10,7 +10,6 @@ import {
   Keyboard,
 } from "react-native";
 import uuid from "react-native-uuid";
-import { useNavigation } from "@react-navigation/core";
 import { auth, database } from "../firebase";
 
 import CustomButton from "../components/CustomButton";
@@ -18,10 +17,8 @@ import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 import Colors from "../constants/colors";
 import backgroundImage from "../assets/ponder.png";
 
-const AddClassScreen = () => {
+const AddClassScreen = ({ navigation }) => {
   const [className, setClassName] = useState("");
-
-  const navigation = useNavigation();
 
   const addClassHandler = () => {
     if (className == "") {

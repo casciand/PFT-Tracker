@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Alert } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
@@ -18,22 +18,40 @@ import AddStaticResultScreen from "./screens/AddStaticResultScreen";
 import Colors from "./constants/colors";
 import Fonts from "./constants/fonts";
 
-export default function App() {
+const App = () => {
   const Stack = createNativeStackNavigator();
+
+  const getStaticTitle = (params) => {
+    if (params.curlUps) {
+      return "Curl-Ups";
+    } else if (params.sitAndReach) {
+      return "Sit & Reach";
+    } else if (params.pushUps) {
+      return "Push-Ups";
+    } else if (params.pullUps) {
+      return "Pull-Ups";
+    } else if (params.armHang) {
+      return "Arm Hang";
+    } else if (params.mile) {
+      return "Mile Run";
+    } else {
+      return "Shuttle Run";
+    }
+  };
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerStyle: styles.header }} initialRoute="Login">
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Class" component={ClassScreen} />
+        <Stack.Screen name="Class" component={ClassScreen} options={{title: "Classes"}} />
         <Stack.Screen name="Roster" component={RosterScreen} />
-        <Stack.Screen name="Fitness" component={FitnessTestsScreen} />
-        <Stack.Screen name="InfoStudent" component={StudentInfoScreen} />
-        <Stack.Screen name="Static" component={StaticFitnessScreen} />
-        <Stack.Screen name="Timer" component={TimerFitnessScreen} />
-        <Stack.Screen name="AddStudent" component={AddStudentScreen} />
-        <Stack.Screen name="AddClass" component={AddClassScreen} />
-        <Stack.Screen name="AddStatic" component={AddStaticResultScreen} />
+        <Stack.Screen name="Fitness" component={FitnessTestsScreen} options={{title: "Activities"}} />
+        <Stack.Screen name="InfoStudent" component={StudentInfoScreen} options={{title: "Student Information"}} />
+        <Stack.Screen name="Static" component={StaticFitnessScreen} options={({ route }) => ({ title: getStaticTitle(route.params) })} />
+        <Stack.Screen name="Timer" component={TimerFitnessScreen} options={({ route }) => ({ title: getStaticTitle(route.params) })} />
+        <Stack.Screen name="AddStudent" component={AddStudentScreen} options={{title: "Add Student"}} />
+        <Stack.Screen name="AddClass" component={AddClassScreen} options={{title: "Add Class"}} />
+        <Stack.Screen name="AddStatic" component={AddStaticResultScreen} options={{title: "Add Result"}} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -76,3 +94,5 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
 });
+
+export default App;

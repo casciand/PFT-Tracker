@@ -17,7 +17,7 @@ import FormatTimeFunctions from "../functions/FormatTimeFunctions";
 import Colors from "../constants/colors";
 import backgroundImage from "../assets/situp.png";
 
-const AddStaticResultScreen = ({ route }) => {
+const AddStaticResultScreen = ({ route, navigation }) => {
   const [enteredValue, setEnteredValue] = useState("");
 
   const { classID, studentID, curlUps, pullUps, pushUps, sitAndReach } = route.params;
@@ -43,7 +43,7 @@ const AddStaticResultScreen = ({ route }) => {
       )
       .set({
         date: FormatTimeFunctions.formatDate(),
-        score: score,
+        score: parseInt(score),
       });
   };
 
@@ -55,6 +55,8 @@ const AddStaticResultScreen = ({ route }) => {
     } else {
       setScore(enteredValue);
       setEnteredValue("");
+      
+      navigation.goBack();
     }
   };
 

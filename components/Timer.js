@@ -49,13 +49,14 @@ const Timer = (props, ref) => {
     setCsecs(6000);
   };
 
-  if (csecs <= 0) {
+  if (csecs < 0) {
     clearInterval(timerRef.current);
+    setCsecs(0);
   }
 
-  let statusButton = isRunning ? statusButton = <StopwatchButton onPress={stopTimerHandler} title="Stop" /> : (
-    <StopwatchButton onPress={startTimerHandler} title="Start" />
-  );
+  let statusButton = isRunning ? statusButton = 
+    <StopwatchButton onPress={stopTimerHandler} title="Stop" /> :
+    <StopwatchButton onPress={startTimerHandler} title="Start" />;
 
   return (
     <View>
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     margin: 10,
     borderWidth: 2,
     borderColor: Colors.colors.primary,
-    width: 220,
+    width: 240
   },
 
   stopwatchText: {

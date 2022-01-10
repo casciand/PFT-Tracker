@@ -1,23 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
 const StudentRoster = (props) => {
-  const insertionSort = (arr) => {
-    for (let i = 1; i < arr.length; ++i) {
-      let j = i;
-
-      while (j > 0 && arr[j].props.lastName < arr[j - 1].props.lastName) {
-        let temp = arr[j];
-        arr[j] = arr[j - 1];
-        arr[j - 1] = temp;
-        --j;
-      }
-    }
-  };
-
-  useEffect(() => {
-    insertionSort(props.students);
-  }, []);
+  props.students.sort((a, b) => {
+    return a.props.lastName.toLowerCase() < b.props.lastName.toLowerCase() ? -1 : 1;
+  });
 
   let rosterStyle = props.multipleCol ? styles.timerStyle : styles.staticStyle;
 

@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     margin: 10,
     borderWidth: 2,
     borderColor: Colors.colors.primary,
-    width: 220,
+    width: 240,
   },
 
   stopwatchText: {

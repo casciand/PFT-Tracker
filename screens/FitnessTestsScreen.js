@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { View, StyleSheet, Image } from "react-native";
 
 import CustomButton from "../components/CustomButton";
-import Colors from "../constants/colors";
+import colors from "../constants/colors";
 import backgroundImage from "../assets/hurdles.png";
 
 const FitnessTestScreen = ({ route, navigation }) => {
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 60,
     marginVertical: 8,
-    backgroundColor: Colors.colors.primary,
+    backgroundColor: colors.primary,
     shadowColor: "black",
     shadowOffset: { width: 0, height: 0 },
     shadowRadius: 6,

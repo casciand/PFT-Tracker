@@ -2,8 +2,8 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 
-import Fonts from "../constants/fonts";
-import Colors from "../constants/colors";
+import fonts from "../constants/fonts";
+import colors from "../constants/colors";
 
 const Class = (props) => {
   const navigation = useNavigation();
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     margin: 10,
     height: 60,
     width: "100%",
-    backgroundColor: Colors.colors.primary,
+    backgroundColor: colors.primary,
     borderWidth: 1,
     borderRadius: 15,
     justifyContent: "space-between",
@@ -51,13 +51,13 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontFamily: Fonts.primary,
+    fontFamily: fonts.primary,
     fontSize: 20,
     color: "white",
   },
 
   subtitle: {
-    fontFamily: Fonts.secondary,
+    fontFamily: fonts.secondary,
     fontSize: 12,
     color: "white",
   },

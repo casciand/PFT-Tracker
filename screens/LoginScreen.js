@@ -56,7 +56,7 @@ const LoginScreen = ({ navigation }) => {
         <TouchableOpacity onPress={signUpHandler} style={[styles.button, styles.buttonOutline]}>
           <Text style={styles.buttonOutlineText}>Register</Text>
         </TouchableOpacity>
-        <Text>Dont have an account? Register now!</Text>
+        <Text style={{ textAlign: "center" }}>Dont have an account? Register now!</Text>
       </View>
     </KeyboardAvoidingView>
   );
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
-    marginBottom: 10
+    marginBottom: 10,
   },
 
   buttonOutline: {

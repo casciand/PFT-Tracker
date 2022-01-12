@@ -13,9 +13,9 @@ import uuid from "react-native-uuid";
 import { auth, database } from "../firebase";
 
 import CustomButton from "../components/CustomButton";
-import FormatTimeFunctions from "../functions/FormatTimeFunctions";
-import Colors from "../constants/colors";
-import backgroundImage from "../assets/situp.png";
+import ft from "../functions/FormatTimeFunctions";
+import colors from "../constants/colors";
+import backgroundImage from "../assets/piechart.png";
 
 const AddStaticResultScreen = ({ route, navigation }) => {
   const [enteredValue, setEnteredValue] = useState("");
@@ -42,7 +42,7 @@ const AddStaticResultScreen = ({ route, navigation }) => {
         }/classes/${classID}/students/${studentID}/${activity}/${uuid.v1()}`
       )
       .set({
-        date: FormatTimeFunctions.formatDate(),
+        date: ft.formatDate(),
         score: parseInt(score),
       });
   };
@@ -55,7 +55,7 @@ const AddStaticResultScreen = ({ route, navigation }) => {
     } else {
       setScore(enteredValue);
       setEnteredValue("");
-      
+
       navigation.goBack();
     }
   };
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 30,
-    backgroundColor: Colors.shades.secondary,
+    backgroundColor: colors.secondary,
     paddingVertical: 30,
     marginHorizontal: 30,
     borderRadius: 15,
@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
     padding: 15,
     width: "55%",
     textAlign: "center",
-    backgroundColor: Colors.colors.background,
     borderRadius: 15,
+    backgroundColor: "white",
   },
 
   buttonContainer: {

@@ -2,17 +2,39 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity } from "react-native";
 import { auth, database } from "../firebase";
 
+import ActivityCard from "../components/ActivityCard";
 import CustomButton from "../components/CustomButton";
-import ValidationFunctions from "../functions/ValidationFunctions";
-import FormatTimeFunctions from "../functions/FormatTimeFunctions";
-import Fonts from "../constants/fonts";
-import Colors from "../constants/colors";
+import vf from "../functions/ValidationFunctions";
+import ft from "../functions/FormatTimeFunctions";
+import fonts from "../constants/fonts";
+import colors from "../constants/colors";
 
 const StudentInfoScreen = ({ route, navigation }) => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState(null);
   const [deleted, setDeleted] = useState(false); // bool for forcing re-renders on delete
 
   const { classID, id } = route.params;
+
+  // update data when entries are deleted
+  useEffect(() => {
+    const dbRef = database.ref();
+    dbRef
+      .child("users")
+      .child(auth.currentUser.uid)
+      .child("classes")
+      .child(classID)
+      .child("students")
+      .child(id)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setData(snapshot.val());
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [deleted]);
 
   const deleteEntryHandler = (activity, entryID) => {
     const dbRef = database.ref();
@@ -42,14 +64,18 @@ const StudentInfoScreen = ({ route, navigation }) => {
       .remove();
   };
 
-  const formatScores = (scores, activity, min, sec, cm) => {
+  const formatScores = ({ scores, activity, min = false, sec = false, cm = false }) => {
+    if (!scores) {
+      return <Text style={styles.noEntry}>No entries.</Text>;
+    }
+
     let formattedScores = [];
 
     for (const [key, value] of Object.entries(scores)) {
       let score = value.score;
 
       if (min) {
-        score = FormatTimeFunctions.formatTimeMinutes(score);
+        score = ft.formatTimeMinutes(score);
       } else if (sec) {
         score = `${score} s`;
       } else if (cm) {
@@ -81,167 +107,103 @@ const StudentInfoScreen = ({ route, navigation }) => {
     return formattedScores;
   };
 
-  const createInfoBlock = ({ scores, activity, min = false, sec = false, cm = false }) => {
-    let contents = (
-      <View style={{ padding: 10 }}>
-        <Text style={styles.noEntry}>No Entries</Text>
-      </View>
-    );
-
-    if (scores) {
-      contents = (
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ padding: 10 }}>
-          {formatScores(scores, activity, min, sec, cm)}
-        </ScrollView>
-      );
-    }
-
-    return contents;
-  };
-
-  // get student data on page open
-  useEffect(() => {
-    const dbRef = database.ref();
-    dbRef
-      .child("users")
-      .child(auth.currentUser.uid)
-      .child("classes")
-      .child(classID)
-      .child("students")
-      .child(id)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          setData(snapshot.val());
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [deleted]);
-
-  return (
-    <View style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.information} showsVerticalScrollIndicator={false}>
-        <View style={styles.fitnessInfo}>
-          <Text style={styles.infoTitle}>Fitness Scores</Text>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.activityTitleView}>
-              <Text style={styles.activityTitle}>Curl-Ups</Text>
-              <Text style={styles.activityTitle}>
-                Best: {ValidationFunctions.getHighestScore(data.curlUps)}
-              </Text>
-            </View>
-            <View style={styles.infoBlock}>
-              {createInfoBlock({ scores: data.curlUps, activity: "curlUps" })}
-            </View>
-
-            <View style={styles.activityTitleView}>
-              <Text style={styles.activityTitle}>Sit & Reach</Text>
-              <Text style={styles.activityTitle}>
-                Best:{" "}
-                {ValidationFunctions.getHighestScore(data.sitAndReach) == "N/A"
-                  ? "N/A"
-                  : `${ValidationFunctions.getHighestScore(data.sitAndReach)} cm`}
-              </Text>
-            </View>
-            <View style={styles.infoBlock}>
-              {createInfoBlock({ scores: data.sitAndReach, activity: "sitAndReach", cm: true })}
-            </View>
-
-            <View style={styles.activityTitleView}>
-              <Text style={styles.activityTitle}>Pull-Ups</Text>
-              <Text style={styles.activityTitle}>
-                Best: {ValidationFunctions.getHighestScore(data.pullUps)}
-              </Text>
-            </View>
-            <View style={styles.infoBlock}>
-              {createInfoBlock({ scores: data.pullUps, activity: "pullUps" })}
-            </View>
-
-            <View style={styles.activityTitleView}>
-              <Text style={styles.activityTitle}>Push-Ups</Text>
-              <Text style={styles.activityTitle}>
-                Best: {ValidationFunctions.getHighestScore(data.pushUps)}
-              </Text>
-            </View>
-            <View style={styles.infoBlock}>
-              {createInfoBlock({ scores: data.pushUps, activity: "pushUps" })}
-            </View>
-
-            <View style={styles.activityTitleView}>
-              <Text style={styles.activityTitle}>Flexed Arm Hang</Text>
-              <Text style={styles.activityTitle}>
-                Best:{" "}
-                {ValidationFunctions.getHighestScore(data.armHang) == "N/A"
-                  ? "N/A"
-                  : `${ValidationFunctions.getHighestScore(data.armHang)} s`}
-              </Text>
-            </View>
-            <View style={styles.infoBlock}>
-              {createInfoBlock({ scores: data.armHang, activity: "armHang", sec: true })}
-            </View>
-
-            <View style={styles.activityTitleView}>
-              <Text style={styles.activityTitle}>Mile Run</Text>
-              <Text style={styles.activityTitle}>
-                Best:{" "}
-                {ValidationFunctions.getLowestScore(data.mile) == "N/A"
-                  ? "N/A"
-                  : FormatTimeFunctions.formatTimeMinutes(
-                      ValidationFunctions.getLowestScore(data.mile)
-                    )}
-              </Text>
-            </View>
-            <View style={styles.infoBlock}>
-              {createInfoBlock({ scores: data.mile, activity: "mile", min: true })}
-            </View>
-
-            <View style={styles.activityTitleView}>
-              <Text style={styles.activityTitle}>Shuttle Run</Text>
-              <Text style={styles.activityTitle}>
-                Best:{" "}
-                {ValidationFunctions.getLowestScore(data.shuttle) == "N/A"
-                  ? "N/A"
-                  : `${ValidationFunctions.getLowestScore(data.shuttle)} s`}
-              </Text>
-            </View>
-            <View style={styles.infoBlock}>
-              {createInfoBlock({ scores: data.shuttle, activity: "shuttle", sec: true })}
-            </View>
-          </ScrollView>
-        </View>
-        <View style={styles.awardInfo}>
-          <Text style={styles.infoTitle}>Awards</Text>
-          <View style={{ ...styles.infoBlock, height: 75 }}>
-            <View style={styles.awardTextView}>
-              <Text style={styles.activity}>Presidential Fitness Award</Text>
-              <Text style={styles.activity}>
-                {ValidationFunctions.passedPresidential(data) ? "Passed" : "Has Not Passed"}
-              </Text>
-            </View>
-            <View style={styles.awardTextView}>
-              <Text style={styles.activity}>National Fitness Award</Text>
-              <Text style={styles.activity}>
-                {ValidationFunctions.passedNational(data) ? "Passed" : "Has Not Passed"}
-              </Text>
+  if (!data) {
+    return null;
+  } else {
+    return (
+      <View style={styles.screen}>
+        <ScrollView contentContainerStyle={styles.information} showsVerticalScrollIndicator={false}>
+          <Text style={styles.header}>
+            {data.firstName}
+            {data.firstName.slice(-1) == "s" ? "'" : "'s"} Scores
+          </Text>
+          <Text style={styles.subtitle}>
+            {data.isMale ? "Boy" : "Girl"}, {data.age}
+          </Text>
+          <ActivityCard
+            title="Curl-Ups"
+            best={vf.getHighestScore(data.curlUps)}
+            scores={formatScores({ scores: data.curlUps, activity: "curlUps" })}
+            national={vf.getThreshold("national", "curlUps", data)}
+            presidential={vf.getThreshold("presidential", "curlUps", data)}
+          />
+          <ActivityCard
+            title="Sit & Reach"
+            best={vf.getHighestScore(data.sitAndReach)}
+            scores={formatScores({ scores: data.sitAndReach, activity: "sitAndReach", cm: true })}
+            national={vf.getThreshold("national", "sitAndReach", data)}
+            presidential={vf.getThreshold("presidential", "sitAndReach", data)}
+          />
+          <ActivityCard
+            title="Push-Ups"
+            best={vf.getHighestScore(data.pushUps)}
+            scores={formatScores({ scores: data.pushUps, activity: "pushUps" })}
+            national={vf.getThreshold("national", "pushUps", data)}
+            presidential={vf.getThreshold("presidential", "pushUps", data)}
+          />
+          <ActivityCard
+            title="Pull-Ups"
+            best={vf.getHighestScore(data.pullUps)}
+            scores={formatScores({ scores: data.pullUps, activity: "pullUps" })}
+            national={vf.getThreshold("national", "pullUps", data)}
+            presidential={vf.getThreshold("presidential", "pullUps", data)}
+          />
+          <ActivityCard
+            title="Arm Hang"
+            best={vf.getHighestScore(data.armHang)}
+            scores={formatScores({ scores: data.armHang, activity: "armHang", sec: true })}
+            national={vf.getThreshold("national", "armHang", data)}
+            presidential="N/A"
+          />
+          <ActivityCard
+            title="Mile Run"
+            best={vf.getLowestScore(data.mile)}
+            scores={formatScores({ scores: data.mile, activity: "mile", min: true })}
+            national={vf.getThreshold("national", "mile", data)}
+            presidential={vf.getThreshold("presidential", "mile", data)}
+          />
+          <ActivityCard
+            title="Shuttle Run"
+            best={vf.getLowestScore(data.shuttle)}
+            scores={formatScores({ scores: data.shuttle, activity: "shuttle", sec: true })}
+            national={vf.getThreshold("national", "shuttle", data)}
+            presidential={vf.getThreshold("presidential", "shuttle", data)}
+          />
+          <Text style={styles.header}>
+            {data.firstName}
+            {data.firstName.slice(-1) == "s" ? "'" : "'s"} Awards
+          </Text>
+          <View style={styles.awardCard}>
+            <View style={styles.awardInfo}>
+              <View style={styles.awardTextView}>
+                <Text style={styles.activity}>Presidential</Text>
+                <Text style={styles.activity}>
+                  {vf.achievedAward("presidential", data) ? "Passed" : "Has Not Passed"}
+                </Text>
+              </View>
+              <View style={styles.awardTextView}>
+                <Text style={styles.activity}>National</Text>
+                <Text style={styles.activity}>
+                  {vf.achievedAward("national", data) ? "Passed" : "Has Not Passed"}
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
-        <View style={styles.buttonContainer}>
-          <CustomButton
-            title="Delete Student"
-            onPress={() => {
-              Alert.alert("Delete Student?", "All of this students' data will be lost.", [
-                { text: "Cancel", style: "cancel", onPress: () => {} },
-                { text: "Delete", style: "destructive", onPress: () => deleteStudentHandler() },
-              ]);
-            }}
-          />
-        </View>
-      </ScrollView>
-    </View>
-  );
+          <View style={styles.buttonContainer}>
+            <CustomButton
+              title="Delete Student"
+              onPress={() => {
+                Alert.alert("Delete Student?", "All of this students' data will be lost.", [
+                  { text: "Cancel", style: "cancel", onPress: () => {} },
+                  { text: "Delete", style: "destructive", onPress: () => deleteStudentHandler() },
+                ]);
+              }}
+            />
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -258,83 +220,33 @@ const styles = StyleSheet.create({
 
   activity: {
     fontSize: 12,
-    fontFamily: Fonts.secondary,
+    fontFamily: fonts.secondary,
     color: "white",
   },
 
   noEntry: {
     fontSize: 12,
     textAlign: "center",
-    fontFamily: Fonts.secondary,
+    fontFamily: fonts.secondary,
     color: "white",
   },
 
   information: {
-    justifyContent: "center",
     alignItems: "center",
-
-  },
-
-  fitnessInfo: {
-    height: "72%",
-    width: "90%",
-    backgroundColor: Colors.shades.secondary,
-    borderRadius: 15,
-    borderWidth: 1,
-    padding: 15,
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 10,
-    shadowOpacity: 0.5,
-    elevation: 5,
-  },
-
-  infoTitle: {
-    fontFamily: Fonts.primary,
-    fontSize: 20,
-    color: "white",
-    textAlign: "left",
-    marginVertical: 5,
-    padding: 5,
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    shadowOpacity: 0.5,
-    elevation: 5,
-  },
-
-  activityTitleView: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  activityTitle: {
-    fontFamily: Fonts.secondary,
-    fontSize: 16,
-    fontStyle: "italic",
-    color: "white",
-    textAlign: "left",
-    marginVertical: 5,
-    padding: 5,
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    shadowOpacity: 0.5,
-    elevation: 5,
-  },
-
-  infoBlock: {
-    backgroundColor: Colors.colors.primary,
-    borderRadius: 15,
-    borderWidth: 1,
-    marginVertical: 10,
-    height: 90,
-    justifyContent: "center",
   },
 
   awardInfo: {
+    backgroundColor: colors.primary,
+    borderRadius: 15,
+    borderWidth: 1,
+    marginVertical: 10,
+    height: 75,
+    justifyContent: "center",
+  },
+
+  awardCard: {
     shadowColor: "black",
-    shadowOffset: { width: 0, height: 0 },
+    shadowOffset: { width: 0, height: 2 },
     shadowRadius: 10,
     shadowOpacity: 0.5,
     elevation: 5,
@@ -342,9 +254,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     margin: 20,
     width: "90%",
-    backgroundColor: Colors.shades.secondary,
+    backgroundColor: colors.secondary,
     borderRadius: 15,
-    borderWidth: 1,
   },
 
   awardTextView: {
@@ -358,6 +269,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
     flexDirection: "row",
+  },
+
+  header: {
+    fontFamily: fonts.primary,
+    fontSize: 30,
+    color: colors.primary,
+    marginTop: 15,
+    textAlign: "center",
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
+    shadowOpacity: 0.3,
+  },
+
+  subtitle: {
+    fontFamily: fonts.secondary,
+    fontSize: 16,
+    color: colors.primary,
+    marginVertical: 5,
+    textAlign: "center",
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 10,
+    shadowOpacity: 0.3,
   },
 });
 

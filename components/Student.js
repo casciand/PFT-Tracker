@@ -4,9 +4,9 @@ import uuid from "react-native-uuid";
 import { useNavigation } from "@react-navigation/core";
 import { auth, database } from "../firebase";
 
-import FormatTimeFunctions from "../functions/FormatTimeFunctions";
-import Fonts from "../constants/fonts";
-import Colors from "../constants/colors";
+import ft from "../functions/FormatTimeFunctions";
+import fonts from "../constants/fonts";
+import colors from "../constants/colors";
 
 const Student = (props) => {
   const [checks, setChecks] = useState(" ");
@@ -31,7 +31,7 @@ const Student = (props) => {
           }/mile/${uuid.v1()}`
         )
         .set({
-          date: FormatTimeFunctions.formatDate(),
+          date: ft.formatDate(),
           score: time,
         });
 
@@ -59,7 +59,7 @@ const Student = (props) => {
           }/${uuid.v1()}`
         )
         .set({
-          date: FormatTimeFunctions.formatDate(),
+          date: ft.formatDate(),
           score: stopwatchTime,
         });
 
@@ -112,7 +112,7 @@ const Student = (props) => {
   if (props.multipleCol) {
     nameFormat = (
       <Text style={styles.name}>
-        {props.firstName} {props.lastName.charAt(0)}.
+        {props.firstName.substring(0, 8)} {props.lastName.charAt(0)}.
       </Text>
     );
 
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 2,
     height: 40,
-    backgroundColor: Colors.colors.primary,
+    backgroundColor: colors.primary,
     borderWidth: 1,
     borderRadius: 15,
     justifyContent: "space-between",
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
 
   name: {
-    fontFamily: Fonts.secondary,
+    fontFamily: fonts.secondary,
     color: "white",
   },
 });

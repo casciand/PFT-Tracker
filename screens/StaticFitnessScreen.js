@@ -5,7 +5,6 @@ import { auth, database } from "../firebase";
 import StudentRoster from "../components/StudentRoster";
 import Student from "../components/Student";
 import Timer from "../components/Timer";
-import Colors from "../constants/colors";
 import backgroundImage from "../assets/situp.png";
 
 const StaticFitnessScreen = ({ route }) => {
@@ -56,7 +55,7 @@ const StaticFitnessScreen = ({ route }) => {
       if (curlUps) {
         timerRef.current.resetTimerHandler();
       }
-    }
+    };
   }, []);
 
   let timer, imageStyle;
@@ -104,7 +103,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 10,
     marginHorizontal: 50,
-    backgroundColor: Colors.colors.background,
     shadowColor: "black",
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 6,

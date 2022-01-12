@@ -1,13 +1,8 @@
-import React, {
-  useState,
-  useRef,
-  useImperativeHandle,
-  forwardRef,
-} from "react";
+import React, { useState, useRef, useImperativeHandle, forwardRef } from "react";
 import { View, StyleSheet, Text } from "react-native";
 
 import StopwatchButton from "../components/StopwatchButton";
-import Colors from "../constants/colors";
+import colors from "../constants/colors";
 
 const Stopwatch = (props, ref) => {
   const [csecs, setCsecs] = useState(0);
@@ -21,7 +16,7 @@ const Stopwatch = (props, ref) => {
     resetStopwatchHandler: () => {
       resetStopwatchHandler();
     },
-    csecs: csecs
+    csecs: csecs,
   }));
 
   const startStopwatchHandler = () => {
@@ -49,16 +44,18 @@ const Stopwatch = (props, ref) => {
     setCsecs(0);
   };
 
-  let statusButton = isRunning ? <StopwatchButton onPress={stopStopwatchHandler} title="Stop" /> : (
+  let statusButton = isRunning ? (
+    <StopwatchButton onPress={stopStopwatchHandler} title="Stop" />
+  ) : (
     <StopwatchButton onPress={startStopwatchHandler} title="Start" />
   );
 
   return (
-    <View>
+    <View style={styles.border}>
       <View style={styles.stopwatchView}>
-        <View style={{ alignItems: "center" }}>
-          <Text style={styles.stopwatchText}>{props.format(csecs / 100)}</Text>
-        </View>
+        <Text style={styles.stopwatchText} allowFontScaling={false}>
+          {props.format(csecs / 100)}
+        </Text>
       </View>
       <View style={styles.buttonView}>
         {statusButton}
@@ -69,18 +66,31 @@ const Stopwatch = (props, ref) => {
 };
 
 const styles = StyleSheet.create({
+  border: {
+    borderColor: colors.primary,
+    borderRadius: 20,
+    padding: 15,
+    backgroundColor: "white",
+    shadowColor: "black",
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    shadowOpacity: 0.3,
+    elevation: 5,
+  },
+
   stopwatchView: {
     padding: 10,
     borderRadius: 30,
     margin: 10,
     borderWidth: 2,
-    borderColor: Colors.colors.primary,
+    borderColor: colors.primary,
     width: 240,
   },
 
   stopwatchText: {
     fontSize: 40,
-    color: Colors.colors.primary,
+    color: colors.primary,
+    textAlign: "center",
   },
 
   buttonView: {

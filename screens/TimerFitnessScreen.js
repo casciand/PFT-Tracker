@@ -5,8 +5,7 @@ import { auth, database } from "../firebase";
 import StudentRoster from "../components/StudentRoster";
 import Student from "../components/Student";
 import Stopwatch from "../components/Stopwatch";
-import FormatTimeFunctions from "../functions/FormatTimeFunctions";
-import Colors from "../constants/colors";
+import ft from "../functions/FormatTimeFunctions";
 import backgroundImage from "../assets/runner.png";
 
 const TimerFitnessScreen = ({ route }) => {
@@ -55,13 +54,13 @@ const TimerFitnessScreen = ({ route }) => {
     // unsubscribe when component unmounts to prevent memory leak
     return () => {
       stopwatchRef.current.resetStopwatchHandler();
-    }
+    };
   }, []);
 
   return (
     <View style={styles.screen}>
       <View style={styles.stopwatchView}>
-        <Stopwatch format={FormatTimeFunctions.formatTimeMinutes} ref={stopwatchRef} />
+        <Stopwatch format={ft.formatTimeMinutes} ref={stopwatchRef} />
       </View>
       <Image source={backgroundImage} style={styles.backgroundImage} />
       <StudentRoster students={roster} multipleCol={true} />
@@ -92,7 +91,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 10,
     marginHorizontal: 50,
-    backgroundColor: Colors.colors.background,
     shadowColor: "black",
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 6,

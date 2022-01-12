@@ -13,8 +13,8 @@ import uuid from "react-native-uuid";
 import { auth, database } from "../firebase";
 
 import CustomButton from "../components/CustomButton";
-import FormatTimeFunctions from "../functions/FormatTimeFunctions";
-import Colors from "../constants/colors";
+import ft from "../functions/FormatTimeFunctions";
+import colors from "../constants/colors";
 import backgroundImage from "../assets/ponder.png";
 
 const AddClassScreen = ({ navigation }) => {
@@ -27,8 +27,8 @@ const AddClassScreen = ({ navigation }) => {
       ]);
     } else {
       database.ref(`users/${auth.currentUser.uid}/classes/${uuid.v1()}`).set({
-        name: className,
-        created: FormatTimeFunctions.formatDate(),
+        name: className.trim(),
+        created: ft.formatDate(),
       });
 
       setClassName("");
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 30,
-    backgroundColor: Colors.colors.primary,
+    backgroundColor: colors.primary,
     paddingVertical: 30,
     marginHorizontal: 30,
     borderRadius: 15,

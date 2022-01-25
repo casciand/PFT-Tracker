@@ -10,10 +10,12 @@ Create a secure account with just an email and password to save your data in the
 
 ## Screenshots
 
-<img src="./images/login.png" alt="Login" width="150">
-<img src="./images/class.png" alt="Class" width="150">
-<img src="./images/roster.png" alt="Roster" width="150">
-<img src="./images/mile.png" alt="Mile Run" width="150">
+<p float="left">
+  <img src="https://github.com/casciand/PFT-Tracker/blob/main/images/login.PNG" alt="Login" width="220">
+  <img src="https://github.com/casciand/PFT-Tracker/blob/main/images/class.PNG" alt="Class" width="220">
+  <img src="https://github.com/casciand/PFT-Tracker/blob/main/images/roster.PNG" alt="Roster" width="220">
+  <img src="https://github.com/casciand/PFT-Tracker/blob/main/images/mile.PNG" alt="Mile Run" width="220">
+</p>
 
 ## Try it out on TestFlight
 

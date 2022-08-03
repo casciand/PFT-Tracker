@@ -9,8 +9,8 @@ Create a secure account with just an email and password to save your data. Intro
 ## Screenshots
 
 <p>
-  <img src="https://github.com/casciand/PFT-Tracker/blob/main/images/login.PNG" alt="Login" width="220">
-  <img src="https://github.com/casciand/PFT-Tracker/blob/main/images/class.PNG" alt="Class" width="220">
-  <img src="https://github.com/casciand/PFT-Tracker/blob/main/images/roster.PNG" alt="Roster" width="220">
-  <img src="https://github.com/casciand/PFT-Tracker/blob/main/images/mile.PNG" alt="Mile Run" width="220">
+  <img src="https://github.com/casciand/PFT-Tracker/blob/main/images/login.PNG" alt="Login" width="200">
+  <img src="https://github.com/casciand/PFT-Tracker/blob/main/images/class.PNG" alt="Class" width="200">
+  <img src="https://github.com/casciand/PFT-Tracker/blob/main/images/roster.PNG" alt="Roster" width="200">
+  <img src="https://github.com/casciand/PFT-Tracker/blob/main/images/mile.PNG" alt="Mile Run" width="200">
 </p>
